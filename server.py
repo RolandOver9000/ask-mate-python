@@ -21,11 +21,11 @@ def route_add():
         return render_template('add-question.html')
 
     # retrieve last id from storage file
-    last_id = connection.get_last_id_from_file()
+    last_id = connection.get_last_question_id_from_file()
     # increment it by 1 to create new id
     new_id = last_id + 1
     # write new id to storage file
-    connection.write_last_id_to_file(new_id)
+    connection.write_last_question_id_to_file(new_id)
 
     # initialize dictionary for new question
     new_question = {

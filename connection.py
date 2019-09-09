@@ -2,7 +2,7 @@ import csv
 
 ANSWER_PATH = "sample_data/answer.csv"
 QUESTION_PATH = "sample_data/question.csv"
-LAST_ID_PATH = "last_id.txt"
+LAST_QUESTION_ID_PATH = "last_question_id.txt"
 ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message", "image")
 QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
 
@@ -52,11 +52,11 @@ def append_data_to_file(data, answer=False):
         data_writer.writerow(data)
 
 
-def write_last_id_to_file(last_id_as_int):
-    with open(LAST_ID_PATH, "w") as id_txt:
+def write_last_question_id_to_file(last_id_as_int):
+    with open(LAST_QUESTION_ID_PATH, "w") as id_txt:
         id_txt.write(str(last_id_as_int))
 
 
-def get_last_id_from_file():
-    with open(LAST_ID_PATH, "r") as id_txt:
+def get_last_question_id_from_file():
+    with open(LAST_QUESTION_ID_PATH, "r") as id_txt:
         return int(id_txt.readline())
