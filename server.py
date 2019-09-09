@@ -20,10 +20,15 @@ def route_add():
 def display_question_and_answers(question_id):
     question_to_display = connection.get_csv_data(data_id=question_id)
     answers_to_display = connection.get_csv_data(answer=True, data_id=question_id)
+    if isinstance(answers_to_display, list):
+        multiple_answers = True
+    else:
+        multiple_answers = False
     return render_template(
         'question.html',
         question_to_display=question_to_display,
-        answers_to_display=answers_to_display
+        answers_to_display=answers_to_display,
+        multiple_answers=multiple_answers
     )
 
 
