@@ -5,21 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-    {% if question_to_display %}
-        <h3>{{ question_to_display.title }}</h3>
-        <p>Q: {{ question_to_display.message }}</p>
-        {% if question_to_display.image %}
-            <img src="{{ question_to_display.image }}">
+    {% if question %}
+        <h3>{{ question.title }}</h3>
+        <p>Q: {{ question.message }}</p>
+        {% if question.image %}
+            <img src="{{ question.image }}">
         {% endif %}
-        <p>views: {{ question_to_display.view_number }} | likes: {{ question_to_display.vote_number }}</p>
+        <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
         {% if multiple_answers %}
-            {% for answer in answers_to_display %}
+            {% for answer in answers %}
                 <p>A: {{ answer.message }}</p>
             {% endfor %}
-        {% elif answers_to_display %}
-            <p>A: {{ answers_to_display.message }}</p>
+        {% elif answers %}
+            <p>A: {{ answers.message }}</p>
         {% else %}
-            <a href="">Be the first to answer this question!</a>
+            <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
         {% endif %}
     {% else %}
         <p>Question not found!</p>
