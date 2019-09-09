@@ -2,6 +2,7 @@ import csv
 
 ANSWER_PATH = "sample_data/answer.csv"
 QUESTION_PATH = "sample_data/question.csv"
+LAST_ID_PATH = "last_id.txt"
 
 
 def get_csv_data(answer=False, data_id=None):
@@ -24,3 +25,13 @@ def get_csv_data(answer=False, data_id=None):
             data_from_csv.append(data_row)
 
     return data_from_csv
+
+
+def write_last_id_to_file(last_id_as_int):
+    with open(LAST_ID_PATH, "w") as id_txt:
+        id_txt.write(str(last_id_as_int))
+
+
+def get_last_id_from_file():
+    with open(LAST_ID_PATH, "r") as id_txt:
+        return id_txt.readline()
