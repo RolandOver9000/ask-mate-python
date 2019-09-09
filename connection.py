@@ -34,4 +34,4 @@ def write_last_id_to_file(last_id_as_int):
 
 def get_last_id_from_file():
     with open(LAST_ID_PATH, "r") as id_txt:
-        return id_txt.readline()
+        return int(id_txt.readline())
