@@ -3,6 +3,8 @@ import csv
 ANSWER_PATH = "sample_data/answer.csv"
 QUESTION_PATH = "sample_data/question.csv"
 LAST_ID_PATH = "last_id.txt"
+ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message", "image")
+QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
 
 
 def get_csv_data(answer=False, data_id=None):
@@ -28,6 +30,19 @@ def get_csv_data(answer=False, data_id=None):
             return
         
     return data_from_csv
+
+
+def append_data_to_file(data, answer=False):
+    if answer:
+        data_file_path = ANSWER_PATH
+        data_keys = ANSWER_KEYS
+    else:
+        data_file_path = QUESTION_PATH
+        data_keys = QUESTION_KEYS
+
+    with open(data_file_path, "a") as csvfile:
+        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+        data_writer.writerow(data)
 
 
 def write_last_id_to_file(last_id_as_int):
