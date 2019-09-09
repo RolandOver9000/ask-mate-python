@@ -50,11 +50,7 @@ def display_question_and_answers(question_id):
     question = connection.get_csv_data(data_id=question_id)
     answers = connection.get_csv_data(answer=True, data_id=question_id)
 
-    return render_template(
-        'question.html',
-        question=question,
-        answers=answers
-    )
+    return render_template('question.html', question=question, answers=answers)
 
 
 if __name__ == '__main__':
