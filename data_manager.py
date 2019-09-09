@@ -21,19 +21,28 @@ def sort_data_by(data, sorting='submission_time', descending=True):
 
 
 def get_new_id_for(data_type):
-    # retrieve last id pair from storage file
-    # last id pair is a dictionary:
-    # {"question": <last_question_id>, "answer": <last_answer_id>}
+    """
+    Gets a new id for given datatype.
+    Function first retrieves the last ID pair,
+    then increments the specified ID
+    and finally returns it.
+    :param data_type: "question" or "answer"
+    :return: new id
+    """
+
     last_id_pair = connection.get_last_id_pair_from_file()
-    # increment datatype id by 1
     last_id_pair[data_type] += 1
-    # write new id pair to storage file
     connection.write_last_id_pair_to_file(last_id_pair)
-    # return new id
     return last_id_pair[data_type]
 
 
 def get_new_question_data(user_inputs):
+    """
+    Updates the dictionary containing the user inputs for the newly submitted question.
+    :param user_inputs: contains the key-value pairs for the new question specified by the user
+    :return: the updated dictionary containing all the necessary data for the new question
+    """
+
     # get new id for new question
     new_id = get_new_id_for("question")
     user_inputs["id"] = new_id

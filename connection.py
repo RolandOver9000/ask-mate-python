@@ -53,6 +53,12 @@ def append_data_to_file(data, answer=False):
 
 
 def get_last_id_pair_from_file():
+    """
+    Reads the file containing a comma-separated pair of IDs.
+    This pair of IDs is the last question ID and the last answer ID, respectively.
+    :return: pair of last IDs
+    """
+
     with open(LAST_ID_PAIR_PATH, "r") as pair_txt:
         id_pair = [int(id_) for id_ in pair_txt.readline().split(",")]
         question, answer = 0, 1
