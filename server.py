@@ -17,9 +17,10 @@ def route_add():
 
 
 @app.route('/question/<question_id>')
-def display_question(question_id):
+def display_question_and_answers(question_id):
     question_to_display = connection.get_csv_data(data_id=str(question_id))
-    return render_template('question.html', question_to_display=question_to_display)
+    answers_to_display = connection.get_csv_data(answer=True, data_id=str(question_id))
+    return render_template('question.html', question_to_display=question_to_display, answers_to_display=answers_to_display)
 
 
 if __name__ == '__main__':
