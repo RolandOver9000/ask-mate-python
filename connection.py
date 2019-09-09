@@ -24,6 +24,9 @@ def get_csv_data(answer=False, data_id=None):
 
             data_from_csv.append(data_row)
 
+        if data_id:
+            return
+        
     return data_from_csv
 
 
