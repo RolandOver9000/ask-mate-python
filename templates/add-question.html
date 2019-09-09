@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>New question | AskMate</title>
+    </head>
+    <body>
+        <h1>Ask a question</h1>
+        <form action="/add-question" method="post">
+            <p>
+                <label for="title">Question title:</label><br>
+                <input id="title" name="title" minlength="5" maxlength="50" size="30" required>
+            </p>
+            <p>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="5" cols="50" required></textarea>
+            </p>
+            <p>
+                <input type="submit" value="Submit question">
+            </p>
+        </form>
+    </body>
+</html>
