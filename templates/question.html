@@ -8,6 +8,10 @@
     {% if question_to_display %}
         <h3>{{ question_to_display.title }}</h3>
         <p>Q: {{ question_to_display.message }}</p>
+        {% if question_to_display.image %}
+            <img src="{{ question_to_display.image }}">
+        {% endif %}
+        <p>views: {{ question_to_display.view_number }} | likes: {{ question_to_display.vote_number }}</p>
         {% if multiple_answers %}
             {% for answer in answers_to_display %}
                 <p>A: {{ answer.message }}</p>
@@ -15,7 +19,7 @@
         {% elif answers_to_display %}
             <p>A: {{ answers_to_display.message }}</p>
         {% else %}
-            <p>This question has not been answered yet!</p>
+            <a href="">Be the first to answer this question!</a>
         {% endif %}
     {% else %}
         <p>Question not found!</p>
