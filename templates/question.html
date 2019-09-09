@@ -6,13 +6,14 @@
 </head>
 <body>
     {% if question_to_display %}
-        <p>{{ question_to_display.message }}</p>
+        <h3>{{ question_to_display.title }}</h3>
+        <p>Q: {{ question_to_display.message }}</p>
         {% if multiple_answers %}
             {% for answer in answers_to_display %}
-                <p>{{ answer.message }}</p>
+                <p>A: {{ answer.message }}</p>
             {% endfor %}
         {% elif answers_to_display %}
-            <p>{{ answers_to_display.message }}</p>
+            <p>A: {{ answers_to_display.message }}</p>
         {% else %}
             <p>This question has not been answered yet!</p>
         {% endif %}
