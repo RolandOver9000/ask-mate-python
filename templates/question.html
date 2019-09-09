@@ -5,6 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-    
+    {% if question_to_display %}
+        <p>{{ question_to_display.message }}</p>
+        {% if multiple_answers %}
+            {% for answer in answers_to_display %}
+                <p>{{ answer.message }}</p>
+            {% endfor %}
+        {% elif answers_to_display %}
+            <p>{{ answers_to_display.message }}</p>
+        {% else %}
+            <p>This question has not been answered yet!</p>
+        {% endif %}
+    {% else %}
+        <p>Question not found!</p>
+    {% endif %}
 </body>
 </html>
