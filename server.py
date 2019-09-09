@@ -7,6 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 @app.route("/list")
 def route_list():
+    questions_data = connection.get_csv_data()
     pass
 
 
