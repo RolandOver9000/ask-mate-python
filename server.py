@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
+import data_manager
 from time import time
 
 app = Flask(__name__)
@@ -8,8 +9,9 @@ app = Flask(__name__)
 @app.route("/")
 @app.route("/list")
 def route_list():
-    questions_data = connection.get_csv_data()
-    pass
+    questions = connection.get_csv_data()
+    sorted_questions = data_manager.sort_data_by(questions)
+    return render_template('list.html', sorted_questions=sorted_questions)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
