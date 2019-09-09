@@ -14,12 +14,18 @@ def route_list():
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def route_add():
+    # handle GET request
     if request.method == 'GET':
         return render_template('add-question.html')
 
+    # retrieve last id from storage file
     last_id = connection.get_last_id_from_file()
+    # increment it by 1 to create new id
     new_id = last_id + 1
+    # write new id to storage file
     connection.write_last_id_to_file(new_id)
+
+    # initialize dictionary for new question
     new_question = {
         "id": new_id,
         "submission_time": time(),
@@ -29,7 +35,10 @@ def route_add():
         "message": request.form.get("message"),
         "image": ""
     }
+    # append new dictionary data to question file
     connection.append_data_to_file(new_question)
+
+    # redirect to question url
     return redirect(url_for(f"/question/{new_id}"))
 
 
