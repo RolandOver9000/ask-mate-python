@@ -48,17 +48,10 @@ def display_question_and_answers(question_id):
     question = connection.get_csv_data(data_id=question_id)
     answers = connection.get_csv_data(answer=True, data_id=question_id)
 
-    # check if there are multiple answers for the given question_id
-    if isinstance(answers, list):
-        multiple_answers = True
-    else:
-        multiple_answers = False
-
     return render_template(
         'question.html',
         question=question,
-        answers=answers,
-        multiple_answers=multiple_answers
+        answers=answers
     )
 
 
