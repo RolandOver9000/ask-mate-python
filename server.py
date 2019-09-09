@@ -18,9 +18,10 @@ def route_add():
         return render_template('add-question.html')
 
     last_id = connection.get_last_id_from_file()
-    connection.write_last_id_to_file(last_id + 1)
+    new_id = last_id + 1
+    connection.write_last_id_to_file(new_id)
     new_question = {
-        "id": last_id + 1,
+        "id": new_id,
         "submission_time": time(),
         "view_number": 0,
         "vote_number": 0,
@@ -28,7 +29,8 @@ def route_add():
         "message": request.form.get("message")
         "image": ""
     }
-    pass
+    connection.append_data_to_file(new_question)
+    return redirect(url_for(f"/question/{new_id}"))
 
 
 @app.route('/question/<question_id>')
