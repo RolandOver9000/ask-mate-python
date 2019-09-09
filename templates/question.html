@@ -16,8 +16,10 @@
             {% for answer in answers %}
                 <p>A: {{ answer.message }}</p>
             {% endfor %}
+            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
         {% elif answers %}
             <p>A: {{ answers.message }}</p>
+            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
         {% else %}
             <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
         {% endif %}
