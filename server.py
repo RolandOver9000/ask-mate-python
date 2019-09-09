@@ -30,7 +30,7 @@ def route_add():
     # initialize dictionary for new question
     new_question = {
         "id": new_id,
-        "submission_time": time(),
+        "submission_time": int(time()),
         "view_number": 0,
         "vote_number": 0,
         "title": request.form.get("title"),
