@@ -21,14 +21,17 @@ def route_add():
         return render_template('add-question.html')
 
     # retrieve last id pair from storage file
+    # last id pair is a dictionary:
+    # {"question": <last_question_id>, "answer": <last_answer_id>}
     last_id_pair = connection.get_last_id_pair_from_file()
     # increment question id by 1
     last_id_pair["question"] += 1
     # write new id pair to storage file
     connection.write_last_id_pair_to_file(last_id_pair)
-    # assign incremented value to new variable name
 
+    # assign incremented value to new variable name
     new_id = last_id_pair["question"]
+
     # initialize dictionary for new question
     new_question = {
         "id": new_id,
