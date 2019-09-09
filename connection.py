@@ -18,18 +18,26 @@ def get_csv_data(answer=False, data_id=None):
     with open(data_file_path, encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
 
-        for row in reader:
-            data_row = dict(row)
+        if answer:
+            for row in reader:
+                data_row = dict(row)
+                if data_id == data_row['question_id']:
+                    data_from_csv.append(data_row)
 
-            if data_id and data_id == data_row['id']:
-                return data_row
+        else:
+            for row in reader:
+                data_row = dict(row)
 
-            data_from_csv.append(data_row)
+                if data_id and data_id == data_row['id']:
+                    return data_row
 
-        if data_id:
-            return
-        
-    return data_from_csv
+                data_from_csv.append(data_row)
+
+            if data_id:
+                return
+
+    if len(data_from_csv) > 0:
+        return data_from_csv
 
 
 def append_data_to_file(data, answer=False):
