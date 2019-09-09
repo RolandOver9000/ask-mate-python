@@ -41,7 +41,7 @@ def route_add():
     connection.append_data_to_file(new_question)
 
     # redirect to question url
-    return redirect(url_for(f"/question/{new_id}"))
+    return redirect(f"/question/{new_id}")
 
 
 @app.route('/question/<question_id>')
