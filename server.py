@@ -4,6 +4,17 @@ import connection
 app = Flask(__name__)
 
 
+@app.route("/")
+@app.route("/list")
+def route_list():
+    pass
+
+
+@app.route("/add-question")
+def route_add():
+    pass
+
+
 @app.route('/question/<question_id>')
 def display_question_and_answers(question_id):
     question_to_display = connection.get_csv_data(data_id=str(question_id))
