@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
+from time import time
 
 app = Flask(__name__)
 
@@ -11,8 +12,22 @@ def route_list():
     pass
 
 
-@app.route("/add-question")
+@app.route("/add-question", methods=['GET', 'POST'])
 def route_add():
+    if request.method == 'GET':
+        return render_template('add-question.html')
+
+    last_id = connection.get_last_id_from_file()
+    connection.write_last_id_to_file(last_id + 1)
+    new_question = {
+        "id": last_id + 1,
+        "submission_time": time(),
+        "view_number": 0,
+        "vote_number": 0,
+        "title": request.form.get("title"),
+        "message": request.form.get("message")
+        "image": ""
+    }
     pass
 
 
