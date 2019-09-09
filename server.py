@@ -26,7 +26,7 @@ def route_add():
         "view_number": 0,
         "vote_number": 0,
         "title": request.form.get("title"),
-        "message": request.form.get("message")
+        "message": request.form.get("message"),
         "image": ""
     }
     connection.append_data_to_file(new_question)
