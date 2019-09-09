@@ -5,11 +5,12 @@
     <title>Homepage | AskMate</title>
 </head>
 <body>
-    <h1>Latest Questions</h1>
+    <h1>Welcome to AskMate!</h1>
+    <h3>Latest questions:</h3>
     <ul>
-        {% for question in questions_data %}
+        {% for question in sorted_questions %}
         <li>
-            <a href="/question/{{question['id']}}">{{question['title']}}</a>
+            <a href="/question/{{ question.id }}">{{ question.title }}</a>
         </li>
         {% endfor %}
     </ul>
