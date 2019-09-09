@@ -36,8 +36,7 @@ def get_csv_data(answer=False, data_id=None):
             if data_id:
                 return
 
-    if len(data_from_csv) > 0:
-        return data_from_csv
+    return data_from_csv
 
 
 def append_data_to_file(data, answer=False):
