@@ -45,19 +45,19 @@ def route_add():
 @app.route('/question/<question_id>')
 def display_question_and_answers(question_id):
     # get question and answer(s)
-    question_to_display = connection.get_csv_data(data_id=question_id)
-    answers_to_display = connection.get_csv_data(answer=True, data_id=question_id)
+    question = connection.get_csv_data(data_id=question_id)
+    answers = connection.get_csv_data(answer=True, data_id=question_id)
 
     # check if there are multiple answers for the given question_id
-    if isinstance(answers_to_display, list):
+    if isinstance(answers, list):
         multiple_answers = True
     else:
         multiple_answers = False
 
     return render_template(
         'question.html',
-        question_to_display=question_to_display,
-        answers_to_display=answers_to_display,
+        question=question,
+        answers=answers,
         multiple_answers=multiple_answers
     )
 
