@@ -9,21 +9,23 @@ app = Flask(__name__)
 @app.route("/list", methods=['GET', 'POST'])
 def route_list():
     if request.method == "POST":
-        sorting_method = request.form['sorting_method']
-        sorting_order = request.form['sorting_order']
-        return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+        return goto_sorted_url()
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
-    return render_template('list.html', sorted_questions=sorted_questions)
+    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting='submission_time', selected_order='desc')
+
+
+def goto_sorted_url():
+    sorting_method = request.form['sorting_method']
+    sorting_order = request.form['sorting_order']
+    return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
 
 
 @app.route('/list?order_by=<sorting>&order_direction=<order>', methods=['GET', 'POST'])
 def route_sort(sorting, order):
     if request.method == 'POST':
-        sorting_method = request.form['sorting_method']
-        sorting_order = request.form['sorting_order']
-        return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+        return goto_sorted_url()
 
     if order == 'desc':
         order_by = True
@@ -32,7 +34,7 @@ def route_sort(sorting, order):
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
-    return render_template('list.html', sorted_questions=sorted_questions)
+    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting=sorting, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
