@@ -34,7 +34,11 @@ def display_question_and_answers(question_id):
     question = connection.get_csv_data(data_id=question_id)
     answers = connection.get_csv_data(answer=True, data_id=question_id)
 
-    return render_template('question.html', question=question, answers=answers)
+    #get id of last question
+    latest_ids = connection.get_last_id_pair_from_file()
+    last_question_id = latest_ids['question']
+
+    return render_template('question.html', question=question, answers=answers, last_question_id=last_question_id)
 
 
 if __name__ == '__main__':
