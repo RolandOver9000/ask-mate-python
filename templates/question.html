@@ -7,7 +7,12 @@
 <body>
     {% if question %}
         <h3>{{ question.title }}</h3>
-        <p>Q: {{ question.message }}</p>
+        <div>
+            {% for line in question.message.split("\n") %}
+                {{ line }}<br>
+            {% endfor %}
+            <br>
+        </div>
         {% if question.image %}
             <img src="{{ question.image }}" width="500">
         {% endif %}
@@ -27,7 +32,12 @@
             <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
             {% for answer in answers %}
                 <p>
-                    A: {{ answer.message }}
+                    <div>
+                        <strong>Answer at #{{ answer.submission_time }}</strong><br>
+                        {% for line in answer.message.split("\n") %}
+                            {{ line }}<br>
+                        {% endfor %}
+                    </div>
                     {% if answer.image %}
                         <br><img src="{{ answer.image }}" width="300">
                     {% endif %}
