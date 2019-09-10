@@ -28,6 +28,11 @@
                 <a href="{{ question.id|int + 1 }}">Next question</a>
             {% endif %}
         </div>
+        <div>
+            {% if question.id|int > 0 %}
+                <a href="{{ question.id|int - 1 }}">Previous question</a>
+            {% endif %}
+        </div>
         <p>
             <a href="/">Return to main page</a>
         </p>
