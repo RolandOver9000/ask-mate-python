@@ -5,12 +5,38 @@ import data_manager
 app = Flask(__name__)
 
 
-@app.route("/")
-@app.route("/list")
+@app.route("/", methods=['GET', 'POST'])
+@app.route("/list", methods=['GET', 'POST'])
 def route_list():
+    if request.method == "POST":
+        return goto_sorted_url()
+
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
-    return render_template('list.html', sorted_questions=sorted_questions)
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting='submission_time', selected_order='desc')
+
+
+def goto_sorted_url():
+    sorting = {'sorting_method': request.form['sorting'].split('.')[0],
+               'sorting_order': request.form['sorting'].split('.')[1]}
+    return redirect(url_for('route_sort', sorting=sorting['sorting_method'], order=sorting['sorting_order']))
+
+
+@app.route('/list?order_by=<sorting>&order_direction=<order>', methods=['GET', 'POST'])
+def route_sort(sorting, order):
+    if request.method == 'POST':
+        return goto_sorted_url()
+
+    if order == 'desc':
+        order_by = True
+    else:
+        order_by = False
+
+    questions = connection.get_csv_data()
+    sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting=sorting, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -38,6 +64,8 @@ def display_question_and_answers(question_id):
     latest_ids = connection.get_last_id_pair_from_file()
     last_question_id = latest_ids['question']
 
+    data_manager.increment_view_number(question)
+
     return render_template('question.html', question=question, answers=answers, last_question_id=last_question_id)
 
 
@@ -52,6 +80,18 @@ def route_edit(question_id):
     connection.update_data_in_file(question_data, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
+@app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
+def post_an_answer(question_id):
+    if request.method == "POST":
+        user_inputs_for_answer = request.form.to_dict()
+        answer_data = data_manager.get_new_answer_data(user_inputs_for_answer, question_id)
+        connection.append_data_to_file(answer_data, True)
+        return redirect(url_for('display_question_and_answers', question_id=question_id))
+    else:
+        question = connection.get_csv_data(data_id=question_id)
+        return render_template("new_answer.html", question=question)
 
 
 @app.route('/question/<question_id>/delete')
