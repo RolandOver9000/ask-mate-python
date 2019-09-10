@@ -54,3 +54,18 @@ def get_new_question_data(user_inputs):
     user_inputs["vote_number"] = 0
 
     return user_inputs
+
+
+def get_new_answer_data(user_input, question_id):
+    answer = {}
+    last_question_and_answer_id = connection.get_last_id_pair_from_file()
+    last_question_and_answer_id["answer"] = last_question_and_answer_id["answer"] + 1
+    connection.write_last_id_pair_to_file(last_question_and_answer_id)
+
+    answer["id"] = last_question_and_answer_id["answer"]
+    answer["submission_time"] = int(time())
+    answer["vote_number"] = 0
+    answer["question_id"] = question_id
+    answer["message"] = user_input
+    answer["image"] = " "
+    return answer
