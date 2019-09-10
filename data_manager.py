@@ -1,5 +1,6 @@
 from time import time
 from datetime import datetime
+from copy import deepcopy
 import connection
 
 
@@ -77,7 +78,7 @@ def increment_view_number(question_data):
 
 
 def unix_to_readable(data):
-    readable_data = data.copy()
-    for line in readable_data:
-        line['submission_time'] = datetime.utcfromtimestamp(int(line['submission_time'])).strftime('%Y.%m.%d %H:%M')
+    readable_data = deepcopy(data)
+    for entry in readable_data:
+        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
     return readable_data
