@@ -7,7 +7,7 @@
 <body>
     <h1>Welcome to AskMate!</h1>
     <form action="" method="post">
-        <select name="sorting_method" id="sort_method">
+        <select name="sorting" id="sort_method">
             <option value="id.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}}>Id (ascending)</option>
             <option value="id.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}}>Id (descending)</option>
             <option value="submission_time.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}} >Time posted (ascending)</option>

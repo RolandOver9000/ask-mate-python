@@ -18,8 +18,8 @@ def route_list():
 
 
 def goto_sorted_url():
-    sorting = {'sorting_method': request.form['sorting_method'].split('.')[0],
-               'sorting_order': request.form['sorting_method'].split('.')[1]}
+    sorting = {'sorting_method': request.form['sorting'].split('.')[0],
+               'sorting_order': request.form['sorting'].split('.')[1]}
     return redirect(url_for('route_sort', sorting=sorting['sorting_method'], order=sorting['sorting_order']))
 
 
