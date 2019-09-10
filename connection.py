@@ -2,7 +2,7 @@ import csv
 
 ANSWER_PATH = "sample_data/answer.csv"
 QUESTION_PATH = "sample_data/question.csv"
-LAST_ID_PATH = "last_id.txt"
+LAST_ID_PAIR_PATH = "last_id_pair.txt"
 ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message", "image")
 QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
 
@@ -52,11 +52,19 @@ def append_data_to_file(data, answer=False):
         data_writer.writerow(data)
 
 
-def write_last_id_to_file(last_id_as_int):
-    with open(LAST_ID_PATH, "w") as id_txt:
-        id_txt.write(str(last_id_as_int))
+def get_last_id_pair_from_file():
+    """
+    Reads the file containing a comma-separated pair of IDs.
+    This pair of IDs is the last question ID and the last answer ID, respectively.
+    :return: pair of last IDs
+    """
+
+    with open(LAST_ID_PAIR_PATH, "r") as pair_txt:
+        id_pair = [int(id_) for id_ in pair_txt.readline().split(",")]
+        question, answer = 0, 1
+        return {"question": id_pair[question], "answer": id_pair[answer]}
 
 
-def get_last_id_from_file():
-    with open(LAST_ID_PATH, "r") as id_txt:
-        return int(id_txt.readline())
+def write_last_id_pair_to_file(new_id_pair):
+    with open(LAST_ID_PAIR_PATH, "w") as pair_txt:
+        pair_txt.write(f"{new_id_pair['question']},{new_id_pair['answer']}")

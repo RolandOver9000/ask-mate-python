@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
-from time import time
 
 app = Flask(__name__)
 
@@ -20,28 +19,13 @@ def route_add():
     if request.method == 'GET':
         return render_template('add-question.html')
 
-    # retrieve last id from storage file
-    last_id = connection.get_last_id_from_file()
-    # increment it by 1 to create new id
-    new_id = last_id + 1
-    # write new id to storage file
-    connection.write_last_id_to_file(new_id)
-
-    # initialize dictionary for new question
-    new_question = {
-        "id": new_id,
-        "submission_time": time(),
-        "view_number": 0,
-        "vote_number": 0,
-        "title": request.form.get("title"),
-        "message": request.form.get("message"),
-        "image": ""
-    }
-    # append new dictionary data to question file
-    connection.append_data_to_file(new_question)
+    # retrieve user inputs and change it to a mutable dictionary
+    user_inputs_for_question = request.form.to_dict()
+    new_question_data = data_manager.get_new_question_data(user_inputs_for_question)
+    connection.append_data_to_file(new_question_data)
 
     # redirect to question url
-    return redirect(url_for(f"/question/{new_id}"))
+    return redirect(f"/question/{new_question_data['id']}")
 
 
 @app.route('/question/<question_id>')
