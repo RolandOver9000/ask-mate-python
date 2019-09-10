@@ -48,7 +48,6 @@ def get_new_question_data(user_inputs):
     user_inputs["id"] = new_id
 
     # set default values
-    user_inputs["image"] = ""
     user_inputs["submission_time"] = int(time())
     user_inputs["view_number"] = 0
     user_inputs["vote_number"] = 0
