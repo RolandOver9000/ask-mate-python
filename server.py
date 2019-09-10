@@ -5,11 +5,33 @@ import data_manager
 app = Flask(__name__)
 
 
-@app.route("/")
-@app.route("/list")
+@app.route("/", methods=['GET', 'POST'])
+@app.route("/list", methods=['GET', 'POST'])
 def route_list():
+    if request.method == "POST":
+        sorting_method = request.form['sorting_method']
+        sorting_order = request.form['sorting_order']
+        return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
+    return render_template('list.html', sorted_questions=sorted_questions)
+
+
+@app.route('/list?order_by=<sorting>&order_direction=<order>', methods=['GET', 'POST'])
+def route_sort(sorting, order):
+    if request.method == 'POST':
+        sorting_method = request.form['sorting_method']
+        sorting_order = request.form['sorting_order']
+        return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+
+    if order == 'desc':
+        order_by = True
+    else:
+        order_by = False
+
+    questions = connection.get_csv_data()
+    sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
     return render_template('list.html', sorted_questions=sorted_questions)
 
 
