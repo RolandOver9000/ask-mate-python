@@ -69,3 +69,8 @@ def get_new_answer_data(user_input, question_id):
     answer["message"] = user_input
     answer["image"] = " "
     return answer
+
+
+def increment_view_number(question_data):
+    new_view_number = int(question_data["view_number"]) + 1
+    connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})

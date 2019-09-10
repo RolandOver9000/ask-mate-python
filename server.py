@@ -38,6 +38,8 @@ def display_question_and_answers(question_id):
     latest_ids = connection.get_last_id_pair_from_file()
     last_question_id = latest_ids['question']
 
+    data_manager.increment_view_number(question)
+
     return render_template('question.html', question=question, answers=answers, last_question_id=last_question_id)
 
 
