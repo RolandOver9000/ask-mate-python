@@ -24,6 +24,11 @@
         <p>Question not found!</p>
     {% endif %}
     <div>
+        {% if question.id|int < last_question_id %}
+            <a href="{{ question.id|int + 1 }}">Next question</a>
+        {% endif %}
+    </div>
+    <div>
         <a href="/">Return to main page</a>
     </div>
 </body>

@@ -68,3 +68,30 @@ def get_last_id_pair_from_file():
 def write_last_id_pair_to_file(new_id_pair):
     with open(LAST_ID_PAIR_PATH, "w") as pair_txt:
         pair_txt.write(f"{new_id_pair['question']},{new_id_pair['answer']}")
+
+
+def update_data_in_file(old_data, user_inputs, answer=False):
+
+    new_data = old_data
+    for key, value in user_inputs.items():
+        new_data[key] = value
+
+    if answer:
+        data_file_path = ANSWER_PATH
+        data_keys = ANSWER_KEYS
+    else:
+        data_file_path = QUESTION_PATH
+        data_keys = QUESTION_KEYS
+
+    csv_data = get_csv_data(answer=answer)
+
+    with open(data_file_path, "w") as csvfile:
+        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+        data_writer.writeheader()
+
+        for data in csv_data:
+
+            if data["id"] == new_data["id"]:
+                data_writer.writerow(new_data)
+            else:
+                data_writer.writerow(data)

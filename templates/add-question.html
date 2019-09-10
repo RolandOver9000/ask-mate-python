@@ -6,14 +6,16 @@
     </head>
     <body>
         <h1>Ask a question</h1>
-        <form action="/add-question" method="post">
+        <form action="" method="post">
             <p>
                 <label for="title">Question title:</label><br>
-                <input id="title" name="title" minlength="5" maxlength="80" size="30" required>
+                <input id="title" name="title" minlength="5" maxlength="80" size="30" required
+                       value="{{ question_data.title if question_data else '' }}">
             </p>
             <p>
                 <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="5" cols="50" required></textarea>
+                <textarea id="message" name="message" rows="5" cols="50" required
+                >{{ question_data.message if question_data else ''}}</textarea>
             </p>
             <p>
                 <input type="submit" value="Submit question">
