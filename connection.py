@@ -121,3 +121,15 @@ def delete_from_file(csv_data, data_id, answer=False):
 
         for data in csv_data:
             data_writer.writerow(data)
+
+
+def get_latest_id_from_csv(answer=False):
+    if answer:
+        csv_data = get_csv_data(answer=True)
+    else:
+        csv_data = get_csv_data()
+
+    if csv_data:
+        return csv_data[-1]['id']
+    else:
+        return 0
