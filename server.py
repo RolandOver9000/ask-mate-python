@@ -81,13 +81,13 @@ def route_edit(question_id):
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def post_an_answer(question_id):
     if request.method == "POST":
-        answer = request.form["get_answer"]
-        answer_data = data_manager.get_new_answer_data(answer, question_id)
+        user_inputs_for_answer = request.form.to_dict()
+        answer_data = data_manager.get_new_answer_data(user_inputs_for_answer, question_id)
         connection.append_data_to_file(answer_data, True)
         return redirect(url_for('display_question_and_answers', question_id=question_id))
     else:
         question = connection.get_csv_data(data_id=question_id)
-        return render_template("new_answer.html", question=question["title"], message_for_question=question["message"])
+        return render_template("new_answer.html", question=question)
 
 
 if __name__ == '__main__':
