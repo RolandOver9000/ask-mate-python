@@ -95,3 +95,29 @@ def update_data_in_file(old_data, user_inputs, answer=False):
                 data_writer.writerow(new_data)
             else:
                 data_writer.writerow(data)
+
+
+def delete_from_file(csv_data, data_id, answer=False):
+
+    if answer:
+        data_file_path = ANSWER_PATH
+        data_keys = ANSWER_KEYS
+
+    else:
+        data_file_path = QUESTION_PATH
+        data_keys = QUESTION_KEYS
+
+    for counter, row in enumerate(csv_data):
+        if answer:
+            if row['question_id'] == data_id:
+                del csv_data[counter]
+        else:
+            if row['id'] == data_id:
+                del csv_data[counter]
+
+    with open(data_file_path, "w") as csvfile:
+        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+        data_writer.writeheader()
+
+        for data in csv_data:
+            data_writer.writerow(data)

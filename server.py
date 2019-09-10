@@ -96,5 +96,16 @@ def post_an_answer(question_id):
         return render_template("new_answer.html", question=question)
 
 
+@app.route('/question/<question_id>/delete')
+def route_delete(question_id):
+    question_data = connection.get_csv_data()
+    answer_data = connection.get_csv_data(answer=True)
+
+    connection.delete_from_file(question_data, question_id)
+    connection.delete_from_file(answer_data, question_id, answer=True)
+
+    return redirect(url_for('route_list'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
