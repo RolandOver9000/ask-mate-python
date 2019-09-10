@@ -21,6 +21,9 @@
             <a href="{{ url_for('route_edit', question_id=question.id) }}">Edit question</a>
         </div>
         <div>
+            <a href="{{ url_for('route_delete', question_id=question.id) }}">Delete question</a>
+        </div>
+        <div>
             {% if question.id|int < last_question_id %}
                 <a href="{{ question.id|int + 1 }}">Next question</a>
             {% endif %}

@@ -13,13 +13,14 @@ def route_list():
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
-    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting='submission_time', selected_order='desc')
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting='submission_time', selected_order='desc')
 
 
 def goto_sorted_url():
-    sorting_method = request.form['sorting_method']
-    sorting_order = request.form['sorting_order']
-    return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+    sorting = {'sorting_method': request.form['sorting'].split('.')[0],
+               'sorting_order': request.form['sorting'].split('.')[1]}
+    return redirect(url_for('route_sort', sorting=sorting['sorting_method'], order=sorting['sorting_order']))
 
 
 @app.route('/list?order_by=<sorting>&order_direction=<order>', methods=['GET', 'POST'])
@@ -34,7 +35,8 @@ def route_sort(sorting, order):
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
-    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting=sorting, selected_order=order)
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting=sorting, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -90,6 +92,17 @@ def post_an_answer(question_id):
     else:
         question = connection.get_csv_data(data_id=question_id)
         return render_template("new_answer.html", question=question)
+
+
+@app.route('/question/<question_id>/delete')
+def route_delete(question_id):
+    question_data = connection.get_csv_data()
+    answer_data = connection.get_csv_data(answer=True)
+
+    connection.delete_from_file(question_data, question_id)
+    connection.delete_from_file(answer_data, question_id, answer=True)
+
+    return redirect(url_for('route_list'))
 
 
 if __name__ == '__main__':
