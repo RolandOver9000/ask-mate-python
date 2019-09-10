@@ -1,4 +1,5 @@
 from time import time
+from datetime import datetime
 import connection
 
 
@@ -73,3 +74,10 @@ def get_new_answer_data(user_inputs, question_id):
 def increment_view_number(question_data):
     new_view_number = int(question_data["view_number"]) + 1
     connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
+
+
+def unix_to_readable(data):
+    readable_data = data.copy()
+    for line in readable_data:
+        line['submission_time'] = datetime.utcfromtimestamp(int(line['submission_time'])).strftime('%Y.%m.%d %H:%M')
+    return readable_data

@@ -13,6 +13,7 @@ def route_list():
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
+    sorted_questions = data_manager.unix_to_readable(sorted_questions)
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting='submission_time', selected_order='desc')
 
@@ -35,6 +36,7 @@ def route_sort(sorting, order):
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
+    sorted_questions = data_manager.unix_to_readable(sorted_questions)
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=sorting, selected_order=order)
 

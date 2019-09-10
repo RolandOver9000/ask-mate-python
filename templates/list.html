@@ -24,13 +24,24 @@
         <button type="submit">Sort</button>
     </form>
     <h3>Help out your fellow AskMates:</h3>
-    <ul>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Question Title</th>
+            <th>Likes</th>
+            <th>Views</th>
+            <th>Submission Time</th>
+        </tr>
         {% for question in sorted_questions %}
-        <li>
-            <a href="/question/{{ question.id }}">{{ question.title }}</a>
-        </li>
+        <tr>
+            <td>{{ question.id }}</td>
+            <td><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
+            <td>{{ question.vote_number }}</td>
+            <td>{{ question.view_number }}</td>
+            <td>{{ question.submission_time }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
     <p><a href="/add-question">Ask a question</a></p>
 </body>
 </html>
