@@ -13,13 +13,14 @@ def route_list():
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions)
-    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting='submission_time', selected_order='desc')
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting='submission_time', selected_order='desc')
 
 
 def goto_sorted_url():
-    sorting_method = request.form['sorting_method']
-    sorting_order = request.form['sorting_order']
-    return redirect(url_for('route_sort', sorting=sorting_method, order=sorting_order))
+    sorting = {'sorting_method': request.form['sorting_method'].split('.')[0],
+               'sorting_order': request.form['sorting_method'].split('.')[1]}
+    return redirect(url_for('route_sort', sorting=sorting['sorting_method'], order=sorting['sorting_order']))
 
 
 @app.route('/list?order_by=<sorting>&order_direction=<order>', methods=['GET', 'POST'])
@@ -34,7 +35,8 @@ def route_sort(sorting, order):
 
     questions = connection.get_csv_data()
     sorted_questions = data_manager.sort_data_by(questions, sorting=sorting, descending=order_by)
-    return render_template('list.html', sorted_questions=sorted_questions, selected_sorting=sorting, selected_order=order)
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting=sorting, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])

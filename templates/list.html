@@ -8,20 +8,22 @@
     <h1>Welcome to AskMate!</h1>
     <form action="" method="post">
         <select name="sorting_method" id="sort_method">
-            <option value="id" {{ 'selected' if selected_sorting=='submission_time' else ''}}>Id</option>
-            <option value="submission_time" {{ 'selected' if selected_sorting=='submission_time' else ''}} >Time posted</option>
-            <option value="view_number" {{ 'selected' if selected_sorting=='view_number' else ''}}>Views</option>
-            <option value="vote_number" {{ 'selected' if selected_sorting=='vote_number' else ''}}>Vote numbers</option>
-            <option value="title" {{ 'selected' if selected_sorting=='title' else ''}}>Title</option>
-            <option value="message" {{ 'selected' if selected_sorting=='message' else ''}}>Message</option>
-        </select>
-        <select name="sorting_order" id="sort_order">
-            <option value="asc" {{ 'selected' if selected_order=='asc' else ''}}>Ascending</option>
-            <option value="desc" {{ 'selected' if selected_order=='desc' else ''}}>Descending</option>
+            <option value="id.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}}>Id (ascending)</option>
+            <option value="id.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}}>Id (descending)</option>
+            <option value="submission_time.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}} >Time posted (ascending)</option>
+            <option value="submission_time.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}} >Time posted (descending)</option>
+            <option value="view_number.asc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='asc' else ''}}>Views (ascending)</option>
+            <option value="view_number.desc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='desc' else ''}}>Views (descending)</option>
+            <option value="vote_number.asc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='asc' else ''}}>Vote numbers (ascending)</option>
+            <option value="vote_number.desc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='desc' else ''}}>Vote numbers (descending)</option>
+            <option value="title.asc" {{ 'selected' if selected_sorting=='title' and selected_order=='asc' else ''}}>Title (ascending)</option>
+            <option value="title.desc" {{ 'selected' if selected_sorting=='title' and selected_order=='desc' else ''}}>Title (descending)</option>
+            <option value="message.asc" {{ 'selected' if selected_sorting=='message' and selected_order=='asc' else ''}}>Message (ascending)</option>
+            <option value="message.desc" {{ 'selected' if selected_sorting=='message' and selected_order=='desc' else ''}}>Message (descending)</option>
         </select>
         <button type="submit">Sort</button>
     </form>
-    <h3>Latest questions:</h3>
+    <h3>Help out your fellow AskMates:</h3>
     <ul>
         {% for question in sorted_questions %}
         <li>
