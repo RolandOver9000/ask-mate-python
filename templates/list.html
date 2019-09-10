@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage | AskMate</title>
+</head>
+<body>
+    <h1>Welcome to AskMate!</h1>
+    <h3>Latest questions:</h3>
+    <ul>
+        {% for question in sorted_questions %}
+        <li>
+            <a href="/question/{{ question.id }}">{{ question.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <p><a href="/add-question">Ask a question</a></p>
+</body>
+</html>

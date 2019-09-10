@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if question %}
+        <h3>{{ question.title }}</h3>
+        <p>Q: {{ question.message }}</p>
+        {% if question.image %}
+            <img src="{{ question.image }}">
+        {% endif %}
+        <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+        {% if answers %}
+            {% for answer in answers %}
+                <p>A: {{ answer.message }}</p>
+            {% endfor %}
+            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
+        {% else %}
+            <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
+        {% endif %}
+    {% else %}
+        <p>Question not found!</p>
+    {% endif %}
+    <div>
+        <a href="/">Return to main page</a>
+    </div>
+</body>
+</html>
