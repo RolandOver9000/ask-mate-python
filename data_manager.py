@@ -32,12 +32,10 @@ def write_new_question_data_to_file(user_inputs, new_id):
 
 def write_new_answer_data_to_file(user_inputs, question_id):
 
-    last_id_pair = connection.get_last_id_pair_from_file()
-    last_id_pair['answer'] = last_id_pair['answer'] + 1
-    connection.write_last_id_pair_to_file(last_id_pair)
+    new_id = get_new_id_for('answer')
 
     new_answer_data = {
-        'id': last_id_pair['answer'],
+        'id': new_id,
         'submission_time': int(time()),
         'vote_number': 0,
         'question_id': question_id,
