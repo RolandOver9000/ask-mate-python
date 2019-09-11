@@ -47,6 +47,15 @@ def get_csv_data(answer=False, data_id=None):
     return data_from_csv
 
 
+def get_single_data_entry(data_id, answer=False):
+    data_type_info = get_data_type_info(for_answers=answer)
+    with open(data_type_info["path"], "r") as csv_file:
+        data_reader = csv.DictReader(csv_file)
+        for data_entry in data_reader:
+            if data_entry['id'] == data_id:
+                return data_entry
+
+
 def append_data_to_file(data, answer=False):
     data_type_info = get_data_type_info(for_answers=answer)
 
