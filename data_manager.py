@@ -56,7 +56,7 @@ def write_new_answer_data_to_file(user_inputs, question_id):
 
 def increment_view_number(question_data):
     new_view_number = int(question_data["view_number"]) + 1
-    connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
+    update_question_data_in_file(question_data['id'], {"view_number": str(new_view_number)})
 
 
 def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
