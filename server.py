@@ -91,7 +91,7 @@ def route_edit(question_id):
         return render_template('add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
-    connection.update_data_in_file(question_data, user_inputs_for_question)
+    data_manager.update_question_data_in_file(question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 

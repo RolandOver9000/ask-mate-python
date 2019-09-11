@@ -119,3 +119,18 @@ def delete_answer_from_file(answer_id):
             break
 
     connection.overwrite_file(answer_csv_data, answer=True)
+
+
+def update_question_data_in_file(question_id, data_updater):
+
+    question_csv_data = connection.get_csv_data()
+
+    for data_index, question_data in enumerate(question_csv_data):
+        if question_data['id'] == question_id:
+            updated_question_data = question_data
+            for key, value in data_updater.items():
+                updated_question_data[key] = value
+            question_csv_data[data_index] = updated_question_data
+            break
+
+    connection.overwrite_file(question_csv_data)
