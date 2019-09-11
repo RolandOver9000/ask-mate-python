@@ -1,5 +1,6 @@
 from time import time
 import connection
+import util
 
 
 def get_new_id_for(data_type):
@@ -126,6 +127,13 @@ def merge_answer_count_into_questions(questions):
         else:
             question['answer_number'] = 0
     return questions
+
+
+def get_sorted_questions(questions, order_by, order_direction):
+    amended_questions = merge_answer_count_into_questions(questions)
+    sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
+    sorted_questions = util.unix_to_readable(sorted_questions)
+    return sorted_questions
 
 
 def handle_votes(vote_option, message_id, message_type):
