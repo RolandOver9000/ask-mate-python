@@ -130,7 +130,8 @@ def merge_answer_count_into_questions(questions):
     return questions
 
 
-def get_sorted_questions(questions, order_by, order_direction):
+def get_sorted_questions(order_by, order_direction):
+    questions = connection.get_csv_data()
     amended_questions = merge_answer_count_into_questions(questions)
     sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
     sorted_questions = util.unix_to_readable(sorted_questions)
