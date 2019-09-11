@@ -3,15 +3,15 @@ import csv
 ANSWER_PATH = "sample_data/answer.csv"
 QUESTION_PATH = "sample_data/question.csv"
 LAST_ID_PAIR_PATH = "last_id_pair.txt"
+ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message", "image")
+QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
 
 
 def get_data_type_info(for_answers=False):
-    answer_keys = ("id", "submission_time", "vote_number", "question_id", "message", "image")
-    question_keys = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
     if for_answers:
-        return {"path": ANSWER_PATH, "keys": answer_keys}
+        return {"path": ANSWER_PATH, "keys": ANSWER_KEYS}
     else:
-        return {"path": QUESTION_PATH, "keys": question_keys}
+        return {"path": QUESTION_PATH, "keys": QUESTION_KEYS}
 
 
 def get_csv_data(answer=False):
