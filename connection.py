@@ -7,16 +7,20 @@ ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message",
 QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
 
 
+def get_data_type_info(for_answers=False):
+    if for_answers:
+        return {"path": ANSWER_PATH, "keys": ANSWER_KEYS}
+    else:
+        return {"path": QUESTION_PATH, "keys": QUESTION_KEYS}
+
+
 def get_csv_data(answer=False, data_id=None):
     data_from_csv = []
 
-    if answer:
-        data_file_path = ANSWER_PATH
-    else:
-        data_file_path = QUESTION_PATH
+    data_type_info = get_data_type_info(for_answers=answer)
 
-    with open(data_file_path, encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
+    with open(data_type_info["path"], encoding='utf-8') as csv_file:
+        reader = csv.DictReader(csv_file)
 
         if answer and data_id:
             for row in reader:
@@ -96,29 +100,14 @@ def update_data_in_file(old_data, user_inputs, answer=False):
                 data_writer.writerow(data)
 
 
-def delete_from_file(csv_data, data_id, answer=False):
+def overwrite_file(new_file_data, answer=False):
 
-    if answer:
-        data_file_path = ANSWER_PATH
-        data_keys = ANSWER_KEYS
+    data_type_info = get_data_type_info(for_answers=answer)
 
-    else:
-        data_file_path = QUESTION_PATH
-        data_keys = QUESTION_KEYS
-
-    for counter, row in enumerate(csv_data):
-        if answer:
-            if row['question_id'] == data_id:
-                del csv_data[counter]
-        else:
-            if row['id'] == data_id:
-                del csv_data[counter]
-
-    with open(data_file_path, "w") as csvfile:
-        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+    with open(data_type_info["path"], "w") as csv_file:
+        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
         data_writer.writeheader()
-
-        for data in csv_data:
+        for data in new_file_data:
             data_writer.writerow(data)
 
 
