@@ -20,8 +20,8 @@
         <p>
             <form action="" method="post">
                 views: {{ question.view_number }} | likes: {{ question.vote_number }}
-                <button type="submit" name="vote" value="Upvote,{{ question.id }},question">Upvote</button>
-                &emsp;<button type="submit" name="vote" value="Downvote,{{ question.id }},question">Downvote</button>
+                <button type="submit" name="vote" value="Upvote,{{ question.id }},question">Upvote</button>&emsp;
+                <button type="submit" name="vote" value="Downvote,{{ question.id }},question">Downvote</button>
             </form>
         </p>
         <div>
@@ -31,7 +31,7 @@
             <a href="{{ url_for('route_delete', question_id=question.id) }}">Delete question</a>
         </div>
         <div>
-            {% if question_ids|length -1 > current_question_index %}
+            {% if question_ids|length - 1 > current_question_index %}
                 <a href="{{ question_ids[current_question_index + 1] }}">Next question</a>
             {% endif %}
         </div>
@@ -55,11 +55,16 @@
                                 {% endfor %}
                                     <p>
                                         Likes: {{ answer.vote_number }}
-                                            <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer">Upvote</button>
-                                            &emsp;<button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">Downvote</button>
+                                        <button type="submit" name="vote"
+                                                value="Upvote,{{ answer.id }},answer">Upvote</button>&emsp;
+                                        <button type="submit" name="vote"
+                                                value="Downvote,{{ answer.id }},answer">Downvote</button>
                                     </p>
                             </form>
                     </div>
+                    <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}">
+                        Delete answer
+                    </a>
                     {% if answer.image %}
                         <br><img src="{{ answer.image }}" width="300">
                     {% endif %}
