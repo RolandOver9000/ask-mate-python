@@ -151,8 +151,7 @@ def handle_votes(vote_option, message_id, message_type):
     vote_calculators = {"Upvote": lambda v: v + 1, "Downvote": lambda v: v - 1}
 
     if message_type == "answer":
-        answers = connection.get_csv_data(answer=True)
-        specified_answer = answers[int(message_id)]
+        specified_answer = connection.get_single_data_entry(message_id)
         specified_answer_copy = specified_answer.copy()
 
         vote_number = int(specified_answer["vote_number"])
@@ -161,7 +160,7 @@ def handle_votes(vote_option, message_id, message_type):
         connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
 
     elif message_type == "question":
-        question_data = connection.get_csv_data(data_id=message_id)
+        question_data = connection.get_single_data_entry(message_id)
         question_data_copy = question_data.copy()
 
         vote_number = int(question_data["vote_number"])

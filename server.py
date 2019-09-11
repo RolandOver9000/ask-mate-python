@@ -54,21 +54,21 @@ def display_question_and_answers(question_id):
         data_manager.handle_votes(vote_option, message_id, message_type)
 
         # after handle, refresh the page with the updated data
-        question_data = connection.get_csv_data(data_id=question_id)
-        answers_data = connection.get_csv_data(answer=True, data_id=question_id)
+        question_data = connection.get_single_data_entry(question_id)
+        answers_data = connection.get_answers_for_question(question_id)
 
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
     else:
-        question_data = connection.get_csv_data(data_id=question_id)
-        answers_data = connection.get_csv_data(answer=True, data_id=question_id)
+        question_data = connection.get_single_data_entry(question_id)
+        answers_data = connection.get_answers_for_question(question_id)
         data_manager.increment_view_number(question_data)
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit(question_id):
-    question_data = connection.get_csv_data(data_id=question_id)
+    question_data = connection.get_single_data_entry(question_id)
 
     if request.method == 'GET':
         return render_template('add-question.html', question_data=question_data)
@@ -86,7 +86,7 @@ def post_an_answer(question_id):
         data_manager.write_new_answer_data_to_file(user_inputs_for_answer, question_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id))
     else:
-        question = connection.get_csv_data(data_id=question_id)
+        question = connection.get_single_data_entry(question_id)
         return render_template("new_answer.html", question=question)
 
 
