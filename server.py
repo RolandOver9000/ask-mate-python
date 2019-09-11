@@ -67,7 +67,7 @@ def display_question_and_answers(question_id):
             specified_answer["vote_number"] = int(specified_answer["vote_number"]) - 1
             connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
 
-        answers_data = connection.get_csv_data(answer=True)
+        answers_data = connection.get_csv_data(answer=True, data_id=question_id)
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
     else:
         data_manager.increment_view_number(question_data)
