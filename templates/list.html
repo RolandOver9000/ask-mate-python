@@ -6,14 +6,42 @@
 </head>
 <body>
     <h1>Welcome to AskMate!</h1>
-    <h3>Latest questions:</h3>
-    <ul>
+    <form action="{{ url_for('route_list') }}" method="get">
+        <select name="sorting" id="sort_method">
+            <option value="id.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}}>Id (ascending)</option>
+            <option value="id.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}}>Id (descending)</option>
+            <option value="submission_time.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}} >Time posted (ascending)</option>
+            <option value="submission_time.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}} >Time posted (descending)</option>
+            <option value="view_number.asc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='asc' else ''}}>Views (ascending)</option>
+            <option value="view_number.desc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='desc' else ''}}>Views (descending)</option>
+            <option value="vote_number.asc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='asc' else ''}}>Vote numbers (ascending)</option>
+            <option value="vote_number.desc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='desc' else ''}}>Vote numbers (descending)</option>
+            <option value="title.asc" {{ 'selected' if selected_sorting=='title' and selected_order=='asc' else ''}}>Title (ascending)</option>
+            <option value="title.desc" {{ 'selected' if selected_sorting=='title' and selected_order=='desc' else ''}}>Title (descending)</option>
+            <option value="message.asc" {{ 'selected' if selected_sorting=='message' and selected_order=='asc' else ''}}>Message (ascending)</option>
+            <option value="message.desc" {{ 'selected' if selected_sorting=='message' and selected_order=='desc' else ''}}>Message (descending)</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+    <h3>Help out your fellow AskMates:</h3>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Question Title</th>
+            <th>Likes</th>
+            <th>Views</th>
+            <th>Submission Time</th>
+        </tr>
         {% for question in sorted_questions %}
-        <li>
-            <a href="/question/{{ question.id }}">{{ question.title }}</a>
-        </li>
+        <tr>
+            <td>{{ question.id }}</td>
+            <td><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
+            <td>{{ question.vote_number }}</td>
+            <td>{{ question.view_number }}</td>
+            <td>{{ question.submission_time }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
     <p><a href="/add-question">Ask a question</a></p>
 </body>
 </html>

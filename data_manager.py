@@ -1,4 +1,6 @@
 from time import time
+from datetime import datetime
+from copy import deepcopy
 import connection
 
 
@@ -48,15 +50,14 @@ def get_new_question_data(user_inputs):
     user_inputs["id"] = new_id
 
     # set default values
-    user_inputs["image"] = ""
     user_inputs["submission_time"] = int(time())
-    user_inputs["view_number"] = 0
+    user_inputs["view_number"] = -1
     user_inputs["vote_number"] = 0
 
     return user_inputs
 
 
-def get_new_answer_data(user_input, question_id):
+def get_new_answer_data(user_inputs, question_id):
     """
     Initialize a new dictionary with the new answer data for the specific question.
     :param user_input:
@@ -73,6 +74,18 @@ def get_new_answer_data(user_input, question_id):
     answer["submission_time"] = int(time())
     answer["vote_number"] = 0
     answer["question_id"] = question_id
-    answer["message"] = user_input
-    answer["image"] = " "
+    answer["message"] = user_inputs["message"]
+    answer["image"] = user_inputs["image"]
     return answer
+
+
+def increment_view_number(question_data):
+    new_view_number = int(question_data["view_number"]) + 1
+    connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
+
+
+def unix_to_readable(data):
+    readable_data = deepcopy(data)
+    for entry in readable_data:
+        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
+    return readable_data

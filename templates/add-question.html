@@ -18,6 +18,11 @@
                 >{{ question_data.message if question_data else ''}}</textarea>
             </p>
             <p>
+                <label for="image">Image URL:</label><br>
+                <input id="image" name="image" size="30"
+                       value="{{ question_data.image if question_data else '' }}">
+            </p>
+            <p>
                 <input type="submit" value="Submit question">
             </p>
         </form>

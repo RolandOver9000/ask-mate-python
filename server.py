@@ -9,8 +9,21 @@ app = Flask(__name__)
 @app.route("/list")
 def route_list():
     questions = connection.get_csv_data()
-    sorted_questions = data_manager.sort_data_by(questions)
-    return render_template('list.html', sorted_questions=sorted_questions)
+
+    if request.args:
+        sorting_method, sorting_order = request.args.get('sorting').split('.')
+    else:
+        sorting_method, sorting_order = 'submission_time', 'desc'
+
+    if sorting_order == 'desc':
+        descending = True
+    else:
+        descending = False
+
+    sorted_questions = data_manager.sort_data_by(questions, sorting=sorting_method, descending=descending)
+    sorted_questions = data_manager.unix_to_readable(sorted_questions)
+    return render_template('list.html', sorted_questions=sorted_questions,
+                           selected_sorting=sorting_method, selected_order=sorting_order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -31,8 +44,8 @@ def route_add():
 @app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
     # get question and answer(s)
-    question = connection.get_csv_data(data_id=question_id)
-    answers = connection.get_csv_data(answer=True, data_id=question_id)
+    question_data = connection.get_csv_data(data_id=question_id)
+    answers_data = connection.get_csv_data(answer=True, data_id=question_id)
 
     # get id of last question
     latest_ids = connection.get_last_id_pair_from_file()
@@ -41,7 +54,9 @@ def display_question_and_answers(question_id):
     if request.method == "POST":
         id_of_voted_answer = request.form["vote"]
         return redirect(url_for("update_vote_number", question_id=question_id, answer_id=id_of_voted_answer))
-    return render_template('question.html', question=question, answers=answers, last_question_id=last_question_id)
+
+    data_manager.increment_view_number(question_data)
+    return render_template('question.html', question=question_data, answers=answers_data, last_question_id=last_question_id)
 
 
 @app.route("/question/<question_id>/<answer_id>/vote", methods=["GET", "POST"])
@@ -84,14 +99,31 @@ def route_edit(question_id):
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def post_an_answer(question_id):
     if request.method == "POST":
-        answer = request.form["get_answer"]
-        answer_data = data_manager.get_new_answer_data(answer, question_id)
+        user_inputs_for_answer = request.form.to_dict()
+        answer_data = data_manager.get_new_answer_data(user_inputs_for_answer, question_id)
         connection.append_data_to_file(answer_data, True)
         return redirect(url_for('display_question_and_answers', question_id=question_id))
-
     else:
         question = connection.get_csv_data(data_id=question_id)
-        return render_template("new_answer.html", question=question["title"], message_for_question=question["message"])
+        return render_template("new_answer.html", question=question)
+
+
+@app.route('/question/<question_id>/delete')
+def route_delete(question_id):
+    # get question and answer data
+    question_data = connection.get_csv_data()
+    answer_data = connection.get_csv_data(answer=True)
+
+    # delete question and answer(s) from file
+    connection.delete_from_file(question_data, question_id)
+    connection.delete_from_file(answer_data, question_id, answer=True)
+
+    # update 'last id pair' file
+    new_id_pair = {'question': connection.get_latest_id_from_csv(),
+                   'answer': connection.get_latest_id_from_csv(answer=True)}
+    connection.write_last_id_pair_to_file(new_id_pair)
+
+    return redirect(url_for('route_list'))
 
 
 if __name__ == '__main__':

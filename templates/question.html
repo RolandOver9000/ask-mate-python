@@ -2,45 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
 </head>
 <body>
-{% if question %}
-    <h3>{{ question.title }}</h3>
-    <p>Q: {{ question.message }}</p>
-    {% if question.image %}
-        <img src="{{ question.image }}">
-    {% endif %}
-    <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
-    {% if answers %}
-        <form action="" method="post">
+    {% if question %}
+        <h3>{{ question.title }}</h3>
+        <div>
+            {% for line in question.message.split("\n") %}
+                {{ line }}<br>
+            {% endfor %}
+            <br>
+        </div>
+        {% if question.image %}
+            <img src="{{ question.image }}" width="500">
+        {% endif %}
+        <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+        <div>
+            <a href="{{ url_for('route_edit', question_id=question.id) }}">Edit question</a>
+        </div>
+        <div>
+            <a href="{{ url_for('route_delete', question_id=question.id) }}">Delete question</a>
+        </div>
+        <div>
+            {% if question.id|int < last_question_id %}
+                <a href="{{ question.id|int + 1 }}">Next question</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if question.id|int > 0 %}
+                <a href="{{ question.id|int - 1 }}">Previous question</a>
+            {% endif %}
+        </div>
+        <p>
+            <a href="/">Return to main page</a>
+        </p>
+        {% if answers %}
+            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
             {% for answer in answers %}
-                        <p>A: {{ answer.message }}</p>
-
+                <p>
+                    <div>
+                        <strong>Answer at #{{ answer.submission_time }}</strong><br>
+                        {% for line in answer.message.split("\n") %}
+                            {{ line }}<br>
+                            <form action="" method="post">
                         <p>
                             Likes: {{ answer.vote_number }}
                             &emsp;<button type="submit" name="vote" value="{{ answer.id }}">Vote</button>
                         </p>
-
+                        {% endfor %}
+                    </div>
+                    {% if answer.image %}
+                        <br><img src="{{ answer.image }}" width="300">
+                    {% endif %}
+                </p>
             {% endfor %}
-        </form>
-            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
         {% else %}
             <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
         {% endif %}
     {% else %}
         <p>Question not found!</p>
     {% endif %}
-    <div>
-        <a href="{{ url_for('route_edit', question_id=question.id) }}">Edit question</a>
-    </div>
-    <div>
-        {% if question.id|int < last_question_id %}
-            <a href="{{ question.id|int + 1 }}">Next question</a>
-        {% endif %}
-    </div>
-    <div>
-        <a href="/">Return to main page</a>
-    </div>
 </body>
 </html>
