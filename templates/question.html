@@ -6,6 +6,7 @@
 </head>
 <body>
     {% if question %}
+        {% set current_question_index = question_ids.index(question.id) %}
         <h3>{{ question.title }}</h3>
         <div>
             {% for line in question.message.split("\n") %}
@@ -24,13 +25,13 @@
             <a href="{{ url_for('route_delete', question_id=question.id) }}">Delete question</a>
         </div>
         <div>
-            {% if question.id|int < last_question_id %}
-                <a href="{{ question.id|int + 1 }}">Next question</a>
+            {% if question_ids|length -1 > current_question_index %}
+                <a href="{{ question_ids[current_question_index + 1] }}">Next question</a>
             {% endif %}
         </div>
         <div>
-            {% if question.id|int > 0 %}
-                <a href="{{ question.id|int - 1 }}">Previous question</a>
+            {% if current_question_index > 0 %}
+                <a href="{{ question_ids[current_question_index - 1] }}">Previous question</a>
             {% endif %}
         </div>
         <p>

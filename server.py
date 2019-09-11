@@ -45,16 +45,16 @@ def display_question_and_answers(question_id):
     question_data = connection.get_csv_data(data_id=question_id)
     answers_data = connection.get_csv_data(answer=True, data_id=question_id)
 
-    # get id of last question
-    latest_ids = connection.get_last_id_pair_from_file()
-    last_question_id = latest_ids['question']
+    # get ids of all questions as a list for 'next/previous question' links
+    question_ids = connection.get_list_of_ids()
 
     if request.method == "POST":
         id_of_voted_answer = request.form["vote"]
         return redirect(url_for("update_vote_number", question_id=question_id, answer_id=id_of_voted_answer))
 
     data_manager.increment_view_number(question_data)
-    return render_template('question.html', question=question_data, answers=answers_data, last_question_id=last_question_id)
+
+    return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route("/question/<question_id>/<answer_id>/vote", methods=["GET", "POST"])
