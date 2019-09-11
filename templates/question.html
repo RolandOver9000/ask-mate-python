@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
@@ -42,14 +42,16 @@
                 <p>
                     <div>
                         <strong>Answer at #{{ answer.submission_time }}</strong><br>
-                        {% for line in answer.message.split("\n") %}
-                            {{ line }}<br>
                             <form action="" method="post">
-                        <p>
-                            Likes: {{ answer.vote_number }}
-                            &emsp;<button type="submit" name="vote" value="{{ answer.id }}">Vote</button>
-                        </p>
-                        {% endfor %}
+                                {% for line in answer.message.split("\n") %}
+                                    {{ line }}<br>
+                                    <p>
+                                        Likes: {{ answer.vote_number }}
+                                            <button type="submit" name="vote" value="Upvote {{ answer.id }}">Upvote</button>
+                                            &emsp;<button type="submit" name="vote" value="Downvote {{ answer.id }}">Downvote</button>
+                                    </p>
+                                {% endfor %}
+                            </form>
                     </div>
                     {% if answer.image %}
                         <br><img src="{{ answer.image }}" width="300">
