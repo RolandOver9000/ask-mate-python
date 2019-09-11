@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
 </head>
 <body>
     {% if question %}
