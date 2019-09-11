@@ -62,34 +62,21 @@ def get_question_data_with_incremented_view_number(question_id):
     return question_data
 
 
-def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
-    if deleting_answers_for_question:
-        for data in [dict(data_orig) for data_orig in data_rows]:
-            if data['question_id'] == data_id:
-                data_rows.remove(data)
-        return data_rows
-    else:
-        for data in [dict(data_orig) for data_orig in data_rows]:
-            if data['id'] == data_id:
-                data_rows.remove(data)
-                return data_rows
-
-
 def delete_question_from_file(question_id):
 
     question_csv_data = connection.get_csv_data()
-    question_csv_data = get_reduced_data_rows(question_id, question_csv_data)
+    question_csv_data = util.get_reduced_data_rows(question_id, question_csv_data)
     connection.overwrite_file(question_csv_data)
 
     answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
+    answer_csv_data = util.get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
 def delete_answer_from_file(answer_id):
 
     answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = get_reduced_data_rows(answer_id, answer_csv_data)
+    answer_csv_data = util.get_reduced_data_rows(answer_id, answer_csv_data)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
@@ -107,35 +94,10 @@ def update_data_entry_in_file(data_id, data_updater, answer=False):
     connection.overwrite_file(csv_data, answer=answer)
 
 
-def count_answers():
-    """
-    Counts the answers for every question.
-    :return:
-    """
-    answer_count = {}
-    answers = connection.get_csv_data(answer=True)
-    for answer in answers:
-        if answer['question_id'] in answer_count:
-            answer_count[answer['question_id']] += 1
-        else:
-            answer_count[answer['question_id']] = 1
-
-    return answer_count
-
-
-def merge_answer_count_into_questions(questions):
-    answer_count = count_answers()
-    for question in questions:
-        if question['id'] in answer_count:
-            question['answer_number'] = answer_count[question['id']]
-        else:
-            question['answer_number'] = 0
-    return questions
-
-
 def get_sorted_questions(order_by, order_direction):
     questions = connection.get_csv_data()
-    amended_questions = merge_answer_count_into_questions(questions)
+    answers = connection.get_csv_data(answer=True)
+    amended_questions = util.merge_answer_count_into_questions(questions, answers)
     sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
     sorted_questions = util.unix_to_readable(sorted_questions)
     return sorted_questions
