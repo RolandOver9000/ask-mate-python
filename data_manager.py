@@ -108,3 +108,29 @@ def update_question_data_in_file(question_id, data_updater):
             break
 
     connection.overwrite_file(question_csv_data)
+
+
+def count_answers():
+    """
+    Counts the answers for every question.
+    :return:
+    """
+    answer_count = {}
+    answers = connection.get_csv_data(answer=True)
+    for answer in answers:
+        if answer['question_id'] in answer_count:
+            answer_count[answer['question_id']] += 1
+        else:
+            answer_count[answer['question_id']] = 1
+
+    return answer_count
+
+
+def merge_answer_count_into_questions(questions):
+    answer_count = count_answers()
+    for question in questions:
+        if question['id'] in answer_count:
+            question['answer_number'] = answer_count[question['id']]
+        else:
+            question['answer_number'] = 0
+    return questions

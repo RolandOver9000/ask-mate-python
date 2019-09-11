@@ -10,18 +10,19 @@ app = Flask(__name__)
 @app.route("/list")
 def route_list():
     questions = connection.get_csv_data()
-
+    # creates sorting URL query string with a GET request
     if request.args:
         sorting_method, sorting_order = request.args.get('sorting').split('.')
     else:
         sorting_method, sorting_order = 'submission_time', 'desc'
-
+    # sets the order for sorting
     if sorting_order == 'desc':
         descending = True
     else:
         descending = False
 
-    sorted_questions = util.sort_data_by(questions, sorting=sorting_method, descending=descending)
+    questions_with_answer_count = data_manager.merge_answer_count_into_questions(questions)
+    sorted_questions = util.sort_data_by(questions_with_answer_count, sorting=sorting_method, descending=descending)
     sorted_questions = util.unix_to_readable(sorted_questions)
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=sorting_method, selected_order=sorting_order)
