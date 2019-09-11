@@ -50,8 +50,8 @@ def get_csv_data(answer=False, data_id=None):
 def append_data_to_file(data, answer=False):
     data_type_info = get_data_type_info(for_answers=answer)
 
-    with open(data_type_info["path"], "a") as csvfile:
-        data_writer = csv.DictWriter(csvfile, fieldnames=data_type_info["keys"])
+    with open(data_type_info["path"], "a") as csv_file:
+        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
         data_writer.writerow(data)
 
 
@@ -63,9 +63,8 @@ def get_last_id_pair_from_file():
     """
 
     with open(LAST_ID_PAIR_PATH, "r") as pair_txt:
-        id_pair = [int(id_) for id_ in pair_txt.readline().split(",")]
-        question, answer = 0, 1
-        return {"question": id_pair[question], "answer": id_pair[answer]}
+        question_id, answer_id = [int(id_) for id_ in pair_txt.readline().split(",")]
+        return {"question": question_id, "answer": answer_id}
 
 
 def write_last_id_pair_to_file(new_id_pair):
