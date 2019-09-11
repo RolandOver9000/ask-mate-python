@@ -48,15 +48,10 @@ def get_csv_data(answer=False, data_id=None):
 
 
 def append_data_to_file(data, answer=False):
-    if answer:
-        data_file_path = ANSWER_PATH
-        data_keys = ANSWER_KEYS
-    else:
-        data_file_path = QUESTION_PATH
-        data_keys = QUESTION_KEYS
+    data_type_info = get_data_type_info(for_answers=answer)
 
-    with open(data_file_path, "a") as csvfile:
-        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+    with open(data_type_info["path"], "a") as csv_file:
+        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
         data_writer.writerow(data)
 
 
@@ -68,9 +63,8 @@ def get_last_id_pair_from_file():
     """
 
     with open(LAST_ID_PAIR_PATH, "r") as pair_txt:
-        id_pair = [int(id_) for id_ in pair_txt.readline().split(",")]
-        question, answer = 0, 1
-        return {"question": id_pair[question], "answer": id_pair[answer]}
+        question_id, answer_id = [int(id_) for id_ in pair_txt.readline().split(",")]
+        return {"question": question_id, "answer": answer_id}
 
 
 def write_last_id_pair_to_file(new_id_pair):
@@ -121,3 +115,16 @@ def get_latest_id_from_csv(answer=False):
         return csv_data[-1]['id']
     else:
         return 0
+
+
+def get_list_of_ids(answer=False):
+    list_of_ids=[]
+    if answer:
+        csv_data = get_csv_data(answer=True)
+    else:
+        csv_data = get_csv_data()
+
+    for row in csv_data:
+        list_of_ids.append(row['id'])
+
+    return list_of_ids

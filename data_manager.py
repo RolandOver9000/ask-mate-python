@@ -1,25 +1,5 @@
 from time import time
-from datetime import datetime
-from copy import deepcopy
 import connection
-
-
-def sort_data_by(data, sorting='submission_time', descending=True):
-    """
-    Sorts a list of dictionaries by chosen key.
-    :param data: list of dictionaries (e.g. questions/answers)
-    :param sorting: key to sort by (default: submission_time)
-    :param descending: descending or ascending order (default: descending)
-    :return: sorted list of dictionaries
-    """
-
-    if sorting in ['id', 'submission_time', 'view_number', 'vote_number']:
-        convert = int
-    else:
-        convert = str
-
-    sorted_data = sorted(data, key=lambda k: convert(k[sorting]), reverse=descending)
-    return sorted_data
 
 
 def get_new_id_for(data_type):
@@ -38,30 +18,31 @@ def get_new_id_for(data_type):
     return last_id_pair[data_type]
 
 
-def get_new_question_data(user_inputs):
+def write_new_question_data_to_file(user_inputs, new_id):
     """
     Updates the dictionary containing the user inputs for the newly submitted question.
+    :param new_id: new id for question
     :param user_inputs: contains the key-value pairs for the new question specified by the user
     :return: the updated dictionary containing all the necessary data for the new question
     """
 
-    # get new id for new question
-    new_id = get_new_id_for("question")
-    user_inputs["id"] = new_id
+    new_question_data = {
+        'id': new_id,
+        'submission_time': int(time()),
+        'view_number': -1,
+        'vote_number': 0
+    }
 
-    # set default values
-    user_inputs["submission_time"] = int(time())
-    user_inputs["view_number"] = -1
-    user_inputs["vote_number"] = 0
+    new_question_data.update(user_inputs)
 
-    return user_inputs
+    connection.append_data_to_file(new_question_data)
 
 
 def get_new_answer_data(user_inputs, question_id):
     """
     Initialize a new dictionary with the new answer data for the specific question.
-    :param user_input:
-    :param question_id:
+    :param user_inputs: user inputs as a dictionary from the form at /new-answer
+    :param question_id: id of the question to which the answer is to be posted
     :return: Filled out dictionary with the data of the new answer
     """
 
@@ -82,13 +63,6 @@ def get_new_answer_data(user_inputs, question_id):
 def increment_view_number(question_data):
     new_view_number = int(question_data["view_number"]) + 1
     connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
-
-
-def unix_to_readable(data):
-    readable_data = deepcopy(data)
-    for entry in readable_data:
-        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
-    return readable_data
 
 
 def delete_question_from_file(question_id):
@@ -119,6 +93,21 @@ def delete_answer_from_file(answer_id):
             break
 
     connection.overwrite_file(answer_csv_data, answer=True)
+
+
+def update_question_data_in_file(question_id, data_updater):
+
+    question_csv_data = connection.get_csv_data()
+
+    for data_index, question_data in enumerate(question_csv_data):
+        if question_data['id'] == question_id:
+            updated_question_data = question_data
+            for key, value in data_updater.items():
+                updated_question_data[key] = value
+            question_csv_data[data_index] = updated_question_data
+            break
+
+    connection.overwrite_file(question_csv_data)
 
 
 def count_answers():

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -21,26 +22,23 @@ def route_list():
         descending = False
 
     questions_with_answer_count = data_manager.merge_answer_count_into_questions(questions)
-    sorted_questions = data_manager.sort_data_by(questions_with_answer_count, sorting=sorting_method, descending=descending)
-    sorted_questions = data_manager.unix_to_readable(sorted_questions)
-    print(sorted_questions)
+    sorted_questions = util.sort_data_by(questions_with_answer_count, sorting=sorting_method, descending=descending)
+    sorted_questions = util.unix_to_readable(sorted_questions)
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=sorting_method, selected_order=sorting_order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def route_add():
-    # handle GET request
+
     if request.method == 'GET':
         return render_template('add-question.html', question_data={})
 
-    # retrieve user inputs and change it to a mutable dictionary
     user_inputs_for_question = request.form.to_dict()
-    new_question_data = data_manager.get_new_question_data(user_inputs_for_question)
-    connection.append_data_to_file(new_question_data)
+    new_id = data_manager.get_new_id_for("question")
+    data_manager.write_new_question_data_to_file(user_inputs_for_question, new_id)
 
-    # redirect to question url
-    return redirect(url_for('display_question_and_answers', question_id=new_question_data["id"]))
+    return redirect(url_for('display_question_and_answers', question_id=new_id))
 
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
@@ -49,16 +47,16 @@ def display_question_and_answers(question_id):
     question_data = connection.get_csv_data(data_id=question_id)
     answers_data = connection.get_csv_data(answer=True, data_id=question_id)
 
-    # get id of last question
-    latest_ids = connection.get_last_id_pair_from_file()
-    last_question_id = latest_ids['question']
+    # get ids of all questions as a list for 'next/previous question' links
+    question_ids = connection.get_list_of_ids()
 
     if request.method == "POST":
         id_of_voted_answer = request.form["vote"]
         return redirect(url_for("update_vote_number", question_id=question_id, answer_id=id_of_voted_answer))
 
     data_manager.increment_view_number(question_data)
-    return render_template('question.html', question=question_data, answers=answers_data, last_question_id=last_question_id)
+
+    return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route("/question/<question_id>/<answer_id>/vote", methods=["GET", "POST"])
@@ -93,7 +91,7 @@ def route_edit(question_id):
         return render_template('add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
-    connection.update_data_in_file(question_data, user_inputs_for_question)
+    data_manager.update_question_data_in_file(question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
