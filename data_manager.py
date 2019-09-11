@@ -59,33 +59,34 @@ def increment_view_number(question_data):
     connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
 
 
+def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
+    if deleting_answers_for_question:
+        for data in [dict(data_orig) for data_orig in data_rows]:
+            if data['question_id'] == data_id:
+                data_rows.remove(data)
+        return data_rows
+    else:
+        for data in [dict(data_orig) for data_orig in data_rows]:
+            if data['id'] == data_id:
+                data_rows.remove(data)
+                return data_rows
+
+
 def delete_question_from_file(question_id):
 
     question_csv_data = connection.get_csv_data()
-
-    for question_data in question_csv_data:
-        if question_data['id'] == question_id:
-            question_csv_data.remove(question_data)
-
+    question_csv_data = get_reduced_data_rows(question_id, question_csv_data)
     connection.overwrite_file(question_csv_data)
 
     answer_csv_data = connection.get_csv_data(answer=True)
-    for answer_data in [dict(answer_data) for answer_data in answer_csv_data]:
-        if answer_data['question_id'] == question_id:
-            answer_csv_data.remove(answer_data)
-
+    answer_csv_data = get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
 def delete_answer_from_file(answer_id):
 
     answer_csv_data = connection.get_csv_data(answer=True)
-
-    for answer_data in answer_csv_data:
-        if answer_data['id'] == answer_id:
-            answer_csv_data.remove(answer_data)
-            break
-
+    answer_csv_data = get_reduced_data_rows(answer_id, answer_csv_data)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
