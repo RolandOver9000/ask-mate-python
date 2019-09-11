@@ -38,23 +38,24 @@ def get_new_id_for(data_type):
     return last_id_pair[data_type]
 
 
-def get_new_question_data(user_inputs):
+def write_new_question_data_to_file(user_inputs, new_id):
     """
     Updates the dictionary containing the user inputs for the newly submitted question.
+    :param new_id: new id for question
     :param user_inputs: contains the key-value pairs for the new question specified by the user
     :return: the updated dictionary containing all the necessary data for the new question
     """
 
-    # get new id for new question
-    new_id = get_new_id_for("question")
-    user_inputs["id"] = new_id
+    new_question_data = {
+        'id': new_id,
+        'submission_time': int(time()),
+        'view_number': -1,
+        'vote_number': 0
+    }
 
-    # set default values
-    user_inputs["submission_time"] = int(time())
-    user_inputs["view_number"] = -1
-    user_inputs["vote_number"] = 0
+    new_question_data.update(user_inputs)
 
-    return user_inputs
+    connection.append_data_to_file(new_question_data)
 
 
 def get_new_answer_data(user_inputs, question_id):

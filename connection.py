@@ -48,15 +48,10 @@ def get_csv_data(answer=False, data_id=None):
 
 
 def append_data_to_file(data, answer=False):
-    if answer:
-        data_file_path = ANSWER_PATH
-        data_keys = ANSWER_KEYS
-    else:
-        data_file_path = QUESTION_PATH
-        data_keys = QUESTION_KEYS
+    data_type_info = get_data_type_info(for_answers=answer)
 
-    with open(data_file_path, "a") as csvfile:
-        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+    with open(data_type_info["path"], "a") as csvfile:
+        data_writer = csv.DictWriter(csvfile, fieldnames=data_type_info["keys"])
         data_writer.writerow(data)
 
 

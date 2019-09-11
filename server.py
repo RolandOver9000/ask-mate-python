@@ -28,17 +28,15 @@ def route_list():
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def route_add():
-    # handle GET request
+
     if request.method == 'GET':
         return render_template('add-question.html', question_data={})
 
-    # retrieve user inputs and change it to a mutable dictionary
     user_inputs_for_question = request.form.to_dict()
-    new_question_data = data_manager.get_new_question_data(user_inputs_for_question)
-    connection.append_data_to_file(new_question_data)
+    new_id = data_manager.get_new_id_for("question")
+    data_manager.write_new_question_data_to_file(user_inputs_for_question, new_id)
 
-    # redirect to question url
-    return redirect(url_for('display_question_and_answers', question_id=new_question_data["id"]))
+    return redirect(url_for('display_question_and_answers', question_id=new_id))
 
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
