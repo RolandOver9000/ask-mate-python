@@ -14,36 +14,16 @@ def get_data_type_info(for_answers=False):
         return {"path": QUESTION_PATH, "keys": QUESTION_KEYS}
 
 
-def get_csv_data(answer=False, data_id=None):
+def get_csv_data(answer=False):
     data_from_csv = []
 
     data_type_info = get_data_type_info(for_answers=answer)
 
     with open(data_type_info["path"], encoding='utf-8') as csv_file:
         reader = csv.DictReader(csv_file)
+        for data_entry in reader:
+            data_from_csv.append(data_entry)
 
-        if answer and data_id:
-            for row in reader:
-                data_row = dict(row)
-                if data_id == data_row['question_id']:
-                    data_from_csv.append(data_row)
-
-        elif answer:
-            for row in reader:
-                data_row = dict(row)
-                data_from_csv.append(data_row)
-
-        else:
-            for row in reader:
-                data_row = dict(row)
-
-                if data_id and data_id == data_row['id']:
-                    return data_row
-
-                data_from_csv.append(data_row)
-
-            if data_id:
-                return
     return data_from_csv
 
 
@@ -92,17 +72,14 @@ def write_last_id_pair_to_file(new_id_pair):
 
 def update_data_in_file(old_data, user_inputs, answer=False):
     new_data = old_data
-    for key, value in user_inputs.items():
-        new_data[key] = value
-    if answer:
-        data_file_path = ANSWER_PATH
-        data_keys = ANSWER_KEYS
-    else:
-        data_file_path = QUESTION_PATH
-        data_keys = QUESTION_KEYS
+    new_data.update(user_inputs)
+
+    data_type_info = get_data_type_info(for_answers=answer)
+
     csv_data = get_csv_data(answer=answer)
-    with open(data_file_path, "w") as csvfile:
-        data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
+
+    with open(data_type_info["path"], "w") as csv_file:
+        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
         data_writer.writeheader()
 
         for data in csv_data:
@@ -124,15 +101,8 @@ def overwrite_file(new_file_data, answer=False):
 
 
 def get_latest_id_from_csv(answer=False):
-    if answer:
-        csv_data = get_csv_data(answer=True)
-    else:
-        csv_data = get_csv_data()
-
-    if csv_data:
-        return csv_data[-1]['id']
-    else:
-        return 0
+    csv_data = get_csv_data(answer=answer)
+    return csv_data[-1]['id'] if csv_data else 0
 
 
 def get_list_of_ids(answer=False):
