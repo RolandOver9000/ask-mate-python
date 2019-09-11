@@ -10,14 +10,7 @@
     <div id="main-question-body">
         {% if question %}
             {% set current_question_index = question_ids.index(question.id) %}
-            <h3>{{ question.title }}</h3>
             <div id="question-without-answers">
-
-                {% for line in question.message.split("\n") %}
-                    {{ line }}<br>
-                {% endfor %}
-                <br>
-
                 {% if question.image %}
                     <img src="{{ question.image }}" width="500" alt="missing_image">
                 {% endif %}
@@ -32,24 +25,27 @@
 
                 <a href="{{ url_for('route_delete', question_id=question.id) }}" id="delete">Delete question</a>
 
-                {% if question_ids|length - 1 > current_question_index %}
-                    <a href="{{ question_ids[current_question_index + 1] }}" id="next-question">Next question</a>
-                {% endif %}
-
                 {% if current_question_index > 0 %}
                     <a href="{{ question_ids[current_question_index - 1] }}" id="previous-question">Previous question</a>
+                {% else %}
+                    <span id="previous-question">Previous question</span>
                 {% endif %}
+                {% if question_ids|length - 1 > current_question_index %}
+                    <a href="{{ question_ids[current_question_index + 1] }}" id="next-question">Next question</a>
+                {% else %}
+                    <span id="next-question">Next question</span>
+                {% endif %}
+                <span id="which-question">{{ current_question_index + 1}}/{{ question_ids|length }}</span>
             </div>
+            <h3>{{ question.title }}</h3>
+            <p id="question-message">{{ question.message }}</p>
             {% if answers %}
                 <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
                 {% for answer in answers %}
                     <p>
                         <div id="answers">
                             <strong>Answer at #{{ answer.submission_time }}</strong><br>
-                                    {% for line in answer.message.split("\n") %}
-                                        {{ line }}<br>
-                                    {% endfor %}
-
+                                    <p id="answer-message">{{ answer.message }}</p>
                                             <form action="" method="post">
                                                 Likes: {{ answer.vote_number }}
                                                 <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>&emsp;

@@ -22,7 +22,7 @@ html {
     display: inline;
 }
 
-#edit, #delete, #next-question, #previous-question {
+#edit, #delete, #next-question, #previous-question, #which-question {
     display: inline;
     padding-right: 20px;
 }
@@ -42,4 +42,10 @@ html {
 #upvote-answer, #downvote-answer {
     display: inline;
     margin-right: auto;
+}
+
+#question-message, #answer-message {
+    white-space: pre-line;
+    width: 500px;
+    text-align: justify;
 }
