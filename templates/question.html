@@ -44,6 +44,11 @@
                         <strong>Answer at #{{ answer.submission_time }}</strong><br>
                         {% for line in answer.message.split("\n") %}
                             {{ line }}<br>
+                            <form action="" method="post">
+                        <p>
+                            Likes: {{ answer.vote_number }}
+                            &emsp;<button type="submit" name="vote" value="{{ answer.id }}">Vote</button>
+                        </p>
                         {% endfor %}
                     </div>
                     {% if answer.image %}

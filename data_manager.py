@@ -58,6 +58,13 @@ def get_new_question_data(user_inputs):
 
 
 def get_new_answer_data(user_inputs, question_id):
+    """
+    Initialize a new dictionary with the new answer data for the specific question.
+    :param user_input:
+    :param question_id:
+    :return: Filled out dictionary with the data of the new answer
+    """
+
     answer = {}
     last_question_and_answer_id = connection.get_last_id_pair_from_file()
     last_question_and_answer_id["answer"] = last_question_and_answer_id["answer"] + 1
@@ -82,3 +89,33 @@ def unix_to_readable(data):
     for entry in readable_data:
         entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
     return readable_data
+
+
+def delete_question_from_file(question_id):
+
+    question_csv_data = connection.get_csv_data()
+
+    for question_data in question_csv_data:
+        if question_data['id'] == question_id:
+            question_csv_data.remove(question_data)
+
+    connection.overwrite_file(question_csv_data)
+
+    answer_csv_data = connection.get_csv_data(answer=True)
+    for answer_data in answer_csv_data:
+        if answer_data['question_id'] == question_id:
+            answer_csv_data.remove(answer_data)
+
+    connection.overwrite_file(answer_csv_data, answer=True)
+
+
+def delete_answer_from_file(answer_id):
+
+    answer_csv_data = connection.get_csv_data(answer=True)
+
+    for answer_data in answer_csv_data:
+        if answer_data['id'] == answer_id:
+            answer_csv_data.remove(answer_data)
+            break
+
+    connection.overwrite_file(answer_csv_data, answer=True)

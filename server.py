@@ -41,7 +41,7 @@ def route_add():
     return redirect(url_for('display_question_and_answers', question_id=new_question_data["id"]))
 
 
-@app.route('/question/<question_id>')
+@app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
     # get question and answer(s)
     question_data = connection.get_csv_data(data_id=question_id)
@@ -51,9 +51,36 @@ def display_question_and_answers(question_id):
     latest_ids = connection.get_last_id_pair_from_file()
     last_question_id = latest_ids['question']
 
-    data_manager.increment_view_number(question_data)
+    if request.method == "POST":
+        id_of_voted_answer = request.form["vote"]
+        return redirect(url_for("update_vote_number", question_id=question_id, answer_id=id_of_voted_answer))
 
+    data_manager.increment_view_number(question_data)
     return render_template('question.html', question=question_data, answers=answers_data, last_question_id=last_question_id)
+
+
+@app.route("/question/<question_id>/<answer_id>/vote", methods=["GET", "POST"])
+def update_vote_number(question_id, answer_id):
+    """Print the question and the title with the specific answer that you want to vote.
+    Buttons: Upvote, Downvote, Back
+    With the Upvote, Downvote buttons, increase/decrease the "vote_number" of the anwser's dictionary and updates the
+    csv file."""
+    counter = 0
+    question = connection.get_csv_data(data_id=question_id)
+    answers = connection.get_csv_data(answer=True, data_id=answer_id)
+    specified_answer = answers[int(answer_id)]
+    specified_answer_copy = specified_answer.copy()
+    if request.method == "POST":
+        if request.form["vote"] == "Upvote":
+            convert = int(specified_answer["vote_number"]) + 1
+            specified_answer["vote_number"] = convert
+            connection.update_data_in_file(specified_answer_copy, {"vote_number": convert}, answer=True)
+        elif request.form["vote"] == "Downvote":
+            convert = int(specified_answer["vote_number"]) - 1
+            specified_answer["vote_number"] = convert
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+        return redirect(url_for("display_question_and_answers", question_id=question_id))
+    return render_template("vote.html", counter=counter, question=question, answer=specified_answer["message"])
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
@@ -83,13 +110,9 @@ def post_an_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete(question_id):
-    # get question and answer data
-    question_data = connection.get_csv_data()
-    answer_data = connection.get_csv_data(answer=True)
 
     # delete question and answer(s) from file
-    connection.delete_from_file(question_data, question_id)
-    connection.delete_from_file(answer_data, question_id, answer=True)
+    data_manager.delete_question_from_file(question_id)
 
     # update 'last id pair' file
     new_id_pair = {'question': connection.get_latest_id_from_csv(),
