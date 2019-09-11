@@ -101,13 +101,8 @@ def post_an_answer(question_id):
 @app.route('/question/<question_id>/delete')
 def route_delete(question_id):
 
-    # delete question and answer(s) from file
     data_manager.delete_question_from_file(question_id)
-
-    # update 'last id pair' file
-    new_id_pair = {'question': connection.get_latest_id_from_csv(),
-                   'answer': connection.get_latest_id_from_csv(answer=True)}
-    connection.write_last_id_pair_to_file(new_id_pair)
+    data_manager.update_id_pair_in_file()
 
     return redirect(url_for('route_list'))
 
