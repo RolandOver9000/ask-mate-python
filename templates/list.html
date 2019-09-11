@@ -18,10 +18,10 @@
             <option value="view_number.desc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='desc' else ''}}>Views (descending)</option>
             <option value="vote_number.asc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='asc' else ''}}>Vote numbers (ascending)</option>
             <option value="vote_number.desc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='desc' else ''}}>Vote numbers (descending)</option>
+            <option value="answer_number.asc" {{ 'selected' if selected_sorting=='answer_number' and selected_order=='asc' else ''}}>Answers (ascending)</option>
+            <option value="answer_number.desc" {{ 'selected' if selected_sorting=='answer_number' and selected_order=='desc' else ''}}>Answers (descending)</option>
             <option value="title.asc" {{ 'selected' if selected_sorting=='title' and selected_order=='asc' else ''}}>Title (ascending)</option>
             <option value="title.desc" {{ 'selected' if selected_sorting=='title' and selected_order=='desc' else ''}}>Title (descending)</option>
-            <option value="message.asc" {{ 'selected' if selected_sorting=='message' and selected_order=='asc' else ''}}>Message (ascending)</option>
-            <option value="message.desc" {{ 'selected' if selected_sorting=='message' and selected_order=='desc' else ''}}>Message (descending)</option>
         </select>
         <button type="submit">Sort</button>
     </form><br>
@@ -31,6 +31,7 @@
             <th>Question Title</th>
             <th>Likes</th>
             <th>Views</th>
+            <th>Answers</th>
             <th>Submission Time</th>
         </tr>
         {% for question in sorted_questions %}
@@ -39,6 +40,7 @@
             <td><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
             <td>{{ question.vote_number }}</td>
             <td>{{ question.view_number }}</td>
+            <td>{{ question.answer_number }}</td>
             <td>{{ question.submission_time }}</td>
         </tr>
         {% endfor %}
