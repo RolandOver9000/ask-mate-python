@@ -9,28 +9,26 @@
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
     <h3>Help out your fellow AskMates:</h3>
-    <form action="{{ url_for('route_list') }}" method="get" id="sorting">
-        <select name="sorting">
-            <option value="id.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}}>Id (ascending)</option>
-            <option value="id.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}}>Id (descending)</option>
-            <option value="submission_time.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}} >Time posted (ascending)</ option>
-            <option value="submission_time.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}} >Time posted (descending)</option>
-            <option value="view_number.asc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='asc' else ''}}>Views (ascending)</option>
-            <option value="view_number.desc" {{ 'selected' if selected_sorting=='view_number' and selected_order=='desc' else ''}}>Views (descending)</option>
-            <option value="vote_number.asc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='asc' else ''}}>Vote numbers (ascending)</option>
-            <option value="vote_number.desc" {{ 'selected' if selected_sorting=='vote_number' and selected_order=='desc' else ''}}>Vote numbers (descending)</option>
-            <option value="answer_number.asc" {{ 'selected' if selected_sorting=='answer_number' and selected_order=='asc' else ''}}>Answers (ascending)</option>
-            <option value="answer_number.desc" {{ 'selected' if selected_sorting=='answer_number' and selected_order=='desc' else ''}}>Answers (descending)</option>
-            <option value="title.asc" {{ 'selected' if selected_sorting=='title' and selected_order=='asc' else ''}}>Title (ascending)</option>
-            <option value="title.desc" {{ 'selected' if selected_sorting=='title' and selected_order=='desc' else ''}}>Title (descending)</option>
+    <form action="{{ url_for('route_list') }}" method="get" id="sort">
+        <select name="order_by" id="sort_order_by">
+            <option value="id" {{ 'selected' if selected_sorting=='submission_time' else ''}}>Id</option>
+            <option value="submission_time" {{ 'selected' if selected_sorting=='submission_time' else ''}} >Time posted</ option>
+            <option value="view_number" {{ 'selected' if selected_sorting=='view_number' else ''}}>Views</option>
+            <option value="vote_number" {{ 'selected' if selected_sorting=='vote_number' else ''}}>Upvotes</option>
+            <option value="answer_number" {{ 'selected' if selected_sorting=='answer_number' else ''}}>Answers</option>
+            <option value="title" {{ 'selected' if selected_sorting=='title' else ''}}>Title</option>
+        </select>
+        <select name="order_direction" id="sort_order_direction">
+            <option value="asc" {{ 'selected' if selected_order=='asc' else ''}}>&#x2B06;</option>
+            <option value="desc" {{ 'selected' if selected_order=='desc' else ''}}>&#x2B07;</option>
         </select>
         <button type="submit">Sort</button>
-    </form><br>
+    </form>
     <table>
         <tr>
             <th>Id</th>
             <th>Question Title</th>
-            <th>Likes</th>
+            <th>Upvotes</th>
             <th>Views</th>
             <th>Answers</th>
             <th>Submission Time</th>

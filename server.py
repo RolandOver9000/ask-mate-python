@@ -12,7 +12,8 @@ def route_list():
     questions = connection.get_csv_data()
     # creates sorting URL query string with a GET request
     if request.args:
-        sorting_method, sorting_order = request.args.get('sorting').split('.')
+        sorting_method = request.args.get('order_by')
+        sorting_order = request.args.get('order_direction')
     else:
         sorting_method, sorting_order = 'submission_time', 'desc'
     # sets the order for sorting

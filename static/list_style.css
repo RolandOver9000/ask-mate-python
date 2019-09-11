@@ -11,14 +11,14 @@ h1 {
 h3 {
     display: inline;
     margin:0 auto;
-    margin-left: 15%;
+    margin-left: 10%;
 }
 
-#sorting {
-    display: inline;
+#sort {
+    display: block;
     float: right;
     margin:0 auto;
-    margin-right: 15%;
+    margin-right: 10%;
 }
 
 table {
@@ -63,3 +63,6 @@ th {
     font-size: 200%;
 }
 
+#sort_order_direction, #sort_order_by, button {
+    font-size: 110%;
+}
