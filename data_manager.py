@@ -60,8 +60,8 @@ def get_new_question_data(user_inputs):
 def get_new_answer_data(user_inputs, question_id):
     """
     Initialize a new dictionary with the new answer data for the specific question.
-    :param user_input:
-    :param question_id:
+    :param user_inputs: user inputs as a dictionary from the form at /new-answer
+    :param question_id: id of the question to which the answer is to be posted
     :return: Filled out dictionary with the data of the new answer
     """
 
