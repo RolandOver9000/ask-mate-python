@@ -91,8 +91,7 @@ def route_edit(question_id):
 def post_an_answer(question_id):
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
-        answer_data = data_manager.get_new_answer_data(user_inputs_for_answer, question_id)
-        connection.append_data_to_file(answer_data, True)
+        data_manager.write_new_answer_data_to_file(user_inputs_for_answer, question_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id))
     else:
         question = connection.get_csv_data(data_id=question_id)
