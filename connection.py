@@ -118,11 +118,9 @@ def get_latest_id_from_csv(answer=False):
 
 
 def get_list_of_ids(answer=False):
-    list_of_ids=[]
-    if answer:
-        csv_data = get_csv_data(answer=True)
-    else:
-        csv_data = get_csv_data()
+    list_of_ids = []
+
+    csv_data = get_csv_data(answer=answer)
 
     for row in csv_data:
         list_of_ids.append(row['id'])

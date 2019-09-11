@@ -1,5 +1,6 @@
 from time import time
 import connection
+import util
 
 
 def get_new_id_for(data_type):
@@ -16,6 +17,14 @@ def get_new_id_for(data_type):
     last_id_pair[data_type] += 1
     connection.write_last_id_pair_to_file(last_id_pair)
     return last_id_pair[data_type]
+
+
+def update_id_pair_in_file():
+    new_id_pair = {
+        'question': connection.get_latest_id_from_csv(),
+        'answer': connection.get_latest_id_from_csv(answer=True)
+    }
+    connection.write_last_id_pair_to_file(new_id_pair)
 
 
 def write_new_question_data_to_file(user_inputs, new_id):
@@ -47,36 +56,37 @@ def write_new_answer_data_to_file(user_inputs, question_id):
 
 def increment_view_number(question_data):
     new_view_number = int(question_data["view_number"]) + 1
-    connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
+    update_question_data_in_file(question_data['id'], {"view_number": str(new_view_number)})
+
+
+def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
+    if deleting_answers_for_question:
+        for data in [dict(data_orig) for data_orig in data_rows]:
+            if data['question_id'] == data_id:
+                data_rows.remove(data)
+        return data_rows
+    else:
+        for data in [dict(data_orig) for data_orig in data_rows]:
+            if data['id'] == data_id:
+                data_rows.remove(data)
+                return data_rows
 
 
 def delete_question_from_file(question_id):
 
     question_csv_data = connection.get_csv_data()
-
-    for question_data in question_csv_data:
-        if question_data['id'] == question_id:
-            question_csv_data.remove(question_data)
-
+    question_csv_data = get_reduced_data_rows(question_id, question_csv_data)
     connection.overwrite_file(question_csv_data)
 
     answer_csv_data = connection.get_csv_data(answer=True)
-    for answer_data in [dict(answer_data) for answer_data in answer_csv_data]:
-        if answer_data['question_id'] == question_id:
-            answer_csv_data.remove(answer_data)
-
+    answer_csv_data = get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
 def delete_answer_from_file(answer_id):
 
     answer_csv_data = connection.get_csv_data(answer=True)
-
-    for answer_data in answer_csv_data:
-        if answer_data['id'] == answer_id:
-            answer_csv_data.remove(answer_data)
-            break
-
+    answer_csv_data = get_reduced_data_rows(answer_id, answer_csv_data)
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
@@ -87,8 +97,7 @@ def update_question_data_in_file(question_id, data_updater):
     for data_index, question_data in enumerate(question_csv_data):
         if question_data['id'] == question_id:
             updated_question_data = question_data
-            for key, value in data_updater.items():
-                updated_question_data[key] = value
+            updated_question_data.update(data_updater)
             question_csv_data[data_index] = updated_question_data
             break
 
@@ -119,3 +128,43 @@ def merge_answer_count_into_questions(questions):
         else:
             question['answer_number'] = 0
     return questions
+
+
+def get_sorted_questions(questions, order_by, order_direction):
+    amended_questions = merge_answer_count_into_questions(questions)
+    sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
+    sorted_questions = util.unix_to_readable(sorted_questions)
+    return sorted_questions
+
+
+def handle_votes(vote_option, message_id, message_type):
+    """
+    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
+    the updated data into the file.
+    :param vote_option:  (Upvote or Downvote[str])
+    :param message_id:   (id of question/answer[str])
+    :param message_type: (answer or question[str])
+    :return:
+    """
+    if message_type == "answer":
+        answers = connection.get_csv_data(answer=True)
+        specified_answer = answers[int(message_id)]
+        specified_answer_copy = specified_answer.copy()
+
+        if vote_option == "Upvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) + 1
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+
+        elif vote_option == "Downvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) - 1
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+
+    elif message_type == "question":
+        question_data = connection.get_csv_data(data_id=message_id)
+        question_data_copy = question_data.copy()
+        if vote_option == "Upvote":
+            question_data["vote_number"] = int(question_data["vote_number"]) + 1
+            connection.update_data_in_file(question_data_copy, question_data)
+        elif vote_option == "Downvote":
+            question_data["vote_number"] = int(question_data["vote_number"]) - 1
+            connection.update_data_in_file(question_data_copy, question_data)

@@ -2,22 +2,27 @@ from datetime import datetime
 from copy import deepcopy
 
 
-def sort_data_by(data, sorting='submission_time', descending=True):
+def sort_data_by(data_rows, order_by, order_direction):
     """
     Sorts a list of dictionaries by chosen key.
-    :param data: list of dictionaries (e.g. questions/answers)
-    :param sorting: key to sort by (default: submission_time)
-    :param descending: descending or ascending order (default: descending)
+    :param data_rows: list of dictionaries (e.g. questions/answers)
+    :param order_by: key to sort by
+    :param order_direction: "desc" (descending) or "asc" (ascending) order
     :return: sorted list of dictionaries
     """
 
-    if sorting in ['id', 'submission_time', 'view_number', 'vote_number']:
+    if order_by in ['id', 'submission_time', 'view_number', 'vote_number']:
         convert = int
     else:
         convert = str
 
-    sorted_data = sorted(data, key=lambda k: convert(k[sorting]), reverse=descending)
-    return sorted_data
+    reverse_values = {"desc": True, "asc": False}
+
+    return sorted(
+        data_rows,
+        key=lambda data_row: convert(data_row[order_by]),
+        reverse=reverse_values[order_direction]
+    )
 
 
 def unix_to_readable(data):

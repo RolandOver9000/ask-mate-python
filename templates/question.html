@@ -17,7 +17,13 @@
         {% if question.image %}
             <img src="{{ question.image }}" width="500">
         {% endif %}
-        <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+        <p>
+            <form action="" method="post">
+                views: {{ question.view_number }} | likes: {{ question.vote_number }}
+                <button type="submit" name="vote" value="Upvote,{{ question.id }},question">Upvote</button>
+                &emsp;<button type="submit" name="vote" value="Downvote,{{ question.id }},question">Downvote</button>
+            </form>
+        </p>
         <div>
             <a href="{{ url_for('route_edit', question_id=question.id) }}">Edit question</a>
         </div>
@@ -48,8 +54,8 @@
                                     {{ line }}<br>
                                     <p>
                                         Likes: {{ answer.vote_number }}
-                                            <button type="submit" name="vote" value="Upvote {{ answer.id }}">Upvote</button>
-                                            &emsp;<button type="submit" name="vote" value="Downvote {{ answer.id }}">Downvote</button>
+                                            <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer">Upvote</button>
+                                            &emsp;<button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">Downvote</button>
                                     </p>
                                 {% endfor %}
                             </form>
