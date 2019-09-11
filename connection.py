@@ -56,6 +56,15 @@ def get_single_data_entry(data_id, answer=False):
                 return data_entry
 
 
+def get_answers_for_question(question_id):
+    answers_for_question = []
+    answer_csv_data = get_csv_data(answer=True)
+    for answer_data in answer_csv_data:
+        if answer_data['question_id'] == question_id:
+            answers_for_question.append(answer_data)
+    return answers_for_question
+
+
 def append_data_to_file(data, answer=False):
     data_type_info = get_data_type_info(for_answers=answer)
 
