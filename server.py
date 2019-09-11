@@ -42,9 +42,6 @@ def route_add():
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
-    # get question and answer(s)
-    question_data = connection.get_csv_data(data_id=question_id)
-    answers_data = connection.get_csv_data(answer=True, data_id=question_id)
 
     # get ids of all questions as a list for 'next/previous question' links
     question_ids = connection.get_list_of_ids()
@@ -52,16 +49,19 @@ def display_question_and_answers(question_id):
     # updates the votes
     if request.method == "POST":
         # get the data of the clicked button in list (3 elements)
-        form_data = list(request.form["vote"].split(","))
-        vote_option = form_data[0]
-        message_id = form_data[1]
-        message_type = form_data[2]
+        vote_option, message_id, message_type = request.form["vote"].split(",")
+
         data_manager.handle_votes(vote_option, message_id, message_type)
+
         # after handle, refresh the page with the updated data
         question_data = connection.get_csv_data(data_id=question_id)
         answers_data = connection.get_csv_data(answer=True, data_id=question_id)
+
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
+
     else:
+        question_data = connection.get_csv_data(data_id=question_id)
+        answers_data = connection.get_csv_data(answer=True, data_id=question_id)
         data_manager.increment_view_number(question_data)
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
