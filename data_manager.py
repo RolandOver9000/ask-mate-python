@@ -134,3 +134,36 @@ def merge_answer_count_into_questions(questions):
         else:
             question['answer_number'] = 0
     return questions
+
+
+def handle_votes(vote_option, message_id, message_type):
+    """
+    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
+    the updated data into the file.
+    :param vote_option:  (Upvote or Downvote[str])
+    :param message_id:   (id of question/answer[str])
+    :param message_type: (answer or question[str])
+    :return:
+    """
+    if message_type == "answer":
+        answers = connection.get_csv_data(answer=True)
+        specified_answer = answers[int(message_id)]
+        specified_answer_copy = specified_answer.copy()
+
+        if vote_option == "Upvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) + 1
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+
+        elif vote_option == "Downvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) - 1
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+
+    elif message_type == "question":
+        question_data = connection.get_csv_data(data_id=message_id)
+        question_data_copy = question_data.copy()
+        if vote_option == "Upvote":
+            question_data["vote_number"] = int(question_data["vote_number"]) + 1
+            connection.update_data_in_file(question_data_copy, question_data)
+        elif vote_option == "Downvote":
+            question_data["vote_number"] = int(question_data["vote_number"]) - 1
+            connection.update_data_in_file(question_data_copy, question_data)

@@ -52,26 +52,19 @@ def display_question_and_answers(question_id):
 
     # updates the votes
     if request.method == "POST":
-        form_data = list(request.form["vote"].split(" "))
-        answer_id = form_data[1]
+        # get the data of the clicked button in list (3 elements)
+        form_data = list(request.form["vote"].split(","))
         vote_option = form_data[0]
-        answers = connection.get_csv_data(answer=True)
-        specified_answer = answers[int(answer_id)]
-        specified_answer_copy = specified_answer.copy()
-
-        if vote_option == "Upvote":
-            specified_answer["vote_number"] = int(specified_answer["vote_number"]) + 1
-            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
-
-        elif vote_option == "Downvote":
-            specified_answer["vote_number"] = int(specified_answer["vote_number"]) - 1
-            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
-
-        answers_data = connection.get_csv_data(answer=True)
+        message_id = form_data[1]
+        message_type = form_data[2]
+        data_manager.handle_votes(vote_option, message_id, message_type)
+        # after handle, refresh the page with the updated data
+        question_data = connection.get_csv_data(data_id=question_id)
+        answers_data = connection.get_csv_data(answer=True, data_id=question_id)
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
     else:
         data_manager.increment_view_number(question_data)
-        return render_template('question.html', question=question_data, answers=answers_data, question_id=question_id)
+        return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
