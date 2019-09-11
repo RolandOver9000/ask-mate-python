@@ -91,7 +91,7 @@ def route_edit(question_id):
         return render_template('add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
-    connection.update_data_in_file(question_data, user_inputs_for_question)
+    data_manager.update_question_data_in_file(question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
@@ -110,13 +110,9 @@ def post_an_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete(question_id):
-    # get question and answer data
-    question_data = connection.get_csv_data()
-    answer_data = connection.get_csv_data(answer=True)
 
     # delete question and answer(s) from file
-    connection.delete_from_file(question_data, question_id)
-    connection.delete_from_file(answer_data, question_id, answer=True)
+    data_manager.delete_question_from_file(question_id)
 
     # update 'last id pair' file
     new_id_pair = {'question': connection.get_latest_id_from_csv(),
