@@ -19,12 +19,6 @@ def get_new_id_for(data_type):
 
 
 def write_new_question_data_to_file(user_inputs, new_id):
-    """
-    Updates the dictionary containing the user inputs for the newly submitted question.
-    :param new_id: new id for question
-    :param user_inputs: contains the key-value pairs for the new question specified by the user
-    :return: the updated dictionary containing all the necessary data for the new question
-    """
 
     new_question_data = {
         'id': new_id,
@@ -32,32 +26,25 @@ def write_new_question_data_to_file(user_inputs, new_id):
         'view_number': -1,
         'vote_number': 0
     }
-
     new_question_data.update(user_inputs)
-
     connection.append_data_to_file(new_question_data)
 
 
-def get_new_answer_data(user_inputs, question_id):
-    """
-    Initialize a new dictionary with the new answer data for the specific question.
-    :param user_inputs: user inputs as a dictionary from the form at /new-answer
-    :param question_id: id of the question to which the answer is to be posted
-    :return: Filled out dictionary with the data of the new answer
-    """
+def write_new_answer_data_to_file(user_inputs, question_id):
 
-    answer = {}
-    last_question_and_answer_id = connection.get_last_id_pair_from_file()
-    last_question_and_answer_id["answer"] = last_question_and_answer_id["answer"] + 1
-    connection.write_last_id_pair_to_file(last_question_and_answer_id)
+    last_id_pair = connection.get_last_id_pair_from_file()
+    last_id_pair['answer'] = last_id_pair['answer'] + 1
+    connection.write_last_id_pair_to_file(last_id_pair)
 
-    answer["id"] = last_question_and_answer_id["answer"]
-    answer["submission_time"] = int(time())
-    answer["vote_number"] = 0
-    answer["question_id"] = question_id
-    answer["message"] = user_inputs["message"]
-    answer["image"] = user_inputs["image"]
-    return answer
+    new_answer_data = {
+        'id': last_id_pair['answer'],
+        'submission_time': int(time()),
+        'vote_number': 0,
+        'question_id': question_id,
+    }
+
+    new_answer_data.update(user_inputs)
+    connection.append_data_to_file(new_answer_data, answer=True)
 
 
 def increment_view_number(question_data):
@@ -76,7 +63,7 @@ def delete_question_from_file(question_id):
     connection.overwrite_file(question_csv_data)
 
     answer_csv_data = connection.get_csv_data(answer=True)
-    for answer_data in answer_csv_data:
+    for answer_data in [dict(answer_data) for answer_data in answer_csv_data]:
         if answer_data['question_id'] == question_id:
             answer_csv_data.remove(answer_data)
 
