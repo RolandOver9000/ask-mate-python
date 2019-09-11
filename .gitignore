@@ -107,3 +107,4 @@ ENV/
 /sample_data/
 /sample_data/question.csv
 /sample_data/answer.csv
+/last_id_pair.txt
