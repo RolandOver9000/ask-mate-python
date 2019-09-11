@@ -71,7 +71,7 @@ def display_question_and_answers(question_id):
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
     else:
         data_manager.increment_view_number(question_data)
-        return render_template('question.html', question=question_data, answers=answers_data, question_id=question_id)
+        return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
