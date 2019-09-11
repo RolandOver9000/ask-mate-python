@@ -1,80 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
 </head>
 <body>
-    {% if question %}
-        {% set current_question_index = question_ids.index(question.id) %}
-        <h3>{{ question.title }}</h3>
-        <div>
-            {% for line in question.message.split("\n") %}
-                {{ line }}<br>
-            {% endfor %}
-            <br>
-        </div>
-        {% if question.image %}
-            <img src="{{ question.image }}" width="500">
-        {% endif %}
-        <p>
-            <form action="" method="post">
-                views: {{ question.view_number }} | likes: {{ question.vote_number }}
-                <button type="submit" name="vote" value="Upvote,{{ question.id }},question">Upvote</button>&emsp;
-                <button type="submit" name="vote" value="Downvote,{{ question.id }},question">Downvote</button>
-            </form>
-        </p>
-        <div>
-            <a href="{{ url_for('route_edit', question_id=question.id) }}">Edit question</a>
-        </div>
-        <div>
-            <a href="{{ url_for('route_delete', question_id=question.id) }}">Delete question</a>
-        </div>
-        <div>
-            {% if question_ids|length - 1 > current_question_index %}
-                <a href="{{ question_ids[current_question_index + 1] }}">Next question</a>
+<link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
+    <p><a href="/" id="back-to-main">Return to main page</a></p>
+    <div id="main-question-body">
+        {% if question %}
+            {% set current_question_index = question_ids.index(question.id) %}
+            <h3>{{ question.title }}</h3>
+            <div id="question-without-answers">
+
+                {% for line in question.message.split("\n") %}
+                    {{ line }}<br>
+                {% endfor %}
+                <br>
+
+                {% if question.image %}
+                    <img src="{{ question.image }}" width="500" alt="missing_image">
+                {% endif %}
+                <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+                <p><form action="" method="post">
+                        <button type="submit" name="vote" value="Upvote,{{ question.id }},question" id="upvote">&#x1F44D;</button>
+                        <button type="submit" name="vote" value="Downvote,{{ question.id }},question" id="downvote">&#x1F44E;</button>
+                </form></p>
+            </div>
+            <div id="operations">
+                <a href="{{ url_for('route_edit', question_id=question.id) }}" id="edit">Edit question</a>
+
+                <a href="{{ url_for('route_delete', question_id=question.id) }}" id="delete">Delete question</a>
+
+                {% if question_ids|length - 1 > current_question_index %}
+                    <a href="{{ question_ids[current_question_index + 1] }}" id="next-question">Next question</a>
+                {% endif %}
+
+                {% if current_question_index > 0 %}
+                    <a href="{{ question_ids[current_question_index - 1] }}" id="previous-question">Previous question</a>
+                {% endif %}
+            </div>
+            {% if answers %}
+                <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
+                {% for answer in answers %}
+                    <p>
+                        <div id="answers">
+                            <strong>Answer at #{{ answer.submission_time }}</strong><br>
+                                    {% for line in answer.message.split("\n") %}
+                                        {{ line }}<br>
+                                    {% endfor %}
+
+                                            <form action="" method="post">
+                                                Likes: {{ answer.vote_number }}
+                                                <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>&emsp;
+                                                <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer" id="downvote-answer">&#x1F44E;</button>
+                                            </form>
+                        </div>
+                        <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}" id="delete-answer">
+                            Delete answer
+                        </a>
+                        {% if answer.image %}
+                            <br><img src="{{ answer.image }}" width="300" alt="answer_image">
+                        {% endif %}
+                    </p>
+                {% endfor %}
+            {% else %}
+                <a href="/question/{{ question.id }}/new-answer" id="answer-question-first">Be the first to answer this question!</a>
             {% endif %}
-        </div>
-        <div>
-            {% if current_question_index > 0 %}
-                <a href="{{ question_ids[current_question_index - 1] }}">Previous question</a>
-            {% endif %}
-        </div>
-        <p>
-            <a href="/">Return to main page</a>
-        </p>
-        {% if answers %}
-            <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
-            {% for answer in answers %}
-                <p>
-                    <div>
-                        <strong>Answer at #{{ answer.submission_time }}</strong><br>
-                            <form action="" method="post">
-                                {% for line in answer.message.split("\n") %}
-                                    {{ line }}<br>
-                                {% endfor %}
-                                    <p>
-                                        Likes: {{ answer.vote_number }}
-                                        <button type="submit" name="vote"
-                                                value="Upvote,{{ answer.id }},answer">Upvote</button>&emsp;
-                                        <button type="submit" name="vote"
-                                                value="Downvote,{{ answer.id }},answer">Downvote</button>
-                                    </p>
-                            </form>
-                    </div>
-                    <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}">
-                        Delete answer
-                    </a>
-                    {% if answer.image %}
-                        <br><img src="{{ answer.image }}" width="300">
-                    {% endif %}
-                </p>
-            {% endfor %}
         {% else %}
-            <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
+            <p>Question not found!</p>
         {% endif %}
-    {% else %}
-        <p>Question not found!</p>
-    {% endif %}
+    </div>
 </body>
 </html>

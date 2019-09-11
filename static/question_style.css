@@ -1,0 +1,45 @@
+html {
+    background-color: whitesmoke;
+}
+
+#main-question-body {
+    margin-left: 2%;
+    margin-top: 2%;
+}
+
+#answers, #delete-answer {
+    margin-left: 4%;
+}
+
+#upvote, #downvote {
+    display: inline;
+    width: auto;
+    text-align: center;
+    font-size: 120%;
+}
+
+#view-counter {
+    display: inline;
+}
+
+#edit, #delete, #next-question, #previous-question {
+    display: inline;
+    padding-right: 20px;
+}
+
+#answer-question, #answer-question-first {
+    font-size: 110%;
+}
+
+#operations {
+    margin-bottom: 3%;
+}
+
+#upvote-answer {
+    margin-left: 10px;
+}
+
+#upvote-answer, #downvote-answer {
+    display: inline;
+    margin-right: auto;
+}
