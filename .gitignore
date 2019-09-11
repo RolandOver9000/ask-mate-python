@@ -102,4 +102,8 @@ ENV/
 
 # pycharm files
 .idea/
+
+# project sample files
 /sample_data/
+/sample_data/question.csv
+/sample_data/answer.csv
