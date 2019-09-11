@@ -70,25 +70,6 @@ def write_last_id_pair_to_file(new_id_pair):
         pair_txt.write(f"{new_id_pair['question']},{new_id_pair['answer']}")
 
 
-def update_data_in_file(old_data, user_inputs, answer=False):
-    new_data = old_data
-    new_data.update(user_inputs)
-
-    data_type_info = get_data_type_info(for_answers=answer)
-
-    csv_data = get_csv_data(answer=answer)
-
-    with open(data_type_info["path"], "w") as csv_file:
-        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
-        data_writer.writeheader()
-
-        for data in csv_data:
-            if data["id"] == new_data["id"]:
-                data_writer.writerow(new_data)
-            else:
-                data_writer.writerow(data)
-
-
 def overwrite_file(new_file_data, answer=False):
 
     data_type_info = get_data_type_info(for_answers=answer)
