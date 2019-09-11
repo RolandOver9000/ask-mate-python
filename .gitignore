@@ -102,3 +102,6 @@ ENV/
 
 # pycharm files
 .idea/
+
+# sample files for project
+sample_data/
