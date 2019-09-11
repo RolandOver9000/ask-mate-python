@@ -18,11 +18,16 @@ def get_csv_data(answer=False, data_id=None):
     with open(data_file_path, encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
 
-        if answer:
+        if answer and data_id:
             for row in reader:
                 data_row = dict(row)
                 if data_id == data_row['question_id']:
                     data_from_csv.append(data_row)
+
+        elif answer:
+            for row in reader:
+                data_row = dict(row)
+                data_from_csv.append(data_row)
 
         else:
             for row in reader:
@@ -35,7 +40,6 @@ def get_csv_data(answer=False, data_id=None):
 
             if data_id:
                 return
-
     return data_from_csv
 
 
@@ -71,26 +75,21 @@ def write_last_id_pair_to_file(new_id_pair):
 
 
 def update_data_in_file(old_data, user_inputs, answer=False):
-
     new_data = old_data
     for key, value in user_inputs.items():
         new_data[key] = value
-
     if answer:
         data_file_path = ANSWER_PATH
         data_keys = ANSWER_KEYS
     else:
         data_file_path = QUESTION_PATH
         data_keys = QUESTION_KEYS
-
     csv_data = get_csv_data(answer=answer)
-
     with open(data_file_path, "w") as csvfile:
         data_writer = csv.DictWriter(csvfile, fieldnames=data_keys)
         data_writer.writeheader()
 
         for data in csv_data:
-
             if data["id"] == new_data["id"]:
                 data_writer.writerow(new_data)
             else:

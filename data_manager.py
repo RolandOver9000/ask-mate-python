@@ -57,6 +57,13 @@ def get_new_question_data(user_inputs):
 
 
 def get_new_answer_data(user_input, question_id):
+    """
+    Initialize a new dictionary with the new answer data for the specific question.
+    :param user_input:
+    :param question_id:
+    :return: Filled out dictionary with the data of the new answer
+    """
+
     answer = {}
     last_question_and_answer_id = connection.get_last_id_pair_from_file()
     last_question_and_answer_id["answer"] = last_question_and_answer_id["answer"] + 1

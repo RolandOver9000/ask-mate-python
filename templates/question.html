@@ -5,17 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-    {% if question %}
-        <h3>{{ question.title }}</h3>
-        <p>Q: {{ question.message }}</p>
-        {% if question.image %}
-            <img src="{{ question.image }}">
-        {% endif %}
-        <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
-        {% if answers %}
+{% if question %}
+    <h3>{{ question.title }}</h3>
+    <p>Q: {{ question.message }}</p>
+    {% if question.image %}
+        <img src="{{ question.image }}">
+    {% endif %}
+    <p>views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+    {% if answers %}
+        <form action="" method="post">
             {% for answer in answers %}
-                <p>A: {{ answer.message }}</p>
+                        <p>A: {{ answer.message }}</p>
+
+                        <p>
+                            Likes: {{ answer.vote_number }}
+                            &emsp;<button type="submit" name="vote" value="{{ answer.id }}">Vote</button>
+                        </p>
+
             {% endfor %}
+        </form>
             <a href="/question/{{ question.id }}/new-answer">Answer this question!</a>
         {% else %}
             <a href="/question/{{ question.id }}/new-answer">Be the first to answer this question!</a>
