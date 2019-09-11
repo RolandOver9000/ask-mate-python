@@ -50,37 +50,28 @@ def display_question_and_answers(question_id):
     # get ids of all questions as a list for 'next/previous question' links
     question_ids = connection.get_list_of_ids()
 
+    # updates the votes
     if request.method == "POST":
-        id_of_voted_answer = request.form["vote"]
-        return redirect(url_for("update_vote_number", question_id=question_id, answer_id=id_of_voted_answer))
+        form_data = list(request.form["vote"].split(" "))
+        answer_id = form_data[1]
+        vote_option = form_data[0]
+        answers = connection.get_csv_data(answer=True)
+        specified_answer = answers[int(answer_id)]
+        specified_answer_copy = specified_answer.copy()
 
-    data_manager.increment_view_number(question_data)
-
-    return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
-
-
-@app.route("/question/<question_id>/<answer_id>/vote", methods=["GET", "POST"])
-def update_vote_number(question_id, answer_id):
-    """Print the question and the title with the specific answer that you want to vote.
-    Buttons: Upvote, Downvote, Back
-    With the Upvote, Downvote buttons, increase/decrease the "vote_number" of the anwser's dictionary and updates the
-    csv file."""
-    counter = 0
-    question = connection.get_csv_data(data_id=question_id)
-    answers = connection.get_csv_data(answer=True, data_id=answer_id)
-    specified_answer = answers[int(answer_id)]
-    specified_answer_copy = specified_answer.copy()
-    if request.method == "POST":
-        if request.form["vote"] == "Upvote":
-            convert = int(specified_answer["vote_number"]) + 1
-            specified_answer["vote_number"] = convert
-            connection.update_data_in_file(specified_answer_copy, {"vote_number": convert}, answer=True)
-        elif request.form["vote"] == "Downvote":
-            convert = int(specified_answer["vote_number"]) - 1
-            specified_answer["vote_number"] = convert
+        if vote_option == "Upvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) + 1
             connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
-        return redirect(url_for("display_question_and_answers", question_id=question_id))
-    return render_template("vote.html", counter=counter, question=question, answer=specified_answer["message"])
+
+        elif vote_option == "Downvote":
+            specified_answer["vote_number"] = int(specified_answer["vote_number"]) - 1
+            connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
+
+        answers_data = connection.get_csv_data(answer=True)
+        return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
+    else:
+        data_manager.increment_view_number(question_data)
+        return render_template('question.html', question=question_data, answers=answers_data, question_id=question_id)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

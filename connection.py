@@ -44,6 +44,7 @@ def get_csv_data(answer=False, data_id=None):
 
             if data_id:
                 return
+    print(data_from_csv)
     return data_from_csv
 
 
