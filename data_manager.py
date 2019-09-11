@@ -1,25 +1,5 @@
 from time import time
-from datetime import datetime
-from copy import deepcopy
 import connection
-
-
-def sort_data_by(data, sorting='submission_time', descending=True):
-    """
-    Sorts a list of dictionaries by chosen key.
-    :param data: list of dictionaries (e.g. questions/answers)
-    :param sorting: key to sort by (default: submission_time)
-    :param descending: descending or ascending order (default: descending)
-    :return: sorted list of dictionaries
-    """
-
-    if sorting in ['id', 'submission_time', 'view_number', 'vote_number']:
-        convert = int
-    else:
-        convert = str
-
-    sorted_data = sorted(data, key=lambda k: convert(k[sorting]), reverse=descending)
-    return sorted_data
 
 
 def get_new_id_for(data_type):
@@ -83,13 +63,6 @@ def get_new_answer_data(user_inputs, question_id):
 def increment_view_number(question_data):
     new_view_number = int(question_data["view_number"]) + 1
     connection.update_data_in_file(question_data, {"view_number": str(new_view_number)})
-
-
-def unix_to_readable(data):
-    readable_data = deepcopy(data)
-    for entry in readable_data:
-        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
-    return readable_data
 
 
 def delete_question_from_file(question_id):

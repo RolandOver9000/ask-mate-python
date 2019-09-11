@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -20,8 +21,8 @@ def route_list():
     else:
         descending = False
 
-    sorted_questions = data_manager.sort_data_by(questions, sorting=sorting_method, descending=descending)
-    sorted_questions = data_manager.unix_to_readable(sorted_questions)
+    sorted_questions = util.sort_data_by(questions, sorting=sorting_method, descending=descending)
+    sorted_questions = util.unix_to_readable(sorted_questions)
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=sorting_method, selected_order=sorting_order)
 
