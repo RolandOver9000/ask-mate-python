@@ -60,9 +60,8 @@ def display_question_and_answers(question_id):
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
     else:
-        question_data = connection.get_single_data_entry(question_id)
+        question_data = data_manager.get_question_data_with_incremented_view_number(question_id)
         answers_data = connection.get_answers_for_question(question_id)
-        data_manager.increment_view_number(question_data)
         return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 

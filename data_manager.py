@@ -54,9 +54,12 @@ def write_new_answer_data_to_file(user_inputs, question_id):
     connection.append_data_to_file(new_answer_data, answer=True)
 
 
-def increment_view_number(question_data):
-    new_view_number = int(question_data["view_number"]) + 1
-    update_question_data_in_file(question_data['id'], {"view_number": str(new_view_number)})
+def get_question_data_with_incremented_view_number(question_id):
+    question_data = connection.get_single_data_entry(question_id)
+    new_view_number = int(question_data['view_number']) + 1
+    question_data['view_number'] = str(new_view_number)
+    update_question_data_in_file(question_id, {'view_number': str(new_view_number)})
+    return question_data
 
 
 def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
