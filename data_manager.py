@@ -54,9 +54,12 @@ def write_new_answer_data_to_file(user_inputs, question_id):
     connection.append_data_to_file(new_answer_data, answer=True)
 
 
-def increment_view_number(question_data):
-    new_view_number = int(question_data["view_number"]) + 1
-    update_question_data_in_file(question_data['id'], {"view_number": str(new_view_number)})
+def get_question_data_with_incremented_view_number(question_id):
+    question_data = connection.get_single_data_entry(question_id)
+    new_view_number = int(question_data['view_number']) + 1
+    question_data['view_number'] = str(new_view_number)
+    update_data_entry_in_file(question_id, {'view_number': str(new_view_number)})
+    return question_data
 
 
 def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=False):
@@ -90,18 +93,18 @@ def delete_answer_from_file(answer_id):
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
-def update_question_data_in_file(question_id, data_updater):
+def update_data_entry_in_file(data_id, data_updater, answer=False):
 
-    question_csv_data = connection.get_csv_data()
+    csv_data = connection.get_csv_data(answer=answer)
 
-    for data_index, question_data in enumerate(question_csv_data):
-        if question_data['id'] == question_id:
-            updated_question_data = question_data
-            updated_question_data.update(data_updater)
-            question_csv_data[data_index] = updated_question_data
+    for data_index, data_entry in enumerate(csv_data):
+        if data_entry['id'] == data_id:
+            updated_data_entry = data_entry
+            updated_data_entry.update(data_updater)
+            csv_data[data_index] = updated_data_entry
             break
 
-    connection.overwrite_file(question_csv_data)
+    connection.overwrite_file(csv_data, answer=answer)
 
 
 def count_answers():
@@ -149,22 +152,11 @@ def handle_votes(vote_option, message_id, message_type):
     """
 
     vote_calculators = {"Upvote": lambda v: v + 1, "Downvote": lambda v: v - 1}
+    answer = True if message_type == "answer" else False
 
-    if message_type == "answer":
-        answers = connection.get_csv_data(answer=True)
-        specified_answer = answers[int(message_id)]
-        specified_answer_copy = specified_answer.copy()
+    data_entry = connection.get_single_data_entry(message_id, answer=answer)
 
-        vote_number = int(specified_answer["vote_number"])
-        specified_answer["vote_number"] = vote_calculators[vote_option](vote_number)
+    vote_number = int(data_entry["vote_number"])
+    new_vote_number = vote_calculators[vote_option](vote_number)
 
-        connection.update_data_in_file(specified_answer_copy, specified_answer, answer=True)
-
-    elif message_type == "question":
-        question_data = connection.get_csv_data(data_id=message_id)
-        question_data_copy = question_data.copy()
-
-        vote_number = int(question_data["vote_number"])
-        question_data["vote_number"] = vote_calculators[vote_option](vote_number)
-
-        connection.update_data_in_file(question_data_copy, question_data)
+    update_data_entry_in_file(message_id, {'vote_number': new_vote_number}, answer=answer)

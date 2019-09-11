@@ -52,12 +52,12 @@
                             <form action="" method="post">
                                 {% for line in answer.message.split("\n") %}
                                     {{ line }}<br>
+                                {% endfor %}
                                     <p>
                                         Likes: {{ answer.vote_number }}
                                             <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer">Upvote</button>
                                             &emsp;<button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">Downvote</button>
                                     </p>
-                                {% endfor %}
                             </form>
                     </div>
                     {% if answer.image %}
