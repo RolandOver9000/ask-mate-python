@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Welcome to AskMate!</h1>
-    <form action="" method="post">
+    <form action="{{ url_for('route_list') }}" method="get">
         <select name="sorting" id="sort_method">
             <option value="id.asc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='asc' else ''}}>Id (ascending)</option>
             <option value="id.desc" {{ 'selected' if selected_sorting=='submission_time' and selected_order=='desc' else ''}}>Id (descending)</option>
