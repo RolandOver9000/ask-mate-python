@@ -98,5 +98,14 @@ def route_delete(question_id):
     return redirect(url_for('route_list'))
 
 
+@app.route('/question/<question_id>/<answer_id>/delete')
+def route_delete_answer(question_id, answer_id):
+
+    data_manager.delete_answer_from_file(answer_id)
+    data_manager.update_id_pair_in_file()
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
