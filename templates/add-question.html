@@ -7,22 +7,16 @@
             html {
                 background: whitesmoke;
             }
-            #link-back {
-                margin-bottom: 2%;
-                position: fixed;
-                top: 2%;
-                margin-left: 0;
-            }
             #body-of-inputs {
                 margin-left: 2%;
             }
             h1 {
-                margin-top: 4%;
+                margin-top: 2%;
             }
         </style>
     </head>
     <body>
-        <a id="link-back" href="{{ url_for('route_list') }}">Return to main page</a>
+        <p><a id="link-back" href="{{ url_for('route_list') }}">Return to main page</a></p>
         <div id="body-of-inputs">
             <h1>Ask a question</h1>
             <form action="" method="post">
