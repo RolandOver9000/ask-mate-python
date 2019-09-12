@@ -3,22 +3,41 @@
     <head>
         <meta charset="UTF-8">
         <title>Post an answer</title>
+        <style type="text/css">
+            html {
+                background: whitesmoke;
+            }
+            #body-of-inputs {
+                margin-left: 2%;
+            }
+            h1 {
+                margin-top: 2%;
+            }
+            #question-message {
+                white-space: pre-line;
+                text-align: justify;
+            }
+        </style>
     </head>
     <body>
-        <h1>{{ question.title }}</h1>
-        <div>{{ question.message }}</div>
-        <form action="" method="post">
-            <p>
-                <label for="message">Write your answer here:</label><br>
-                <textarea id="message" name="message" minlength="10" rows="6" cols="40"></textarea>
-            </p>
-            <p>
-                <label for="image">Image URL:</label><br>
-                <input id="image" name="image" size="30" value="">
-            </p>
-            <p>
-                <button type="submit">Send answer!</button>
-            </p>
-        </form>
+        <p><a id="link-back-to-question"
+           href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to main page</a></p>
+        <div id="body-of-inputs">
+            <h1>{{ question.title }}</h1>
+            <span id="question-message">{{ question.message }}</span>
+            <form action="" method="post">
+                <p>
+                    <label for="message">Write your answer here:</label><br>
+                    <textarea id="message" name="message" minlength="10" rows="6" cols="40"></textarea>
+                </p>
+                <p>
+                    <label for="image">Image URL:</label><br>
+                    <input id="image" name="image" size="30" value="">
+                </p>
+                <p>
+                    <button type="submit">Send answer!</button>
+                </p>
+            </form>
+        </div>
     </body>
 </html>
