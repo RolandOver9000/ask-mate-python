@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='question_style.css') }}">
 </head>
 <body>
-    <p><a href="/" id="back-to-main">Return to main page</a></p>
+    <a href="/" id="back-to-main">&#x2B05; Return to main page</a>
     <div id="main-question-body">
         {% if question %}
             {% set current_question_index = question_ids.index(question.id) %}

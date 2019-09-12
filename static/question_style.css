@@ -1,6 +1,5 @@
 html {
-    /*background: powderblue;*/
-    background-image: url("https://pmcvariety.files.wordpress.com/2019/08/donald-trump.jpg?w=1000");
+    background: #d5ecff;
 }
 
 #main-question-body {
@@ -15,8 +14,11 @@ html {
 }
 
 #back-to-main {
-    display: block;
+    display: inline-block;
     margin-top: 2%;
+    border: 1px solid darkkhaki;
+    background-color: whitesmoke;
+    padding: 5px;
 }
 
 #answers {
