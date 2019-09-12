@@ -46,6 +46,9 @@
                         <div id="answers">
                             <strong>Answer at #{{ answer.submission_time }}</strong><br>
                                     <p id="answer-message">{{ answer.message }}</p>
+                                    {% if answer.image %}
+                                        <br><img src="{{ answer.image }}" width="300" alt="answer_image">
+                                    {% endif %}
                                             <form action="" method="post">
                                                 <p id="answers-like-counter">Likes: {{ answer.vote_number }}</p>
                                                 <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>&emsp;
@@ -55,9 +58,7 @@
                             Delete answer
                         </a>
                         </div>
-                        {% if answer.image %}
-                            <br><img src="{{ answer.image }}" width="300" alt="answer_image">
-                        {% endif %}
+
                     </p>
                 {% endfor %}
             {% else %}
