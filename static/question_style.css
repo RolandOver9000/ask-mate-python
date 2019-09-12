@@ -1,5 +1,5 @@
 html {
-    background: whitesmoke;
+    background: powderblue;
 }
 
 #main-question-body {
@@ -8,7 +8,14 @@ html {
     width: 700px;
     border: 1px solid darkkhaki;
     padding: 2%;
-    padding-right: 10%
+    padding-right: 5%;
+    background: whitesmoke;
+    margin-bottom: 5%;
+}
+
+#back-to-main {
+    display: block;
+    margin-top: 2%;
 }
 
 #answers {
@@ -62,6 +69,17 @@ html {
     width: 500px;
 }
 
-#delete-answer {
+a:hover {
+    color: orange;
+    text-decoration: none;
+    cursor: pointer;
+}
 
+a {
+    text-decoration: none;
+}
+
+img {
+    margin-left: 2%;
+    margin-bottom: 2%;
 }

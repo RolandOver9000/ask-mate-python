@@ -1,5 +1,5 @@
 html {
-    background-color: whitesmoke;
+    background: powderblue;
 }
 
 h1 {
@@ -28,6 +28,7 @@ table {
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
+    background: whitesmoke;
 }
 
 td {
@@ -65,4 +66,14 @@ th {
 
 #sort_order_direction, #sort_order_by, button {
     font-size: 110%;
+}
+
+a:hover {
+    color: orange;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
 }

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Homepage | AskMate</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='list_style.css') }}">
 </head>
 <body>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='list_style.css') }}">
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
     <h3>Help out your fellow AskMates:</h3>
