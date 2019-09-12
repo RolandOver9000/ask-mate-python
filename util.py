@@ -28,7 +28,7 @@ def sort_data_by(data_rows, order_by, order_direction):
 def unix_to_readable(data):
     readable_data = deepcopy(data)
     for entry in readable_data:
-        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d %H:%M')
+        entry['submission_time'] = datetime.utcfromtimestamp(int(entry['submission_time'])).strftime('%Y.%m.%d. %H:%M')
     return readable_data
 
 

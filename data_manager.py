@@ -103,6 +103,12 @@ def get_sorted_questions(order_by, order_direction):
     return sorted_questions
 
 
+def get_answers_readable(question_id):
+    answers = connection.get_answers_for_question(question_id)
+    readable_timestamp_answers = util.unix_to_readable(answers)
+    return readable_timestamp_answers
+
+
 def handle_votes(vote_option, message_id, message_type):
     """
     Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing

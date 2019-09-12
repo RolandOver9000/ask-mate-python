@@ -43,7 +43,8 @@
                 <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
                 {% for answer in answers %}
                         <div id="answers">
-                            <strong>Answer at #{{ answer.submission_time }}</strong><br>
+                            <strong id="answer-id">Answer id_{{ answer.id }}</strong>
+                            <p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
                                     <p id="answer-message">{{ answer.message }}</p>
                                     {% if answer.image %}
                                         <br><img src="{{ answer.image }}" width="500" alt="answer_image">
