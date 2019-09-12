@@ -5,10 +5,18 @@ html {
 #main-question-body {
     margin-left: 2%;
     margin-top: 2%;
+    width: 700px;
+    border: 1px solid darkkhaki;
+    padding: 2%;
+    padding-right: 10%
 }
 
-#answers, #delete-answer {
+#answers {
     margin-left: 4%;
+    margin-top: 4%;
+    width: fit-content;
+    border: 1px solid darkkhaki;
+    padding: 2%;
 }
 
 #upvote, #downvote {
@@ -31,21 +39,29 @@ html {
     font-size: 110%;
 }
 
-#operations {
-    margin-bottom: 3%;
+#upvote-answer, #downvote-answer, #answers-like-counter{
+    display: inline-block;
 }
 
 #upvote-answer {
-    margin-left: 10px;
-}
-
-#upvote-answer, #downvote-answer {
-    display: inline;
-    margin-right: auto;
+    margin-left: 5%;
 }
 
 #question-message, #answer-message {
     white-space: pre-line;
-    width: 500px;
     text-align: justify;
+    margin-left: 2%;
+}
+
+#answer-message {
+    word-break: break-word;
+    margin-right: 2%;
+}
+
+#question-message {
+    width: 500px;
+}
+
+#delete-answer {
+
 }

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='question_style.css') }}">
 </head>
 <body>
-<link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
     <p><a href="/" id="back-to-main">Return to main page</a></p>
     <div id="main-question-body">
         {% if question %}
@@ -14,11 +14,6 @@
                 {% if question.image %}
                     <img src="{{ question.image }}" width="500" alt="missing_image">
                 {% endif %}
-                <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
-                <p><form action="" method="post">
-                        <button type="submit" name="vote" value="Upvote,{{ question.id }},question" id="upvote">&#x1F44D;</button>
-                        <button type="submit" name="vote" value="Downvote,{{ question.id }},question" id="downvote">&#x1F44E;</button>
-                </form></p>
             </div>
             <div id="operations">
                 <a href="{{ url_for('route_edit', question_id=question.id) }}" id="edit">Edit question</a>
@@ -39,6 +34,11 @@
             </div>
             <h3>{{ question.title }}</h3>
             <p id="question-message">{{ question.message }}</p>
+            <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+                <p><form action="" method="post">
+                        <button type="submit" name="vote" value="Upvote,{{ question.id }},question" id="upvote">&#x1F44D;</button>
+                        <button type="submit" name="vote" value="Downvote,{{ question.id }},question" id="downvote">&#x1F44E;</button>
+                </form></p>
             {% if answers %}
                 <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
                 {% for answer in answers %}
@@ -47,14 +47,14 @@
                             <strong>Answer at #{{ answer.submission_time }}</strong><br>
                                     <p id="answer-message">{{ answer.message }}</p>
                                             <form action="" method="post">
-                                                Likes: {{ answer.vote_number }}
+                                                <p id="answers-like-counter">Likes: {{ answer.vote_number }}</p>
                                                 <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>&emsp;
                                                 <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer" id="downvote-answer">&#x1F44E;</button>
                                             </form>
-                        </div>
                         <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}" id="delete-answer">
                             Delete answer
                         </a>
+                        </div>
                         {% if answer.image %}
                             <br><img src="{{ answer.image }}" width="300" alt="answer_image">
                         {% endif %}

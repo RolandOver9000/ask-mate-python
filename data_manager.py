@@ -32,7 +32,7 @@ def write_new_question_data_to_file(user_inputs, new_id):
     new_question_data = {
         'id': new_id,
         'submission_time': int(time()),
-        'view_number': 0,
+        'view_number': -1,
         'vote_number': 0
     }
     new_question_data.update(user_inputs)
