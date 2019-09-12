@@ -10,7 +10,7 @@ html {
     padding: 2%;
     padding-right: 5%;
     background: whitesmoke;
-    margin-bottom: 5%;
+    margin-bottom: 2%;
 }
 
 #back-to-main {
@@ -27,10 +27,12 @@ html {
 }
 
 #upvote, #downvote {
-    display: inline;
+    display: inline-block;
     width: auto;
     text-align: center;
     font-size: 120%;
+    margin-top: 1%;
+    margin-bottom: 2%;
 }
 
 #view-counter {
