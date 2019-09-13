@@ -23,9 +23,15 @@
         </style>
     </head>
     <body>
+    {% if question_data %}
         <p><a id="link-back" href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">&#x2B05; Return to question</a></p>
         <div id="body-of-inputs">
             <h1>Edit question</h1>
+    {% else %}
+            <p><a id="link-back" href="{{ url_for('route_list')}}">&#x2B05; Return to homepage</a></p>
+            <div id="body-of-inputs">
+            <h1>Ask a question</h1>
+    {% endif %}
             <form action="" method="post">
                 <p id="add-question-title">
                     <label for="title">Question title:</label><br>
