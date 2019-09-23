@@ -55,14 +55,11 @@ def display_question_and_answers(question_id):
 
         # after handle, refresh the page with the updated data
         question_data = connection.get_single_data_entry(question_id)
-        answers_data = data_manager.get_answers_readable(question_id)
-
-        return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
-
     else:
         question_data = data_manager.get_question_data_with_incremented_view_number(question_id)
-        answers_data = data_manager.get_answers_readable(question_id)
-        return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
+
+    answers_data = data_manager.get_answers_readable(question_id)
+    return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

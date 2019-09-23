@@ -10,14 +10,14 @@ h1 {
 
 h3 {
     display: inline;
-    margin:0 auto;
+    margin: 0 auto;
     margin-left: 10%;
 }
 
 #sort {
     display: block;
     float: right;
-    margin:0 auto;
+    margin: 0 auto;
     margin-right: 10%;
 }
 
@@ -35,9 +35,7 @@ td {
     border: 1px solid black;
     border-collapse: separate;
     border-spacing: 0;
-    padding: 10px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 10px 8px;
     text-align: center;
 }
 
