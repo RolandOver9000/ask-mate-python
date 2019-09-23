@@ -186,21 +186,6 @@ def update_data_entry_in_file(data_id, data_updater, answer=False):
     connection.overwrite_file(csv_data, answer=answer)
 
 
-def get_sorted_questions(order_by, order_direction):
-    questions = connection.get_csv_data()
-    answers = connection.get_csv_data(answer=True)
-    amended_questions = util.merge_answer_count_into_questions(questions, answers)
-    sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
-    sorted_questions = util.unix_to_readable(sorted_questions)
-    return sorted_questions
-
-
-def get_answers_readable(question_id):
-    answers = connection.get_answers_for_question(question_id)
-    readable_timestamp_answers = util.unix_to_readable(answers)
-    return readable_timestamp_answers
-
-
 @connection.connection_handler
 def handle_votes(cursor, vote_option, message_id, message_type):
     """
