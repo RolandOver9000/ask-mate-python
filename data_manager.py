@@ -8,6 +8,12 @@ from psycopg2 import sql
 
 @connection.connection_handler
 def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    """
+    :param cursor:
+    :param order_by:
+    :param order:
+    :return:
+    """
     cursor.execute(
             sql.SQL("""
                     SELECT * FROM question
@@ -169,11 +175,12 @@ def delete_question_from_file(question_id):
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
-def delete_answer_from_file(answer_id):
-
-    answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = util.get_reduced_data_rows(answer_id, answer_csv_data)
-    connection.overwrite_file(answer_csv_data, answer=True)
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                   DELETE FROM answer
+                   WHERE id=%(answer_id)s
+                   """, {'answer_id': answer_id})
 
 
 def update_data_entry_in_file(data_id, data_updater, answer=False):
@@ -224,3 +231,41 @@ def handle_votes(vote_option, message_id, message_type):
     new_vote_number = vote_calculators[vote_option](vote_number)
 
     update_data_entry_in_file(message_id, {'vote_number': new_vote_number}, answer=answer)
+
+
+@connection.connection_handler
+def get_answer_count(cursor):
+    """
+    Counts the answers for every question.
+    :return:
+    """
+    cursor.execute("""
+                   SELECT question_id, COUNT(question_id)
+                   FROM answer
+                   GROUP BY question_id
+                   ORDER BY question_id asc;
+                   """)
+
+    answer_count = cursor.fetchall()
+    return answer_count
+
+
+@connection.connection_handler
+def get_question_by_question_id(cursor, question_id):
+    cursor.execute("""
+                   SELECT * FROM question
+                   WHERE id=%(question_id)s;
+                   """, {'question_id': int(question_id)})
+    question_data = cursor.fetchall()
+    return question_data
+
+
+@connection.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute("""
+                   SELECT * FROM answer
+                   WHERE question_id=%(question_id)s
+                   ORDER BY submission_time;
+                   """, {'question_id': question_id})
+    answer_data = cursor.fetchall()
+    return answer_data
