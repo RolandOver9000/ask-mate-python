@@ -8,6 +8,12 @@ from psycopg2 import sql
 
 @connection.connection_handler
 def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    """
+    :param cursor:
+    :param order_by:
+    :param order:
+    :return:
+    """
     cursor.execute(
             sql.SQL("""
                     SELECT * FROM question
