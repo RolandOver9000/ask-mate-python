@@ -43,4 +43,3 @@ def get_reduced_data_rows(data_id, data_rows, deleting_answers_for_question=Fals
             if data['id'] == data_id:
                 data_rows.remove(data)
                 return data_rows
-

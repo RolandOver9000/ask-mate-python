@@ -1,9 +1,8 @@
 from time import time
-from datetime import datetime
-from psycopg2 import sql
 import connection
 import util
 from psycopg2 import sql
+from datetime import datetime
 
 
 @connection.connection_handler
@@ -125,19 +124,19 @@ def write_new_question_data_to_file(user_inputs, new_id):
     connection.append_data_to_file(new_question_data)
 
 
-def write_new_answer_data_to_file(user_inputs, question_id):
-
-    new_id = get_new_id_for('answer')
-
-    new_answer_data = {
-        'id': new_id,
-        'submission_time': int(time()),
-        'vote_number': 0,
-        'question_id': question_id,
-    }
-
-    new_answer_data.update(user_inputs)
-    connection.append_data_to_file(new_answer_data, answer=True)
+@connection.connection_handler
+def write_new_answer_data_to_table(cursor, user_inputs, question_id):
+    cursor.execute("""
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUE (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
+                    """,
+                   {
+                    'submission_time': datetime.now(),
+                    'vote_number': 0,
+                    'question_id': question_id,
+                    'new_answer': user_inputs['message'],
+                    'image': user_inputs['image']
+                    })
 
 
 def get_question_data_with_incremented_view_number(question_id):
@@ -202,25 +201,29 @@ def get_answers_readable(question_id):
     return readable_timestamp_answers
 
 
-def handle_votes(vote_option, message_id, message_type):
+@connection.connection_handler
+def handle_votes(cursor, vote_option, message_id, message_type):
     """
-    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
-    the updated data into the file.
-    :param vote_option:  ("Upvote" or "Downvote"[str])
-    :param message_id:   (id of question/answer[str])
-    :param message_type: ("answer" or "question"[str])
+    :param cursor:
+    :param vote_option:
+    :param message_id:
+    :param message_type:
     :return:
     """
-
-    vote_calculators = {"Upvote": lambda v: v + 1, "Downvote": lambda v: v - 1}
-    answer = True if message_type == "answer" else False
-
-    data_entry = connection.get_single_data_entry(message_id, answer=answer)
-
-    vote_number = int(data_entry["vote_number"])
-    new_vote_number = vote_calculators[vote_option](vote_number)
-
-    update_data_entry_in_file(message_id, {'vote_number': new_vote_number}, answer=answer)
+    print("bejön")
+    vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
+    table = 'answer' if message_type == 'answer' else 'question'
+    print(vote_calculation, table)
+    cursor.execute(
+        sql.SQL("""
+                    UPDATE {table}
+                    SET vote_number={vote_calculation}
+                    WHERE id={message_id}
+                    """)
+        .format(table=sql.Identifier(table),
+                vote_calculation=sql.SQL(vote_calculation),
+                message_id=sql.SQL(message_id))
+                )
 
 
 @connection.connection_handler
