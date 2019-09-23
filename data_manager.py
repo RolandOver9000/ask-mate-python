@@ -81,6 +81,31 @@ def insert_question(cursor, question_data):
 
 
 @connection.connection_handler
+def update_entry(cursor, table, entry_id, entry_updater):
+    """
+
+    :param cursor:
+    :param table:
+    :param entry_id:
+    :param entry_updater:
+    :return:
+    """
+    entry_updater.update({'id': entry_id})
+    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
+        sql.Identifier(table),
+        sql.SQL(', ').join([
+            sql.SQL(' = ').join([sql.Identifier(key), sql.Placeholder(key)])
+            for key in entry_updater.keys()
+        ]),
+        sql.Placeholder('id')
+    )
+    cursor.execute(
+        query,
+        entry_updater
+    )
+
+
+@connection.connection_handler
 def get_question_ids(cursor):
     cursor.execute(
         """

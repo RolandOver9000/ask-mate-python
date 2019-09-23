@@ -64,13 +64,13 @@ def route_vote(question_id):
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit(question_id):
-    question_data = connection.get_single_data_entry(question_id)
+    question_data = data_manager.get_single_question(question_id)
 
     if request.method == 'GET':
         return render_template('add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
-    data_manager.update_data_entry_in_file(question_id, user_inputs_for_question)
+    data_manager.update_entry('question', question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
