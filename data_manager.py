@@ -6,7 +6,7 @@ import util
 @connection.connection_handler
 def get_all_questions(cursor):
     cursor.execute("""
-                    SELECT * FROM ask_mate.public.question
+                    SELECT * FROM question
                     """)
     questions = cursor.fetchall()
     return questions
