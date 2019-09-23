@@ -87,6 +87,18 @@ def get_question_ids(cursor):
     return [question['id'] for question in questions]
 
 
+@connection.connection_handler
+def increment_view_number(cursor, question_id):
+    cursor.execute(
+        """
+        UPDATE question
+        SET view_number = view_number + 1
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+
+
 def get_new_id_for(data_type):
     """
     Gets a new id for given datatype.
