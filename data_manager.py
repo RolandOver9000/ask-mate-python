@@ -104,47 +104,11 @@ def increment_view_number(cursor, question_id):
     )
 
 
-def get_new_id_for(data_type):
-    """
-    Gets a new id for given datatype.
-    Function first retrieves the last ID pair,
-    then increments the specified ID
-    and finally returns it.
-    :param data_type: "question" or "answer"
-    :return: new id
-    """
-
-    last_id_pair = connection.get_last_id_pair_from_file()
-    last_id_pair[data_type] += 1
-    connection.write_last_id_pair_to_file(last_id_pair)
-    return last_id_pair[data_type]
-
-
-def update_id_pair_in_file():
-    new_id_pair = {
-        'question': connection.get_latest_id_from_csv(),
-        'answer': connection.get_latest_id_from_csv(answer=True)
-    }
-    connection.write_last_id_pair_to_file(new_id_pair)
-
-
-def write_new_question_data_to_file(user_inputs, new_id):
-
-    new_question_data = {
-        'id': new_id,
-        'submission_time': int(time()),
-        'view_number': -1,
-        'vote_number': 0
-    }
-    new_question_data.update(user_inputs)
-    connection.append_data_to_file(new_question_data)
-
-
 @connection.connection_handler
 def write_new_answer_data_to_table(cursor, user_inputs, question_id):
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUE (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
                     """,
                    {
                     'submission_time': datetime.now(),
@@ -153,25 +117,6 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
                     'new_answer': user_inputs['message'],
                     'image': user_inputs['image']
                     })
-
-
-def get_question_data_with_incremented_view_number(question_id):
-    question_data = connection.get_single_data_entry(question_id)
-    new_view_number = int(question_data['view_number']) + 1
-    question_data['view_number'] = str(new_view_number)
-    update_data_entry_in_file(question_id, {'view_number': str(new_view_number)})
-    return question_data
-
-
-def delete_question_from_file(question_id):
-
-    question_csv_data = connection.get_csv_data()
-    question_csv_data = util.get_reduced_data_rows(question_id, question_csv_data)
-    connection.overwrite_file(question_csv_data)
-
-    answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = util.get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
-    connection.overwrite_file(answer_csv_data, answer=True)
 
 
 @connection.connection_handler
@@ -186,35 +131,6 @@ def delete_answer(cursor, answer_id):
                    DELETE FROM answer
                    WHERE id=%(answer_id)s
                    """, {'answer_id': answer_id})
-
-
-def update_data_entry_in_file(data_id, data_updater, answer=False):
-
-    csv_data = connection.get_csv_data(answer=answer)
-
-    for data_index, data_entry in enumerate(csv_data):
-        if data_entry['id'] == data_id:
-            updated_data_entry = data_entry
-            updated_data_entry.update(data_updater)
-            csv_data[data_index] = updated_data_entry
-            break
-
-    connection.overwrite_file(csv_data, answer=answer)
-
-
-def get_sorted_questions(order_by, order_direction):
-    questions = connection.get_csv_data()
-    answers = connection.get_csv_data(answer=True)
-    amended_questions = util.merge_answer_count_into_questions(questions, answers)
-    sorted_questions = util.sort_data_by(amended_questions, order_by, order_direction)
-    sorted_questions = util.unix_to_readable(sorted_questions)
-    return sorted_questions
-
-
-def get_answers_readable(question_id):
-    answers = connection.get_answers_for_question(question_id)
-    readable_timestamp_answers = util.unix_to_readable(answers)
-    return readable_timestamp_answers
 
 
 @connection.connection_handler
