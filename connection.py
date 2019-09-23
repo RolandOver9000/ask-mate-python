@@ -1,97 +1,44 @@
-import csv
-
-ANSWER_PATH = "sample_data/answer.csv"
-QUESTION_PATH = "sample_data/question.csv"
-LAST_ID_PAIR_PATH = "last_id_pair.txt"
-ANSWER_KEYS = ("id", "submission_time", "vote_number", "question_id", "message", "image")
-QUESTION_KEYS = ("id", "submission_time", "view_number", "vote_number", "title", "message", "image")
+# Creates a decorator to handle the database connection/cursor opening/closing.
+# Creates the cursor with RealDictCursor, thus it returns real dictionaries, where the column names are the keys.
+import os
+import psycopg2
+import psycopg2.extras
 
 
-def get_data_type_info(for_answers=False):
-    if for_answers:
-        return {"path": ANSWER_PATH, "keys": ANSWER_KEYS}
+def get_connection_string():
+    user_name = os.environ.get('PSQL_USER_NAME')
+    password = os.environ.get('PSQL_PASSWORD')
+    host = os.environ.get('PSQL_HOST')
+    database_name = os.environ.get('PSQL_DB_NAME')
+
+    env_variables_defined = user_name and password and host and database_name
+
+    if env_variables_defined:
+        # this string describes all info for psycopg2 to connect to the database
+        return f'postgresql://{user_name}:{password}@{host}/{database_name}'
     else:
-        return {"path": QUESTION_PATH, "keys": QUESTION_KEYS}
+        raise KeyError('Some necessary environment variable(s) are not defined')
 
 
-def get_csv_data(answer=False):
-    data_from_csv = []
-
-    data_type_info = get_data_type_info(for_answers=answer)
-
-    with open(data_type_info["path"], encoding='utf-8') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for data_entry in reader:
-            data_from_csv.append(data_entry)
-
-    return data_from_csv
+def open_database():
+    try:
+        connection_string = get_connection_string()
+        connection = psycopg2.connect(connection_string)
+        connection.autocommit = True
+    except psycopg2.DatabaseError as exception:
+        print('Database connection problem')
+        raise exception
+    return connection
 
 
-def get_single_data_entry(data_id, answer=False):
-    data_type_info = get_data_type_info(for_answers=answer)
-    with open(data_type_info["path"], "r") as csv_file:
-        data_reader = csv.DictReader(csv_file)
-        for data_entry in data_reader:
-            if data_entry['id'] == data_id:
-                return data_entry
+def connection_handler(function):
+    def wrapper(*args, **kwargs):
+        connection = open_database()
+        # we set the cursor_factory parameter to return with a RealDictCursor cursor (cursor which provide dictionaries)
+        dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        ret_value = function(dict_cur, *args, **kwargs)
+        dict_cur.close()
+        connection.close()
+        return ret_value
 
-
-def get_answers_for_question(question_id):
-    answers_for_question = []
-    answer_csv_data = get_csv_data(answer=True)
-    for answer_data in answer_csv_data:
-        if answer_data['question_id'] == question_id:
-            answers_for_question.append(answer_data)
-    return answers_for_question
-
-
-def append_data_to_file(data, answer=False):
-    data_type_info = get_data_type_info(for_answers=answer)
-
-    with open(data_type_info["path"], "a") as csv_file:
-        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
-        data_writer.writerow(data)
-
-
-def get_last_id_pair_from_file():
-    """
-    Reads the file containing a comma-separated pair of IDs.
-    This pair of IDs is the last question ID and the last answer ID, respectively.
-    :return: pair of last IDs
-    """
-
-    with open(LAST_ID_PAIR_PATH, "r") as pair_txt:
-        question_id, answer_id = [int(id_) for id_ in pair_txt.readline().split(",")]
-        return {"question": question_id, "answer": answer_id}
-
-
-def write_last_id_pair_to_file(new_id_pair):
-    with open(LAST_ID_PAIR_PATH, "w") as pair_txt:
-        pair_txt.write(f"{new_id_pair['question']},{new_id_pair['answer']}")
-
-
-def overwrite_file(new_file_data, answer=False):
-
-    data_type_info = get_data_type_info(for_answers=answer)
-
-    with open(data_type_info["path"], "w") as csv_file:
-        data_writer = csv.DictWriter(csv_file, fieldnames=data_type_info["keys"])
-        data_writer.writeheader()
-        for data in new_file_data:
-            data_writer.writerow(data)
-
-
-def get_latest_id_from_csv(answer=False):
-    csv_data = get_csv_data(answer=answer)
-    return csv_data[-1]['id'] if csv_data else 0
-
-
-def get_list_of_ids(answer=False):
-    list_of_ids = []
-
-    csv_data = get_csv_data(answer=answer)
-
-    for row in csv_data:
-        list_of_ids.append(row['id'])
-
-    return list_of_ids
+    return wrapper
