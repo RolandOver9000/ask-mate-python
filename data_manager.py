@@ -12,6 +12,32 @@ def get_all_questions(cursor):
     return questions
 
 
+@connection.connection_handler
+def get_single_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM question
+        WHERE id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+    question = cursor.fetchone()
+    return question
+
+
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    answers_for_question = cursor.fetchall()
+    return answers_for_question
+
+
 def get_new_id_for(data_type):
     """
     Gets a new id for given datatype.
