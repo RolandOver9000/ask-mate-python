@@ -45,7 +45,7 @@ def route_add():
 def display_question_and_answers(question_id):
 
     # get ids of all questions as a list for 'next/previous question' links
-    question_ids = connection.get_list_of_ids()
+    #question_ids = connection.get_list_of_ids()
 
     # updates the votes
     if request.method == "POST":
@@ -55,12 +55,12 @@ def display_question_and_answers(question_id):
         data_manager.handle_votes(vote_option, message_id, message_type)
 
         # after handle, refresh the page with the updated data
-        question_data = connection.get_single_data_entry(question_id)
+        question_data = data_manager.get_question_by_question_id(question_id)
     else:
-        question_data = data_manager.get_question_data_with_incremented_view_number(question_id)
+        question_data = data_manager.get_question_by_question_id(question_id)
 
-    answers_data = data_manager.get_answers_readable(question_id)
-    return render_template('question.html', question=question_data, answers=answers_data, question_ids=question_ids)
+    answers_data = data_manager.get_answers_for_question(question_id)
+    return render_template('question.html', question=question_data, answers=answers_data)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

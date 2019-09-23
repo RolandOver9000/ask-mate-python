@@ -215,3 +215,24 @@ def get_answer_count(cursor):
 
     answer_count = cursor.fetchall()
     return answer_count
+
+
+@connection.connection_handler
+def get_question_by_question_id(cursor, question_id):
+    cursor.execute("""
+                   SELECT * FROM question
+                   WHERE id=%(question_id)s;
+                   """, {'question_id': int(question_id)})
+    question_data = cursor.fetchall()
+    return question_data
+
+
+@connection.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute("""
+                   SELECT * FROM answer
+                   WHERE question_id=%(question_id)s
+                   ORDER BY submission_time;
+                   """, {'question_id': question_id})
+    answer_data = cursor.fetchall()
+    return answer_data
