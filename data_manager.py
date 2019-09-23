@@ -108,7 +108,7 @@ def increment_view_number(cursor, question_id):
 def write_new_answer_data_to_table(cursor, user_inputs, question_id):
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUE (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
                     """,
                    {
                     'submission_time': datetime.now(),
