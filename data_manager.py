@@ -159,6 +159,12 @@ def delete_question_from_file(question_id):
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
+    # delete comments to answer from comment table
+    cursor.execute("""
+                   DELETE FROM comment
+                   WHERE answer_id=%(answer_id)s
+                   """, {'answer_id': answer_id})
+    # delete answer from answer table
     cursor.execute("""
                    DELETE FROM answer
                    WHERE id=%(answer_id)s
@@ -225,7 +231,7 @@ def get_answer_count(cursor):
                    SELECT question_id, COUNT(question_id)
                    FROM answer
                    GROUP BY question_id
-                   ORDER BY question_id asc;
+                   ORDER BY question_id;
                    """)
 
     answer_count = cursor.fetchall()
