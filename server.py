@@ -88,9 +88,7 @@ def post_an_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete(question_id):
-
-    data_manager.delete_question_from_file(question_id)
-    data_manager.update_id_pair_in_file()
+    data_manager.delete_question(question_id)
 
     return redirect(url_for('route_list'))
 
