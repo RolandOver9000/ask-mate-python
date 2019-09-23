@@ -21,7 +21,6 @@ def route_list():
         order_by, order = 'submission_time', 'desc'
 
     sorted_questions = data_manager.get_all_questions(order_by, order)
-
     return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=order_by, selected_order=order)
 

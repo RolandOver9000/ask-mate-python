@@ -19,6 +19,8 @@ def get_all_questions(cursor, order_by='submission_time', order='DESC'):
                     ORDER BY {order_by} {order}
                    """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
     questions = cursor.fetchall()
+    # calling this function will add a new key to the questions that contains the amount of answers
+    add_answer_count_to_question(questions)
     return questions
 
 
@@ -197,7 +199,7 @@ def handle_votes(cursor, vote_option, message_id, message_type):
 def get_answer_count(cursor):
     """
     Counts the answers for every question.
-    :return:
+    :return: answer_count (list of dict)
     """
     cursor.execute("""
                    SELECT question_id, COUNT(question_id)
@@ -208,3 +210,16 @@ def get_answer_count(cursor):
 
     answer_count = cursor.fetchall()
     return answer_count
+
+
+def add_answer_count_to_question(questions):
+    """
+    Adds an answer count key to the questions dictionary.
+    :param questions: list of dicts of questions.
+    """
+    answer_count = get_answer_count()
+    for question in questions:
+        question['answer_count'] = 0
+        for count in answer_count:
+            if question['id'] == count['question_id']:
+                question['answer_count'] = count['count']
