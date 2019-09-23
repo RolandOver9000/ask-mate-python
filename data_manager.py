@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+def get_all_questions(cursor, order_by, order):
     """
     :param cursor: SQL cursor from @connection.connection_handler
     :param order_by:
@@ -71,7 +71,7 @@ def delete_question(cursor, question_id):
 
 @connection.connection_handler
 def insert_question(cursor, question_data):
-    question_data['submission_time'] = datetime.now()
+    question_data['submission_time'] = datetime.now().replace(microsecond=0)
     question_data['view_number'] = 0
     question_data['vote_number'] = 0
     cursor.execute(
@@ -223,3 +223,16 @@ def add_answer_count_to_question(questions):
         for count in answer_count:
             if question['id'] == count['question_id']:
                 question['answer_count'] = count['count']
+
+
+@connection.connection_handler
+def get_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE id = %(answer_id)s
+        """,
+        {'answer_id': answer_id}
+    )
+    answer = cursor.fetchone()
+    return answer
