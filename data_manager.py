@@ -139,14 +139,6 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
                     })
 
 
-def get_question_data_with_incremented_view_number(question_id):
-    question_data = connection.get_single_data_entry(question_id)
-    new_view_number = int(question_data['view_number']) + 1
-    question_data['view_number'] = str(new_view_number)
-    update_data_entry_in_file(question_id, {'view_number': str(new_view_number)})
-    return question_data
-
-
 def delete_question_from_file(question_id):
 
     question_csv_data = connection.get_csv_data()
