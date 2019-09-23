@@ -40,7 +40,8 @@ def get_answers_for_question(cursor, question_id):
     cursor.execute(
         """
         SELECT * FROM answer
-        WHERE question_id = %(question_id)s;
+        WHERE question_id = %(question_id)s
+        ORDER BY id;
         """,
         {'question_id': question_id}
     )
