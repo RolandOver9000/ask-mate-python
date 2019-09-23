@@ -45,6 +45,7 @@ def display_question_and_answers(question_id):
 
     if request.method == 'GET':
         # update view number for question
+        data_manager.increment_view_number(question_id)
         pass
 
     question_ids = data_manager.get_question_ids()

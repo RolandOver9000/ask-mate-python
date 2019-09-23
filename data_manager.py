@@ -8,6 +8,12 @@ from psycopg2 import sql
 
 @connection.connection_handler
 def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    """
+    :param cursor:
+    :param order_by:
+    :param order:
+    :return:
+    """
     cursor.execute(
             sql.SQL("""
                     SELECT * FROM question
@@ -85,6 +91,18 @@ def get_question_ids(cursor):
     )
     questions = cursor.fetchall()
     return [question['id'] for question in questions]
+
+
+@connection.connection_handler
+def increment_view_number(cursor, question_id):
+    cursor.execute(
+        """
+        UPDATE question
+        SET view_number = view_number + 1
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
 
 
 def get_new_id_for(data_type):
