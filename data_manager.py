@@ -6,12 +6,102 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def get_all_questions(cursor):
-    cursor.execute("""
+def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    """
+    :param cursor: SQL cursor from @connection.connection_handler
+    :param order_by:
+    :param order:
+    :return:
+    """
+    cursor.execute(
+            sql.SQL("""
                     SELECT * FROM question
-                    """)
+                    ORDER BY {order_by} {order}
+                   """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def get_single_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM question
+        WHERE id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+    question = cursor.fetchone()
+    return question
+
+
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    answers_for_question = cursor.fetchall()
+    return answers_for_question
+
+
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute(
+        """
+        DELETE FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    cursor.execute(
+        """
+        DELETE FROM question
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+
+
+@connection.connection_handler
+def insert_question(cursor, question_data):
+    question_data['submission_time'] = datetime.now()
+    question_data['view_number'] = 0
+    question_data['vote_number'] = 0
+    cursor.execute(
+        """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+        VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+        """,
+        question_data
+    )
+
+
+@connection.connection_handler
+def get_question_ids(cursor):
+    cursor.execute(
+        """
+        SELECT id FROM question
+        ORDER BY id;
+        """
+    )
+    questions = cursor.fetchall()
+    return [question['id'] for question in questions]
+
+
+@connection.connection_handler
+def increment_view_number(cursor, question_id):
+    cursor.execute(
+        """
+        UPDATE question
+        SET view_number = view_number + 1
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
 
 
 def get_new_id_for(data_type):
@@ -84,11 +174,18 @@ def delete_question_from_file(question_id):
     connection.overwrite_file(answer_csv_data, answer=True)
 
 
-def delete_answer_from_file(answer_id):
-
-    answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = util.get_reduced_data_rows(answer_id, answer_csv_data)
-    connection.overwrite_file(answer_csv_data, answer=True)
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    # delete comments to answer from comment table
+    cursor.execute("""
+                   DELETE FROM comment
+                   WHERE answer_id=%(answer_id)s
+                   """, {'answer_id': answer_id})
+    # delete answer from answer table
+    cursor.execute("""
+                   DELETE FROM answer
+                   WHERE id=%(answer_id)s
+                   """, {'answer_id': answer_id})
 
 
 def update_data_entry_in_file(data_id, data_updater, answer=False):
@@ -129,10 +226,10 @@ def handle_votes(cursor, vote_option, message_id, message_type):
     :param message_type:
     :return:
     """
-
+    print("bejön")
     vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
     table = 'answer' if message_type == 'answer' else 'question'
-
+    print(vote_calculation, table)
     cursor.execute(
         sql.SQL("""
                     UPDATE {table}
@@ -143,3 +240,20 @@ def handle_votes(cursor, vote_option, message_id, message_type):
                 vote_calculation=sql.SQL(vote_calculation),
                 message_id=sql.SQL(message_id))
                 )
+
+
+@connection.connection_handler
+def get_answer_count(cursor):
+    """
+    Counts the answers for every question.
+    :return:
+    """
+    cursor.execute("""
+                   SELECT question_id, COUNT(question_id)
+                   FROM answer
+                   GROUP BY question_id
+                   ORDER BY question_id;
+                   """)
+
+    answer_count = cursor.fetchall()
+    return answer_count
