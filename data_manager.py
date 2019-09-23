@@ -38,6 +38,24 @@ def get_answers_for_question(cursor, question_id):
     return answers_for_question
 
 
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute(
+        """
+        DELETE FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    cursor.execute(
+        """
+        DELETE FROM question
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+
+
 def get_new_id_for(data_type):
     """
     Gets a new id for given datatype.
