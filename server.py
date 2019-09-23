@@ -22,9 +22,8 @@ def route_list():
         order_by, order_direction = 'submission_time', 'desc'
 
     sorted_questions = data_manager.get_all_questions()
-    answer_count = data_manager.get_answer_count()
-    print(answer_count)
-    return render_template('list.html', sorted_questions=sorted_questions, answer_count=answer_count,
+
+    return render_template('list.html', sorted_questions=sorted_questions,
                            selected_sorting=order_by, selected_order=order_direction)
 
 
@@ -44,23 +43,24 @@ def route_add():
 @app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
 
-    # get ids of all questions as a list for 'next/previous question' links
-    #question_ids = connection.get_list_of_ids()
+    if request.method == 'GET':
+        # update view number for question
+        pass
 
-    # updates the votes
-    if request.method == "POST":
-        # get the data of the clicked button in list (3 elements)
-        vote_option, message_id, message_type = request.form["vote"].split(",")
+    question_ids = data_manager.get_question_ids()
+    question = data_manager.get_single_question(question_id)
+    answers = data_manager.get_answers_for_question(question_id)
+    return render_template('question.html', question=question, answers=answers, question_ids=question_ids)
 
-        data_manager.handle_votes(vote_option, message_id, message_type)
 
-        # after handle, refresh the page with the updated data
-        question_data = data_manager.get_question_by_question_id(question_id)
-    else:
-        question_data = data_manager.get_question_by_question_id(question_id)
+@app.route('/question/<question_id>/vote', methods=['POST'])
+def route_vote(question_id):
+    vote_option, message_id, message_type = request.form['vote'].split(',')
+    data_manager.handle_votes(vote_option, message_id, message_type)
 
-    answers_data = data_manager.get_answers_for_question(question_id)
-    return render_template('question.html', question=question_data, answers=answers_data)
+    # the code=307 argument ensures that the request type (POST) is preserved after redirection
+    # so that the view number of the question doesn't increase after voting
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

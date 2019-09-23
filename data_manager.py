@@ -3,13 +3,16 @@ from datetime import datetime
 from psycopg2 import sql
 import connection
 import util
+from psycopg2 import sql
 
 
 @connection.connection_handler
-def get_all_questions(cursor):
-    cursor.execute("""
+def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    cursor.execute(
+            sql.SQL("""
                     SELECT * FROM question
-                    """)
+                    ORDER BY {order_by} {order}
+                   """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
     questions = cursor.fetchall()
     return questions
 
@@ -70,6 +73,18 @@ def insert_question(cursor, question_data):
         """,
         question_data
     )
+
+
+@connection.connection_handler
+def get_question_ids(cursor):
+    cursor.execute(
+        """
+        SELECT id FROM question
+        ORDER BY id;
+        """
+    )
+    questions = cursor.fetchall()
+    return [question['id'] for question in questions]
 
 
 def get_new_id_for(data_type):
