@@ -1,13 +1,16 @@
 from time import time
 import connection
 import util
+from psycopg2 import sql
 
 
 @connection.connection_handler
-def get_all_questions(cursor):
-    cursor.execute("""
+def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+    cursor.execute(
+            sql.SQL("""
                     SELECT * FROM question
-                    """)
+                    ORDER BY {order_by} {order}
+                   """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
     questions = cursor.fetchall()
     return questions
 
