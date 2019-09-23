@@ -105,22 +105,6 @@ def increment_view_number(cursor, question_id):
     )
 
 
-def get_new_id_for(data_type):
-    """
-    Gets a new id for given datatype.
-    Function first retrieves the last ID pair,
-    then increments the specified ID
-    and finally returns it.
-    :param data_type: "question" or "answer"
-    :return: new id
-    """
-
-    last_id_pair = connection.get_last_id_pair_from_file()
-    last_id_pair[data_type] += 1
-    connection.write_last_id_pair_to_file(last_id_pair)
-    return last_id_pair[data_type]
-
-
 def update_id_pair_in_file():
     new_id_pair = {
         'question': connection.get_latest_id_from_csv(),
