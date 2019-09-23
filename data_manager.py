@@ -72,6 +72,18 @@ def insert_question(cursor, question_data):
     )
 
 
+@connection.connection_handler
+def get_question_ids(cursor):
+    cursor.execute(
+        """
+        SELECT id FROM question
+        ORDER BY id;
+        """
+    )
+    questions = cursor.fetchall()
+    return [question['id'] for question in questions]
+
+
 def get_new_id_for(data_type):
     """
     Gets a new id for given datatype.
