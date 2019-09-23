@@ -15,15 +15,15 @@ def route_list():
     """
 
     if request.args:
-        order_by = request.args.get('order_by')
-        order_direction = request.args.get('order_direction')
+        order_by= request.args.get('order_by')
+        order = request.args.get('order_direction')
     else:
-        order_by, order_direction = 'submission_time', 'desc'
+        order_by, order = 'submission_time', 'desc'
 
-    sorted_questions = data_manager.get_all_questions()
+    sorted_questions = data_manager.get_all_questions(order_by, order)
 
     return render_template('list.html', sorted_questions=sorted_questions,
-                           selected_sorting=order_by, selected_order=order_direction)
+                           selected_sorting=order_by, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
