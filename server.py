@@ -22,8 +22,9 @@ def route_list():
         order_by, order_direction = 'submission_time', 'desc'
 
     sorted_questions = data_manager.get_all_questions()
-
-    return render_template('list.html', sorted_questions=sorted_questions,
+    answer_count = data_manager.get_answer_count()
+    print(answer_count)
+    return render_template('list.html', sorted_questions=sorted_questions, answer_count=answer_count,
                            selected_sorting=order_by, selected_order=order_direction)
 
 
@@ -97,10 +98,7 @@ def route_delete(question_id):
 
 @app.route('/question/<question_id>/<answer_id>/delete')
 def route_delete_answer(question_id, answer_id):
-
-    data_manager.delete_answer_from_file(answer_id)
-    data_manager.update_id_pair_in_file()
-
+    data_manager.delete_answer(answer_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
