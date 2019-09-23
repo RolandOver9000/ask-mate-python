@@ -1,4 +1,6 @@
 from time import time
+from datetime import datetime
+from psycopg2 import sql
 import connection
 import util
 
@@ -10,6 +12,64 @@ def get_all_questions(cursor):
                     """)
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def get_single_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM question
+        WHERE id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+    question = cursor.fetchone()
+    return question
+
+
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    answers_for_question = cursor.fetchall()
+    return answers_for_question
+
+
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute(
+        """
+        DELETE FROM answer
+        WHERE question_id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+    cursor.execute(
+        """
+        DELETE FROM question
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+
+
+@connection.connection_handler
+def insert_question(cursor, question_data):
+    question_data['submission_time'] = datetime.now()
+    question_data['view_number'] = 0
+    question_data['vote_number'] = 0
+    cursor.execute(
+        """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+        VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+        """,
+        question_data
+    )
 
 
 def get_new_id_for(data_type):
