@@ -9,7 +9,7 @@ from psycopg2 import sql
 @connection.connection_handler
 def get_all_questions(cursor, order_by='submission_time', order='DESC'):
     """
-    :param cursor:
+    :param cursor: SQL cursor from @connection.connection_handler
     :param order_by:
     :param order:
     :return:
