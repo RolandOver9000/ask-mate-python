@@ -1,4 +1,6 @@
 from time import time
+from datetime import datetime
+from psycopg2 import sql
 import connection
 import util
 
@@ -53,6 +55,20 @@ def delete_question(cursor, question_id):
         WHERE id = %(question_id)s;
         """,
         {'question_id': question_id}
+    )
+
+
+@connection.connection_handler
+def insert_question(cursor, question_data):
+    question_data['submission_time'] = datetime.now()
+    question_data['view_number'] = 0
+    question_data['vote_number'] = 0
+    cursor.execute(
+        """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+        VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+        """,
+        question_data
     )
 
 
