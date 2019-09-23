@@ -139,17 +139,6 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
                     })
 
 
-def delete_question_from_file(question_id):
-
-    question_csv_data = connection.get_csv_data()
-    question_csv_data = util.get_reduced_data_rows(question_id, question_csv_data)
-    connection.overwrite_file(question_csv_data)
-
-    answer_csv_data = connection.get_csv_data(answer=True)
-    answer_csv_data = util.get_reduced_data_rows(question_id, answer_csv_data, deleting_answers_for_question=True)
-    connection.overwrite_file(answer_csv_data, answer=True)
-
-
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
     # delete comments to answer from comment table
