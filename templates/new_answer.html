@@ -20,22 +20,27 @@
         </style>
     </head>
     <body>
-        <p><a id="link-back-to-question"
-           href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to question</a></p>
+        <div>
+            {% if question %}
+            <a id="link-back-to-question" href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to question</a>
+            {%  elif answer %}
+            <a id="link-back-to-question" href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">Return to question</a>
+            {% endif %}
+        </div>
         <div id="body-of-inputs">
-            <h1>{{ question.title }}</h1>
-            <span id="question-message">{{ question.message }}</span>
+            <h1>{{ question.title}}</h1>
+            <span id="question-message">{{ question.message}}</span>
             <form action="" method="post">
                 <p>
                     <label for="message">Write your answer here:</label><br>
-                    <textarea id="message" name="message" minlength="10" rows="6" cols="40"></textarea>
+                    <textarea id="message" name="message" minlength="10" rows="6" cols="40" required>{{ answer.message if answer }}</textarea>
                 </p>
                 <p>
                     <label for="image">Image URL:</label><br>
-                    <input id="image" name="image" size="30" value="">
+                    <input id="image" name="image" size="30" value="{{ answer.image if answer }}">
                 </p>
                 <p>
-                    <button type="submit">Send answer!</button>
+                    <button type="submit">{{ "Submit changes" if answer else "Send answer!" }}</button>
                 </p>
             </form>
         </div>
