@@ -3,6 +3,15 @@ import connection
 import util
 
 
+@connection.connection_handler
+def get_all_questions(cursor):
+    cursor.execute("""
+                    SELECT * FROM ask_mate.public.question
+                    """)
+    questions = cursor.fetchall()
+    return questions
+
+
 def get_new_id_for(data_type):
     """
     Gets a new id for given datatype.
