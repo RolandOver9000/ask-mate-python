@@ -104,18 +104,6 @@ def increment_view_number(cursor, question_id):
     )
 
 
-def write_new_question_data_to_file(user_inputs, new_id):
-
-    new_question_data = {
-        'id': new_id,
-        'submission_time': int(time()),
-        'view_number': -1,
-        'vote_number': 0
-    }
-    new_question_data.update(user_inputs)
-    connection.append_data_to_file(new_question_data)
-
-
 @connection.connection_handler
 def write_new_answer_data_to_table(cursor, user_inputs, question_id):
     cursor.execute("""
