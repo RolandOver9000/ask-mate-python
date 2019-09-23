@@ -172,20 +172,6 @@ def delete_answer(cursor, answer_id):
                    """, {'answer_id': answer_id})
 
 
-def update_data_entry_in_file(data_id, data_updater, answer=False):
-
-    csv_data = connection.get_csv_data(answer=answer)
-
-    for data_index, data_entry in enumerate(csv_data):
-        if data_entry['id'] == data_id:
-            updated_data_entry = data_entry
-            updated_data_entry.update(data_updater)
-            csv_data[data_index] = updated_data_entry
-            break
-
-    connection.overwrite_file(csv_data, answer=answer)
-
-
 @connection.connection_handler
 def handle_votes(cursor, vote_option, message_id, message_type):
     """
