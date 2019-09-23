@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+def get_all_questions(cursor, order_by, order):
     """
     :param cursor: SQL cursor from @connection.connection_handler
     :param order_by:
@@ -208,3 +208,16 @@ def get_answer_count(cursor):
 
     answer_count = cursor.fetchall()
     return answer_count
+
+
+@connection.connection_handler
+def get_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE id = %(answer_id)s
+        """,
+        {'answer_id': answer_id}
+    )
+    answer = cursor.fetchone()
+    return answer
