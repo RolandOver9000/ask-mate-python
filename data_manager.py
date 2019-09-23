@@ -104,14 +104,6 @@ def increment_view_number(cursor, question_id):
     )
 
 
-def update_id_pair_in_file():
-    new_id_pair = {
-        'question': connection.get_latest_id_from_csv(),
-        'answer': connection.get_latest_id_from_csv(answer=True)
-    }
-    connection.write_last_id_pair_to_file(new_id_pair)
-
-
 def write_new_question_data_to_file(user_inputs, new_id):
 
     new_question_data = {
