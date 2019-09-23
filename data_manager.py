@@ -81,6 +81,15 @@ def insert_question(cursor, question_data):
 
 
 @connection.connection_handler
+def get_latest_id(cursor, table):
+    cursor.execute(sql.SQL("SELECT id FROM {} ORDER BY id DESC LIMIT 1;").format(
+        sql.Identifier(table)
+    ))
+    entry_data = cursor.fetchone()
+    return entry_data['id']
+
+
+@connection.connection_handler
 def update_entry(cursor, table, entry_id, entry_updater):
     """
 

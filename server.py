@@ -34,8 +34,8 @@ def route_add():
         return render_template('add-question.html', question_data={})
 
     user_inputs_for_question = request.form.to_dict()
-    new_id = data_manager.get_new_id_for("question")
-    data_manager.write_new_question_data_to_file(user_inputs_for_question, new_id)
+    data_manager.insert_question(user_inputs_for_question)
+    new_id = data_manager.get_latest_id('question')
 
     return redirect(url_for('display_question_and_answers', question_id=new_id))
 
