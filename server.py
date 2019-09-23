@@ -98,5 +98,20 @@ def route_delete_answer(question_id, answer_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def route_edit_answer(answer_id):
+    answer_data = data_manager.get_answer(answer_id)
+    question_id = answer_data.get('question_id')
+    question_data = data_manager.get_single_question(question_id)
+
+    if request.method == 'GET':
+        return render_template('new_answer.html', answer=answer_data, question=question_data)
+
+    user_inputs_for_answer = request.form.to_dict()
+    data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
