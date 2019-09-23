@@ -37,7 +37,7 @@
                 </p>
                 <p>
                     <label for="image">Image URL:</label><br>
-                    <input id="image" name="image" size="30" value="{{ answer.image if answer }}">
+                    <input id="image" name="image" size="30" value="{{ answer.image if answer and answer.image != None }}">
                 </p>
                 <p>
                     <button type="submit">{{ "Submit changes" if answer else "Send answer!" }}</button>
