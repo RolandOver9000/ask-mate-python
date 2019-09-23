@@ -220,16 +220,16 @@ def get_answers_readable(question_id):
 @connection.connection_handler
 def handle_votes(cursor, vote_option, message_id, message_type):
     """
+    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
+    and updates the SQL table.
     :param cursor:
-    :param vote_option:
-    :param message_id:
-    :param message_type:
+    :param vote_option:  ("Upvote" or "Downvote"[str])
+    :param message_id:   (id of question/answer[str])
+    :param message_type: ("answer" or "question"[str])
     :return:
     """
-    print("bejön")
     vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
     table = 'answer' if message_type == 'answer' else 'question'
-    print(vote_calculation, table)
     cursor.execute(
         sql.SQL("""
                     UPDATE {table}
