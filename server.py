@@ -197,8 +197,8 @@ def route_edit_comment(comment_id):
     if request.method == 'GET':
         return render_template('new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
 
-    updated_comment = {'message': request.form['comment'],
-                       'edited_count': comment_data['edited_count'] + 1}
+    updated_comment_message = request.form['comment']
+    updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
     data_manager.update_entry('comment', comment_id, updated_comment)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
