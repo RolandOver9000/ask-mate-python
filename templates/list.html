@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Homepage | AskMate</title>
+{% extends 'layout.html' %}
+{% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='list_style.css') }}">
-</head>
-<body>
+    {{ super() }}
+{% endblock %}
+{% block title %}All questions{% endblock %}
+{% block content %}
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
         <h3>Help out your fellow AskMates:</h3>
@@ -19,5 +18,4 @@
             <a href="{{ url_for('route_add') }}" id="first-question">Be the fist to ask a question</a>
         </p>
     {% endif %}
-</body>
-</html>
+{% endblock %}
