@@ -43,7 +43,7 @@ def get_answers_for_question(cursor, question_id):
         """
         SELECT * FROM answer
         WHERE question_id = %(question_id)s
-        ORDER BY id;
+        ORDER BY submission_time desc;
         """,
         {'question_id': question_id}
     )
@@ -148,7 +148,7 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
                     VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
                     """,
                    {
-                    'submission_time': datetime.now(),
+                    'submission_time': datetime.now().replace(microsecond=0),
                     'vote_number': 0,
                     'question_id': question_id,
                     'new_answer': user_inputs['message'],
@@ -236,3 +236,15 @@ def get_answer(cursor, answer_id):
     )
     answer = cursor.fetchone()
     return answer
+
+
+@connection.connection_handler
+def get_tags_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT name
+                    FROM tag
+                    JOIN question_tag as qt on tag.id = qt.tag_id
+                    WHERE qt.question_id = %(question_id)s
+                    """, {'question_id': question_id})
+    tags = cursor.fetchall()
+    return tags

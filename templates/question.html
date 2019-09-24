@@ -40,6 +40,11 @@
             <button type="submit" name="vote" value="Downvote,{{ question.id }},question" id="downvote">&#x1F44E;
             </button>
         </form>
+        <div id="tags">
+            {% for tag in tags %}
+                {{ tag.name }}
+            {% endfor %}
+        </div>
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             {% for answer in answers %}
