@@ -47,12 +47,29 @@ def get_single_question(cursor, question_id):
 
 
 @connection.connection_handler
+def get_specific_entries(cursor, table, entry_ids):
+    id_placeholders = sql.SQL("({})").format(
+        sql.SQL(', ').join([sql.Placeholder() for instance in range(len(entry_ids))])
+    )
+    query = sql.SQL("SELECT * FROM {} WHERE id IN {}").format(
+        sql.Identifier(table),
+        id_placeholders
+    )
+    cursor.execute(
+        query,
+        entry_ids
+    )
+    entries = cursor.fetchall()
+    return entries
+
+
+@connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute(
         """
         SELECT * FROM answer
         WHERE question_id = %(question_id)s
-        ORDER BY id;
+        ORDER BY submission_time desc;
         """,
         {'question_id': question_id}
     )
@@ -120,7 +137,6 @@ def update_entry(cursor, table, entry_id, entry_updater):
         ]),
         sql.Placeholder('id')
     )
-    print(query.as_string(cursor))
     cursor.execute(
         query,
         entry_updater
@@ -158,7 +174,7 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
                     VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
                     """,
                    {
-                    'submission_time': datetime.now(),
+                    'submission_time': datetime.now().replace(microsecond=0),
                     'vote_number': 0,
                     'question_id': question_id,
                     'new_answer': user_inputs['message'],
@@ -263,3 +279,15 @@ def get_single_entry(cursor, table, entry_id):
     )
     entry = cursor.fetchone()
     return entry
+
+
+@connection.connection_handler
+def get_tags_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT name
+                    FROM tag
+                    JOIN question_tag as qt on tag.id = qt.tag_id
+                    WHERE qt.question_id = %(question_id)s
+                    """, {'question_id': question_id})
+    tags = cursor.fetchall()
+    return tags
