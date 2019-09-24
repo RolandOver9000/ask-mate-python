@@ -120,6 +120,20 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
 
 
 @connection.connection_handler
+def write_new_comment_data_to_table(cursor, new_comment_data):
+    cursor.execute("""
+                    INSERT INTO comment (answer_id, message, submission_time)
+                    VALUES (%(answer_id)s, %(message)s, %(submission_time)s)
+                    """,
+                   {
+                    'answer_id': new_comment_data.answer_id,
+                    'question_id': new_comment_data.question_id,
+                    'message': new_comment_data.new_comment,
+                    'submission_time': datetime.now()
+                    })
+
+
+@connection.connection_handler
 def delete_answer(cursor, answer_id):
     # delete comments to answer from comment table
     cursor.execute("""
