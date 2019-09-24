@@ -268,7 +268,7 @@ def get_single_entry(cursor, table, entry_id):
 @connection.connection_handler
 def get_tags_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT name
+                    SELECT id, name
                     FROM tag
                     JOIN question_tag as qt on tag.id = qt.tag_id
                     WHERE qt.question_id = %(question_id)s
@@ -313,6 +313,15 @@ def add_new_tag(cursor, tag_text):
                     INSERT INTO tag (name)
                     VALUES ( %(name)s)
                     """, {'name': tag_text})
+
+
+@connection.connection_handler
+def remove_tag(cursor, question_id, tag_id):
+    cursor.execute("""
+                    DELETE FROM question_tag
+                    WHERE question_id=%(question_id)s AND
+                          tag_id=%(tag_id)s
+                    """, {'question_id': question_id, 'tag_id': tag_id})
 
 
 @connection.connection_handler
