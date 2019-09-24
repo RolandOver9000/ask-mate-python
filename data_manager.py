@@ -57,6 +57,22 @@ def get_specific_entries(cursor, table, entry_ids):
 
 
 @connection.connection_handler
+def get_most_recent_questions(cursor, number_of_entries=5):
+    cursor.execute(
+        """
+        SELECT
+            question.*,
+            (SELECT COUNT(id) FROM answer WHERE answer.question_id = question.id) AS answer_number
+            FROM question
+            ORDER BY submission_time DESC LIMIT %s;
+        """,
+        (number_of_entries,)
+    )
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute(
         """

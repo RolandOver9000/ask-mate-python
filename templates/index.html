@@ -4,16 +4,18 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='clickables.css') }}">
     {{ super() }}
 {% endblock %}
-{% block title %}All questions{% endblock %}
+{% block title %}Homepage{% endblock %}
 {% block content %}
-    <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
+    <a class="back-to-main" id="index-page">HIDDEN</a>
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
         <h3>Help out your fellow AskMates:</h3>
-        {% include 'sort.html' %}
         {% include 'table.html' %}
         <p>
             <a href="{{ url_for('route_add') }}" id="ask-question">Ask a question</a>
+        </p>
+        <p>
+            <a href="{{ url_for('route_list') }}" id="list-questions">List all questions</a>
         </p>
     {% else %}
         <p>

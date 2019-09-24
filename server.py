@@ -5,6 +5,11 @@ app = Flask(__name__)
 
 
 @app.route("/")
+def route_index():
+    sorted_questions = data_manager.get_most_recent_questions()
+    return render_template('index.html', sorted_questions=sorted_questions)
+
+
 @app.route("/list")
 def route_list():
     """
