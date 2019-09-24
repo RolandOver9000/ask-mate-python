@@ -102,18 +102,12 @@ def get_all_comments(cursor, comment_id):
 def delete_question(cursor, question_id):
     cursor.execute(
         """
-        DELETE FROM answer
-        WHERE question_id = %(question_id)s;
+        DELETE FROM question_tag WHERE question_id = %(question_id)s;
+        DELETE FROM comment WHERE question_id = %(question_id)s;
+        DELETE FROM answer WHERE question_id = %(question_id)s;
+        DELETE FROM question WHERE id = %(question_id)s;
         """,
-        {'question_id': question_id}
-    )
-    cursor.execute(
-        """
-        DELETE FROM question
-        WHERE id = %(question_id)s;
-        """,
-        {'question_id': question_id}
-    )
+        {'question_id': question_id})
 
 
 @connection.connection_handler
@@ -158,6 +152,7 @@ def update_entry(cursor, table, entry_id, entry_updater):
         ]),
         sql.Placeholder('id')
     )
+    print(query.as_string(cursor))
     cursor.execute(
         query,
         entry_updater
@@ -220,16 +215,11 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
-    # delete comments to answer from comment table
     cursor.execute("""
-                   DELETE FROM comment
-                   WHERE answer_id=%(answer_id)s
-                   """, {'answer_id': answer_id})
-    # delete answer from answer table
-    cursor.execute("""
-                   DELETE FROM answer
-                   WHERE id=%(answer_id)s
-                   """, {'answer_id': answer_id})
+                   DELETE FROM comment WHERE answer_id=%(answer_id)s;
+                   DELETE FROM answer WHERE id=%(answer_id)s;
+                   """,
+                   {'answer_id': answer_id})
 
 
 @connection.connection_handler
@@ -321,3 +311,45 @@ def add_new_tag(cursor, tag_text):
                     VALUES ( %(name)s)
                     """, {'name': tag_text})
 
+
+@connection.connection_handler
+def get_questions_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase + '%'
+    cursor.execute(
+        """
+        SELECT question. * FROM question
+        FULL JOIN answer ON question.id = answer.question_id
+        WHERE question.message LIKE %(search_phrase)s OR
+              answer.message LIKE %(search_phrase)s
+        ORDER BY submission_time DESC
+        """,
+        {'search_phrase': search_phrase}
+    )
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def delete_data_by_id(cursor, table_name, row_id):
+    if table_name == 'question':
+        cursor.execute(
+            """
+            DELETE FROM question_tag WHERE question_id = %(question_id)s;
+            DELETE FROM comment WHERE question_id = %(question_id)s;
+            DELETE FROM answer WHERE question_id = %(question_id)s;
+            DELETE FROM question WHERE id = %(question_id)s;
+            """,
+            {'question_id': row_id})
+    elif table_name == 'answer':
+        cursor.execute(
+            """
+            DELETE FROM comment WHERE answer_id=%(answer_id)s;
+            DELETE FROM answer WHERE id=%(answer_id)s;
+            """,
+            {'answer_id': row_id})
+    elif table_name == 'comment':
+        cursor.execute(
+            """
+            DELETE FROM comment WHERE id=%(comment_id)s;    
+            """,
+            {'comment_id': row_id})

@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='list_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='clickables.css') }}">
+    {{ super() }}
+{% endblock %}
+{% block title %}Search results{% endblock %}
+{% block content %}
+    <h1>Search results</h1>
+    {% include 'table.html' %}
+{% endblock %}
