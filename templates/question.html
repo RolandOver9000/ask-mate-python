@@ -58,6 +58,9 @@
                                 <div class="comment">
                                     </br>
                                     <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    {% if comment.edited_count > 0 %}
+                                        <div class="comment-edit-count">Edited {{ comment.edited_count }} times</div>
+                                    {% endif %}
                                     <p class="comment-message">{{ comment.message }}</p>
                                     <a href="/comments/{{ comment.id }}/edit">Edit comment</a>
                                 </div>
@@ -95,6 +98,9 @@
                                 <div class="comment">
                                     </br>
                                     <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    {% if comment.edited_count > 0 %}
+                                        <div class="comment-edit-count">Edited {{ comment.edited_count }} times</div>
+                                    {% endif %}
                                     <p class="comment-message">{{ comment.message }}</p>
                                      &emsp;
                                     <a href="/comments/{{ comment.id }}/edit">Edit comment</a>
