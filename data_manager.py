@@ -107,8 +107,8 @@ def delete_question(cursor, question_id):
         DELETE FROM answer WHERE question_id = %(question_id)s;
         DELETE FROM question WHERE id = %(question_id)s;
         """,
-        {'question_id': question_id}
-    )
+        {'question_id': question_id})
+
 
 @connection.connection_handler
 def insert_question(cursor, question_data):
@@ -214,16 +214,11 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
-    # delete comments to answer from comment table
     cursor.execute("""
-                   DELETE FROM comment
-                   WHERE answer_id=%(answer_id)s
-                   """, {'answer_id': answer_id})
-    # delete answer from answer table
-    cursor.execute("""
-                   DELETE FROM answer
-                   WHERE id=%(answer_id)s
-                   """, {'answer_id': answer_id})
+                   DELETE FROM comment WHERE answer_id=%(answer_id)s;
+                   DELETE FROM answer WHERE id=%(answer_id)s;
+                   """,
+                   {'answer_id': answer_id})
 
 
 @connection.connection_handler
