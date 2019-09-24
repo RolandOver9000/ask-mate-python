@@ -102,6 +102,21 @@ def get_all_comments(cursor, comment_id):
 def delete_question(cursor, question_id):
     cursor.execute(
         """
+        DELETE FROM question_tag
+        WHERE question_id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+    cursor.execute(
+        """
+        DELETE FROM comment
+        WHERE question_id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+
+    cursor.execute(
+        """
         DELETE FROM answer
         WHERE question_id = %(question_id)s;
         """,
