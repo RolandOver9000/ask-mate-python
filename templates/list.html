@@ -24,26 +24,7 @@
         </select>
         <button type="submit">Sort</button>
     </form><br>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Question Title</th>
-            <th>Upvotes</th>
-            <th>Views</th>
-            <th>Answers</th>
-            <th>Submission Time</th>
-        </tr>
-        {% for question in sorted_questions %}
-        <tr>
-            <td>{{ question.id }}</td>
-            <td><a href="/question/{{ question.id }}">{{ question.title }}</a></td>
-            <td>{{ question.vote_number }}</td>
-            <td>{{ question.view_number }}</td>
-            <td>{{ question.answer_count }}</td>
-            <td>{{ question.submission_time }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% include 'table.html' %}
     <p><a href="/add-question" id="ask-question">Ask a question</a></p>
     {% else %}
         <a href="/add-question" id="first-question">Be the fist to ask a question</a>
