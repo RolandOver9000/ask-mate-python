@@ -13,23 +13,14 @@ def get_all_questions(cursor, order_by, order):
     :param order:
     :return:
     """
-    if order_by == 'answer_number':
-        cursor.execute(
-                sql.SQL("""
-                         SELECT * FROM question
-                         ORDER BY {order_by} {order}
-                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
-
-    else:
-        cursor.execute(
-                sql.SQL("""
-                         SELECT * FROM question
-                         ORDER BY {order_by} {order}
-                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+    cursor.execute(
+            sql.SQL("""
+                     SELECT question.*, 
+                     (SELECT COUNT(*) FROM answer WHERE answer.question_id = question.id) AS answer_number FROM question
+                     ORDER BY {order_by} {order}
+                    """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
 
     questions = cursor.fetchall()
-    # calling this function will add a new key to the questions that contains the amount of answers
-    add_answer_count_to_question(questions)
     return questions
 
 
@@ -203,37 +194,7 @@ def handle_votes(cursor, vote_option, message_id, message_type):
                 vote_calculation=sql.SQL(vote_calculation),
                 message_id=sql.SQL(message_id))
                 )
-
-
-@connection.connection_handler
-def get_answer_count(cursor):
-    """
-    Counts the answers for every question.
-    :return: answer_count (list of dict)
-    """
-    cursor.execute("""
-                   SELECT question_id, COUNT(question_id)
-                   FROM answer
-                   GROUP BY question_id
-                   ORDER BY question_id;
-                   """)
-
-    answer_count = cursor.fetchall()
-    return answer_count
-
-
-def add_answer_count_to_question(questions):
-    """
-    Adds an answer count key to the questions dictionary.
-    :param questions: list of dicts of questions.
-    """
-    answer_count = get_answer_count()
-    for question in questions:
-        question['answer_count'] = 0
-        for count in answer_count:
-            if question['id'] == count['question_id']:
-                question['answer_count'] = count['count']
-
+    
 
 @connection.connection_handler
 def get_single_entry(cursor, table, entry_id):
