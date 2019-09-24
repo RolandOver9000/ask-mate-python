@@ -168,7 +168,7 @@ def route_add_comment_to_question(question_id):
 def route_search():
     search_phrase = request.args.get('search_phrase')
     sorted_questions = data_manager.get_questions_by_search_phrase(search_phrase)
-    return render_template('search.html', sorted_questions=sorted_questions)
+    return render_template('search.html', sorted_questions=sorted_questions, search_phrase=search_phrase)
 
 
 @app.route('/question/<question_id>/<answer_id>/<comment_id>/delete', methods=["GET", "POST"])
