@@ -143,16 +143,19 @@ def update_entry(cursor, table, entry_id, entry_updater):
     :param entry_updater:
     :return:
     """
+
     entry_updater.update({'id': entry_id})
-    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
-        sql.Identifier(table),
-        sql.SQL(', ').join([
+    composable_sets = [
             sql.SQL(' = ').join([sql.Identifier(key), sql.Placeholder(key)])
             for key in entry_updater.keys()
-        ]),
+    ]
+
+    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
+        sql.Identifier(table),
+        sql.SQL(', ').join(composable_sets),
         sql.Placeholder('id')
     )
-    print(query.as_string(cursor))
+
     cursor.execute(
         query,
         entry_updater
