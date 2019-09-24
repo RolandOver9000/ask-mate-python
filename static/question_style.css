@@ -70,6 +70,10 @@ h3 {
     border-left: 5px solid darkkhaki;
 }
 
+#comment-message {
+    white-space: pre-line;
+}
+
 #answer-message {
     word-break: break-word;
     margin-right: 2%;
@@ -94,11 +98,15 @@ img {
     margin-bottom: 2%;
 }
 
-#answer-submission-time {
+#answer-submission-time, #comment-submission-time {
     display: inline-block;
     margin-top: 0;
     float: right;
     font-size: small;
+}
+
+.comment {
+    border-style: solid;
 }
 
 #answer-id {
