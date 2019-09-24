@@ -52,7 +52,7 @@ th {
 #search-input {
     display: inline-block;
     position: absolute;
-    width: 22%;
+    width: 21%;
     left: 39%;
 }
 
@@ -60,7 +60,7 @@ th {
 #search-button {
     display: inline-block;
     position: absolute;
-    left: 62%;
+    left: 61%;
 }
 
 
