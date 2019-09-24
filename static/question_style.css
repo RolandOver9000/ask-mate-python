@@ -38,22 +38,6 @@ a {
     margin: 4px 1px;
 }
 
-#tags a, a:visited {
-    color: black;
-}
-
-#tags a:hover {
-    color: orange;
-}
-
-#add-new-tag a {
-    color: black;
-}
-
-#add-new-tag a:hover {
-    color: orange;
-}
-
 #main-question-body {
     margin-left: 2%;
     margin-top: 2%;

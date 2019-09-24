@@ -90,9 +90,10 @@ def get_answers_for_question(cursor, question_id):
 def get_all_comments(cursor, comment_id):
     cursor.execute(
         sql.SQL("""
-                    SELECT * FROM comment
+                    SELECT id, question_id, answer_id, message, submission_time,
+                           COALESCE(edited_count, 0) AS edited_count 
+                    FROM comment
                     WHERE question_id = {comment_id}
-                    
                     """).format(comment_id=sql.SQL(comment_id)))
     comment_data = cursor.fetchall()
     return comment_data
