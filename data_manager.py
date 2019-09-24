@@ -13,11 +13,20 @@ def get_all_questions(cursor, order_by, order):
     :param order:
     :return:
     """
-    cursor.execute(
-            sql.SQL("""
-                    SELECT * FROM question
-                    ORDER BY {order_by} {order}
-                   """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+    if order_by == 'answer_number':
+        cursor.execute(
+                sql.SQL("""
+                         SELECT * FROM question
+                         ORDER BY {order_by} {order}
+                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+
+    else:
+        cursor.execute(
+                sql.SQL("""
+                         SELECT * FROM question
+                         ORDER BY {order_by} {order}
+                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+
     questions = cursor.fetchall()
     # calling this function will add a new key to the questions that contains the amount of answers
     add_answer_count_to_question(questions)
@@ -128,6 +137,7 @@ def update_entry(cursor, table, entry_id, entry_updater):
         ]),
         sql.Placeholder('id')
     )
+    print(query.as_string(cursor))
     cursor.execute(
         query,
         entry_updater
@@ -243,13 +253,15 @@ def add_answer_count_to_question(questions):
 
 
 @connection.connection_handler
-def get_answer(cursor, answer_id):
+def get_single_entry(cursor, table, entry_id):
     cursor.execute(
-        """
-        SELECT * FROM answer
-        WHERE id = %(answer_id)s
-        """,
-        {'answer_id': answer_id}
+        sql.SQL(
+            """
+            SELECT * FROM {table}
+            WHERE id = %(entry_id)s
+            """
+        ).format(table=sql.Identifier(table)),
+        {'entry_id': entry_id}
     )
-    answer = cursor.fetchone()
-    return answer
+    entry = cursor.fetchone()
+    return entry

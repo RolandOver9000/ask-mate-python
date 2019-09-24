@@ -99,9 +99,9 @@ def route_delete_answer(question_id, answer_id):
 
 @app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
 def route_edit_answer(answer_id):
-    answer_data = data_manager.get_answer(answer_id)
+    answer_data = data_manager.get_single_entry('answer', answer_id)
     question_id = answer_data.get('question_id')
-    question_data = data_manager.get_single_question(question_id)
+    question_data = data_manager.get_single_entry('question', question_id)
 
     if request.method == 'GET':
         return render_template('new_answer.html', answer=answer_data, question=question_data)
