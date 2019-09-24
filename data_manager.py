@@ -317,7 +317,10 @@ def get_questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase + '%'
     cursor.execute(
         """
-        SELECT question. * FROM question
+        SELECT
+            question. *,
+            (SELECT COUNT(id) FROM answer WHERE answer.question_id=question.id) AS answer_number
+        FROM question
         FULL JOIN answer ON question.id = answer.question_id
         WHERE question.message LIKE %(search_phrase)s OR
               answer.message LIKE %(search_phrase)s
