@@ -45,9 +45,25 @@
                 {{ tag.name }}
             {% endfor %}
         </div>
+        <div>
+            <a href="{{ url_for('route_new_tag', question_id=question.id) }}">Add new tag</a>
+        </div>
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
+        {% endif %}
+            <div class="comments">
+                        {% for comment in comments %}
+                            {% if comment.answer_id == None %}
+                                <div class="comment">
+                                    </br>
+                                    <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    <p class="comment-message">{{ comment.message }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+            </div>
+            {% if answers %}
             {% for answer in answers %}
                 <div id="answers">
                     <strong id="answer-id">Answer id_{{ answer.id }}</strong>
@@ -72,13 +88,17 @@
                     &emsp;
                     <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}"
                        id="delete-answer">Edit answer</a>
-                    <div class="comment">
+                    <div class="comments">
                         {% for comment in comments %}
                             {% if comment.answer_id == answer.id %}
-                                </br>
-                                <p>{{ comment.message }}</p>
+                                <div class="comment">
+                                    </br>
+                                    <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    <p class="comment-message">{{ comment.message }}</p>
+                                </div>
                             {% endif %}
                         {% endfor %}
+
                     </div>
                 </div>
             {% endfor %}

@@ -213,7 +213,7 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
                     'answer_id': new_comment_data['answer_id'],
                     'question_id': new_comment_data['question_id'],
                     'message': new_comment_data['new_comment'],
-                    'submission_time': datetime.now(),
+                    'submission_time': datetime.now().replace(microsecond=0),
                     'edited_count': 0
                     })
 
@@ -282,6 +282,45 @@ def get_tags_for_question(cursor, question_id):
                     """, {'question_id': question_id})
     tags = cursor.fetchall()
     return tags
+
+
+@connection.connection_handler
+def get_existing_tags(cursor):
+    cursor.execute("""
+                    SELECT id, name
+                    FROM tag
+                    ORDER BY id
+                    """)
+    existing_tags = cursor.fetchall()
+    return existing_tags
+
+
+@connection.connection_handler
+def get_tag_id(cursor, tag_text):
+    cursor.execute("""
+                    SELECT id
+                    FROM tag
+                    WHERE name=%(tag_text)s
+                    """, {'tag_text': tag_text})
+    tag_id = cursor.fetchone()
+    return tag_id
+
+
+@connection.connection_handler
+def add_tag_to_question(cursor, question_id, tag_id):
+    cursor.execute("""
+                    INSERT INTO question_tag
+                    VALUES (%(question_id)s, %(tag_id)s)
+                    """, {'question_id': question_id, 'tag_id': tag_id})
+
+
+@connection.connection_handler
+def add_new_tag(cursor, tag_text):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES ( %(name)s)
+                    """, {'name': tag_text})
+
 
 
 @connection.connection_handler
