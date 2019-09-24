@@ -164,5 +164,18 @@ def route_add_comment_to_question(question_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
+@app.route('/question/<question_id>/<answer_id>/<comment_id>/delete', methods=["GET", "POST"])
+def delete_comment(question_id, answer_id, comment_id):
+    if request.method == "GET":
+        comment = data_manager.get_single_entry('comment', comment_id)
+        answer_data = data_manager.get_single_entry('answer', answer_id)
+        return render_template('delete_comment.html', answer=answer_data['message'], comment=comment)
+
+    if request.form['delete-button'] == 'Yes':
+        data_manager.delete_data_by_id('comment', comment_id)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

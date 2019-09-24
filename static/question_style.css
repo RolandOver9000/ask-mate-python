@@ -112,3 +112,12 @@ img {
 #answer-id {
     display: inline;
 }
+
+#delete-comment {
+    width: 10%;
+}
+
+#delete-button-image {
+  width: 100%;
+  height: 100%;
+}
