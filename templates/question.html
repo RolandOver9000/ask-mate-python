@@ -50,6 +50,7 @@
         </div>
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
+            <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
             {% for answer in answers %}
                 <div id="answers">
                     <strong id="answer-id">Answer id_{{ answer.id }}</strong>
@@ -74,13 +75,20 @@
                     &emsp;
                     <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}"
                        id="delete-answer">Edit answer</a>
+                    <div class="comment">
+                        {% for comment in comments %}
+                            {% if comment.answer_id == answer.id %}
+                                </br>
+                                <p>{{ comment.message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
-            <div class="comment">
-            </div>
         {% else %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question-first">Be the first to answer this
                 question!</a>
+            <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
         {% endif %}
     {% else %}
         <p>Question not found!</p>
