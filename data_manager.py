@@ -314,7 +314,7 @@ def add_new_tag(cursor, tag_text):
 
 @connection.connection_handler
 def get_questions_by_search_phrase(cursor, search_phrase):
-    search_phrase = '%' + search_phrase + '%'
+    search_phrase = '%' + search_phrase.lower() + '%'
     cursor.execute(
         """
         SELECT
@@ -322,8 +322,9 @@ def get_questions_by_search_phrase(cursor, search_phrase):
             (SELECT COUNT(id) FROM answer WHERE answer.question_id=question.id) AS answer_number
         FROM question
         FULL JOIN answer ON question.id = answer.question_id
-        WHERE question.message LIKE %(search_phrase)s OR
-              answer.message LIKE %(search_phrase)s
+        WHERE LOWER(question.message) LIKE %(search_phrase)s OR
+              LOWER(question.title) LIKE %(search_phrase)s OR
+              LOWER(answer.message) LIKE %(search_phrase)s
         ORDER BY submission_time DESC
         """,
         {'search_phrase': search_phrase}
