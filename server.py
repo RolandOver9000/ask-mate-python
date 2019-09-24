@@ -121,19 +121,19 @@ def route_edit_answer(answer_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
-@app.route('/question/<question_id>/new-tag')
+@app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
+    existing_tags = data_manager.get_existing_tags()
+
     if request.method == "POST":
         tag = request.form.to_dict()
-        if tag['existing_tag'] == "None":
-            print(type(tag['new_tag']))
-            util.add_new_tag_to_question(question_id, tag['new_tag'])
-        else:
+        if tag['new_tag'] == '':
             util.add_tag_to_question(question_id, int(tag['existing_tag']))
+        else:
+            util.add_new_tag_to_question(question_id, tag['new_tag'])
 
         return redirect(url_for('display_question_and_answers', question_id=question_id))
 
-    existing_tags = data_manager.get_existing_tags()
     return render_template('new_tag.html', existing_tags=existing_tags)
 
 
@@ -162,6 +162,13 @@ def route_add_comment_to_question(question_id):
                         'answer_id': None}
     data_manager.write_new_comment_data_to_table(new_comment_data)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
+@app.route('/search')
+def route_search():
+    search_phrase = request.args.get('search_phrase')
+    sorted_questions = data_manager.get_questions_by_search_phrase(search_phrase)
+    return render_template('search.html', sorted_questions=sorted_questions)
 
 
 @app.route('/question/<question_id>/<answer_id>/<comment_id>/delete', methods=["GET", "POST"])

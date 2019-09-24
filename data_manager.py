@@ -213,7 +213,7 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
                     'answer_id': new_comment_data['answer_id'],
                     'question_id': new_comment_data['question_id'],
                     'message': new_comment_data['new_comment'],
-                    'submission_time': datetime.now(),
+                    'submission_time': datetime.now().replace(microsecond=0),
                     'edited_count': 0
                     })
 
@@ -320,6 +320,23 @@ def add_new_tag(cursor, tag_text):
                     INSERT INTO tag (name)
                     VALUES ( %(name)s)
                     """, {'name': tag_text})
+
+
+@connection.connection_handler
+def get_questions_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase + '%'
+    cursor.execute(
+        """
+        SELECT question. * FROM question
+        FULL JOIN answer ON question.id = answer.question_id
+        WHERE question.message LIKE %(search_phrase)s OR
+              answer.message LIKE %(search_phrase)s
+        ORDER BY submission_time DESC
+        """,
+        {'search_phrase': search_phrase}
+    )
+    questions = cursor.fetchall()
+    return questions
 
 
 @connection.connection_handler

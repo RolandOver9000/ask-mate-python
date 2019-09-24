@@ -98,7 +98,7 @@ img {
     margin-bottom: 2%;
 }
 
-#answer-submission-time, #comment-submission-time {
+#answer-submission-time, .comment-submission-time {
     display: inline-block;
     margin-top: 0;
     float: right;

@@ -49,6 +49,21 @@ th {
     border: 1px solid black;
 }
 
+#search-input {
+    display: inline-block;
+    position: absolute;
+    width: 22%;
+    left: 39%;
+}
+
+
+#search-button {
+    display: inline-block;
+    position: absolute;
+    left: 62%;
+}
+
+
 #ask-question, #list-questions {
     text-align: center;
     display: block;
