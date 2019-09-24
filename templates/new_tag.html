@@ -1,6 +1,6 @@
 <form action="" method="post" id="tag-select">
     <select name="existing_tag" id="tag-list">
-        <option SELECTED hidden value="None">Select a tag</option>
+        <option SELECTED hidden value="not_present">Select a tag</option>
     {% for tag in existing_tags %}
         <option value="{{ tag.id }}" >{{ tag.name }}</option>
     {% endfor %}
