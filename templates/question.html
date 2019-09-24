@@ -51,6 +51,19 @@
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
+        {% endif %}
+            <div class="comments">
+                        {% for comment in comments %}
+                            {% if comment.answer_id == None %}
+                                <div class="comment">
+                                    </br>
+                                    <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    <p class="comment-message">{{ comment.message }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+            </div>
+            {% if answers %}
             {% for answer in answers %}
                 <div id="answers">
                     <strong id="answer-id">Answer id_{{ answer.id }}</strong>
@@ -80,8 +93,8 @@
                             {% if comment.answer_id == answer.id %}
                                 <div class="comment">
                                     </br>
-                                    <p id="comment-submission-time">posted on {{ comment.submission_time }}</p>
-                                    <p id="comment-message">{{ comment.message }}</p>
+                                    <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    <p class="comment-message">{{ comment.message }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
