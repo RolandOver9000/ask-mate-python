@@ -213,7 +213,7 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
                     'answer_id': new_comment_data['answer_id'],
                     'question_id': new_comment_data['question_id'],
                     'message': new_comment_data['new_comment'],
-                    'submission_time': datetime.now(),
+                    'submission_time': datetime.now().replace(microsecond=0),
                     'edited_count': 0
                     })
 

@@ -75,13 +75,17 @@
                     &emsp;
                     <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}"
                        id="delete-answer">Edit answer</a>
-                    <div class="comment">
+                    <div class="comments">
                         {% for comment in comments %}
                             {% if comment.answer_id == answer.id %}
-                                </br>
-                                <p>{{ comment.message }}</p>
+                                <div class="comment">
+                                    </br>
+                                    <p id="comment-submission-time">posted on {{ comment.submission_time }}</p>
+                                    <p id="comment-message">{{ comment.message }}</p>
+                                </div>
                             {% endif %}
                         {% endfor %}
+
                     </div>
                 </div>
             {% endfor %}
