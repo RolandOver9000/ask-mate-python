@@ -59,6 +59,7 @@
                                     </br>
                                     <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
                                     <p class="comment-message">{{ comment.message }}</p>
+                                    <a href="">Edit comment</a>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -96,6 +97,7 @@
                                     <p class="comment-submission-time">posted on {{ comment.submission_time }}</p>
                                     <p class="comment-message">{{ comment.message }}</p>
                                      &emsp;
+                                    <a href="">Edit comment</a>
                                     <a href="{{ url_for('delete_comment', question_id=question.id,
                                                                           comment_id=comment.id,
                                                                           answer_id=answer.id) }}">
