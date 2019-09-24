@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -122,7 +123,18 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag')
 def route_new_tag(question_id):
-    pass
+    if request.method == "POST":
+        tag = request.form.to_dict()
+        if tag['existing_tag'] == "None":
+            print(type(tag['new_tag']))
+            util.add_new_tag_to_question(question_id, tag['new_tag'])
+        else:
+            util.add_tag_to_question(question_id, int(tag['existing_tag']))
+
+        return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+    existing_tags = data_manager.get_existing_tags()
+    return render_template('new_tag.html', existing_tags=existing_tags)
 
 
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
