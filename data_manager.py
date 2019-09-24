@@ -282,3 +282,20 @@ def get_tags_for_question(cursor, question_id):
                     """, {'question_id': question_id})
     tags = cursor.fetchall()
     return tags
+
+
+@connection.connection_handler
+def get_questions_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase + '%'
+    cursor.execute(
+        """
+        SELECT question. * FROM question
+        FULL JOIN answer ON question.id = answer.question_id
+        WHERE question.message LIKE %(search_phrase)s OR
+              answer.message LIKE %(search_phrase)s
+        ORDER BY submission_time DESC
+        """,
+        {'search_phrase': search_phrase}
+    )
+    questions = cursor.fetchall()
+    return questions

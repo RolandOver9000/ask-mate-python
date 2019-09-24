@@ -152,5 +152,12 @@ def route_add_comment_to_question(question_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
+@app.route('/search')
+def route_search():
+    search_phrase = request.args.get('search_phrase')
+    sorted_questions = data_manager.get_questions_by_search_phrase(search_phrase)
+    return render_template('search.html', sorted_questions=sorted_questions)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
