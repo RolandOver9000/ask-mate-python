@@ -71,10 +71,16 @@
                     &emsp;
                     <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}"
                        id="delete-answer">Edit answer</a>
+                    <div class="comment">
+                        {% for comment in comments %}
+                            {% if comment.answer_id == answer.id %}
+                                </br>
+                                <p>{{ comment.message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
-            <div class="comment">
-            </div>
         {% else %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question-first">Be the first to answer this
                 question!</a>

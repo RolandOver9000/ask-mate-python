@@ -78,6 +78,18 @@ def get_answers_for_question(cursor, question_id):
 
 
 @connection.connection_handler
+def get_all_comments(cursor, comment_id):
+    cursor.execute(
+        sql.SQL("""
+                    SELECT * FROM comment
+                    WHERE question_id = {comment_id}
+                    
+                    """).format(comment_id=sql.SQL(comment_id)))
+    comment_data = cursor.fetchall()
+    return comment_data
+
+
+@connection.connection_handler
 def delete_question(cursor, question_id):
     cursor.execute(
         """
