@@ -15,8 +15,10 @@ def get_all_questions(cursor, order_by, order):
     """
     cursor.execute(
             sql.SQL("""
-                     SELECT question.*, 
-                     (SELECT COUNT(*) FROM answer WHERE answer.question_id = question.id) AS answer_number FROM question
+                     SELECT
+                        question.*, 
+                        (SELECT COUNT(*) FROM answer WHERE answer.question_id = question.id) AS answer_number
+                     FROM question
                      ORDER BY {order_by} {order}
                     """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
 
