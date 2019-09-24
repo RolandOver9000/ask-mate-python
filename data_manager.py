@@ -38,6 +38,23 @@ def get_single_question(cursor, question_id):
 
 
 @connection.connection_handler
+def get_specific_entries(cursor, table, entry_ids):
+    id_placeholders = sql.SQL("({})").format(
+        sql.SQL(', ').join([sql.Placeholder() for instance in range(len(entry_ids))])
+    )
+    query = sql.SQL("SELECT * FROM {} WHERE id IN {}").format(
+        sql.Identifier(table),
+        id_placeholders
+    )
+    cursor.execute(
+        query,
+        entry_ids
+    )
+    entries = cursor.fetchall()
+    return entries
+
+
+@connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute(
         """
