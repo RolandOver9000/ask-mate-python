@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for
-import connection
 import data_manager
 
 app = Flask(__name__)
@@ -16,15 +15,14 @@ def route_list():
     """
 
     if request.args:
-        order_by = request.args.get('order_by')
-        order_direction = request.args.get('order_direction')
+        order_by= request.args.get('order_by')
+        order = request.args.get('order_direction')
     else:
-        order_by, order_direction = 'submission_time', 'desc'
+        order_by, order = 'submission_time', 'desc'
 
-    sorted_questions = data_manager.get_all_questions()
-
+    sorted_questions = data_manager.get_all_questions(order_by, order)
     return render_template('list.html', sorted_questions=sorted_questions,
-                           selected_sorting=order_by, selected_order=order_direction)
+                           selected_sorting=order_by, selected_order=order)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -34,8 +32,8 @@ def route_add():
         return render_template('add-question.html', question_data={})
 
     user_inputs_for_question = request.form.to_dict()
-    new_id = data_manager.get_new_id_for("question")
-    data_manager.write_new_question_data_to_file(user_inputs_for_question, new_id)
+    data_manager.insert_question(user_inputs_for_question)
+    new_id = data_manager.get_latest_id('question')
 
     return redirect(url_for('display_question_and_answers', question_id=new_id))
 
@@ -64,13 +62,13 @@ def route_vote(question_id):
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit(question_id):
-    question_data = connection.get_single_data_entry(question_id)
+    question_data = data_manager.get_single_question(question_id)
 
     if request.method == 'GET':
         return render_template('add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
-    data_manager.update_data_entry_in_file(question_id, user_inputs_for_question)
+    data_manager.update_entry('question', question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
@@ -88,9 +86,7 @@ def post_an_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete(question_id):
-
-    data_manager.delete_question_from_file(question_id)
-    data_manager.update_id_pair_in_file()
+    data_manager.delete_question(question_id)
 
     return redirect(url_for('route_list'))
 
@@ -101,13 +97,28 @@ def route_delete_answer(question_id, answer_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def route_edit_answer(answer_id):
+    answer_data = data_manager.get_single_entry('answer', answer_id)
+    question_id = answer_data.get('question_id')
+    question_data = data_manager.get_single_entry('question', question_id)
+
+    if request.method == 'GET':
+        return render_template('new_answer.html', answer=answer_data, question=question_data)
+
+    user_inputs_for_answer = request.form.to_dict()
+    data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
 def add_new_comment_to_answer(question_id, answer_id):
     if request.method == "GET":
         answer_by_id = data_manager.get_single_entry('answer', answer_id)
         return render_template('new_comment.html', answer_by_id=answer_by_id)
 
-    new_comment_data = {'new_comment': request.form.to_dict(),
+    new_comment_data = {'new_comment': request.form['comment'],
                         'answer_id': answer_id,
                         'question_id': question_id}
     data_manager.write_new_comment_data_to_table(new_comment_data)

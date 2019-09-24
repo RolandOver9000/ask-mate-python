@@ -5,13 +5,11 @@
     <title>New comment for answer</title>
 </head>
 <body>
-    <p>{{ answer_by_id }}</p>
+    <p>{{ answer_by_id.message }}</p>
     <form action="", method="POST">
-        <textarea cols="40" rows="10">
-
-        </textarea>
+        <textarea name="comment" cols="40" rows="10"></textarea>
         <button type="submit">
-
+            Post Comment!
         </button>
     </form>
 </body>

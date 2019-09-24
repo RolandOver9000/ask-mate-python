@@ -6,19 +6,30 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def get_all_questions(cursor, order_by='submission_time', order='DESC'):
+def get_all_questions(cursor, order_by, order):
     """
     :param cursor: SQL cursor from @connection.connection_handler
     :param order_by:
     :param order:
     :return:
     """
-    cursor.execute(
-            sql.SQL("""
-                    SELECT * FROM question
-                    ORDER BY {order_by} {order}
-                   """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+    if order_by == 'answer_number':
+        cursor.execute(
+                sql.SQL("""
+                         SELECT * FROM question
+                         ORDER BY {order_by} {order}
+                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+
+    else:
+        cursor.execute(
+                sql.SQL("""
+                         SELECT * FROM question
+                         ORDER BY {order_by} {order}
+                        """).format(order_by=sql.Identifier(order_by), order=sql.SQL(order)))
+
     questions = cursor.fetchall()
+    # calling this function will add a new key to the questions that contains the amount of answers
+    add_answer_count_to_question(questions)
     return questions
 
 
@@ -40,7 +51,8 @@ def get_answers_for_question(cursor, question_id):
     cursor.execute(
         """
         SELECT * FROM answer
-        WHERE question_id = %(question_id)s;
+        WHERE question_id = %(question_id)s
+        ORDER BY id;
         """,
         {'question_id': question_id}
     )
@@ -68,7 +80,7 @@ def delete_question(cursor, question_id):
 
 @connection.connection_handler
 def insert_question(cursor, question_data):
-    question_data['submission_time'] = datetime.now()
+    question_data['submission_time'] = datetime.now().replace(microsecond=0)
     question_data['view_number'] = 0
     question_data['vote_number'] = 0
     cursor.execute(
@@ -77,6 +89,41 @@ def insert_question(cursor, question_data):
         VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
         """,
         question_data
+    )
+
+
+@connection.connection_handler
+def get_latest_id(cursor, table):
+    cursor.execute(sql.SQL("SELECT id FROM {} ORDER BY id DESC LIMIT 1;").format(
+        sql.Identifier(table)
+    ))
+    entry_data = cursor.fetchone()
+    return entry_data['id']
+
+
+@connection.connection_handler
+def update_entry(cursor, table, entry_id, entry_updater):
+    """
+
+    :param cursor:
+    :param table:
+    :param entry_id:
+    :param entry_updater:
+    :return:
+    """
+    entry_updater.update({'id': entry_id})
+    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
+        sql.Identifier(table),
+        sql.SQL(', ').join([
+            sql.SQL(' = ').join([sql.Identifier(key), sql.Placeholder(key)])
+            for key in entry_updater.keys()
+        ]),
+        sql.Placeholder('id')
+    )
+    print(query.as_string(cursor))
+    cursor.execute(
+        query,
+        entry_updater
     )
 
 
@@ -122,14 +169,15 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
 @connection.connection_handler
 def write_new_comment_data_to_table(cursor, new_comment_data):
     cursor.execute("""
-                    INSERT INTO comment (answer_id, message, submission_time)
-                    VALUES (%(answer_id)s, %(message)s, %(submission_time)s)
+                    INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
+                    VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                     """,
                    {
-                    'answer_id': new_comment_data.answer_id,
-                    'question_id': new_comment_data.question_id,
-                    'message': new_comment_data.new_comment,
-                    'submission_time': datetime.now()
+                    'answer_id': new_comment_data['answer_id'],
+                    'question_id': new_comment_data['question_id'],
+                    'message': new_comment_data['new_comment'],
+                    'submission_time': datetime.now(),
+                    'edited_count': 0
                     })
 
 
@@ -176,7 +224,7 @@ def handle_votes(cursor, vote_option, message_id, message_type):
 def get_answer_count(cursor):
     """
     Counts the answers for every question.
-    :return:
+    :return: answer_count (list of dict)
     """
     cursor.execute("""
                    SELECT question_id, COUNT(question_id)
@@ -187,3 +235,31 @@ def get_answer_count(cursor):
 
     answer_count = cursor.fetchall()
     return answer_count
+
+
+def add_answer_count_to_question(questions):
+    """
+    Adds an answer count key to the questions dictionary.
+    :param questions: list of dicts of questions.
+    """
+    answer_count = get_answer_count()
+    for question in questions:
+        question['answer_count'] = 0
+        for count in answer_count:
+            if question['id'] == count['question_id']:
+                question['answer_count'] = count['count']
+
+
+@connection.connection_handler
+def get_single_entry(cursor, table, entry_id):
+    cursor.execute(
+        sql.SQL(
+            """
+            SELECT * FROM {table}
+            WHERE id = %(entry_id)s
+            """
+        ).format(table=sql.Identifier(table)),
+        {'entry_id': entry_id}
+    )
+    entry = cursor.fetchone()
+    return entry
