@@ -45,6 +45,9 @@
                 {{ tag.name }}
             {% endfor %}
         </div>
+        <div>
+            <a href="{{ url_for('route_new_tag', question_id=question.id) }}">Add new tag</a>
+        </div>
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             {% for answer in answers %}
