@@ -5,11 +5,17 @@
     <title>New comment for answer</title>
 </head>
 <body>
-    <p>{{ answer_by_id.message if answer_by_id }}</p>
+    {% if answer_by_id %}
+        <p>{{ answer_by_id.message }}</p>
+    {% elif comment.answer_id %}
+        <p>{{ answer.message }}</p>
+    {% else %}
+        <p>{{ question.message }}</p>
+    {% endif %}
     <form action="", method="POST">
-        <textarea name="comment" cols="40" rows="10" required></textarea>
+        <textarea name="comment" cols="40" rows="10" required>{{ comment.message if comment }}</textarea>
         <button type="submit">
-            Post Comment!
+            {{"Post comment" if answer_by_id else "Save changes"}}
         </button>
     </form>
 </body>
