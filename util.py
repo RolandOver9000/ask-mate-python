@@ -1,4 +1,5 @@
 import data_manager
+from datetime import datetime
 
 
 def add_new_tag_to_question(question_id, new_tag):
@@ -18,3 +19,10 @@ def not_duplicate_tag(tag_text):
         if tag_text == tag['name']:
             return False
     return True
+
+
+def handle_updated_comment(comment_data, updated_comment_message):
+    updated_comment = {'message': updated_comment_message,
+                       'submission_time': datetime.now().replace(microsecond=0),
+                       'edited_count': comment_data['edited_count'] + 1}
+    return updated_comment
