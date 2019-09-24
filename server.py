@@ -137,6 +137,12 @@ def route_new_tag(question_id):
     return render_template('new_tag.html', existing_tags=existing_tags)
 
 
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def remove_tag(question_id, tag_id):
+    data_manager.remove_tag(question_id, tag_id)
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
 def add_new_comment_to_answer(question_id, answer_id):
     if request.method == "GET":
