@@ -148,7 +148,7 @@ def add_new_comment_to_answer(question_id, answer_id):
                         'question_id': question_id
                         }
     data_manager.write_new_comment_data_to_table(new_comment_data)
-    return redirect(url_for('display_question_and_answers', question_id=question_id, answer_id=answer_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/new-comment', methods=["GET", "POST"])
@@ -184,7 +184,7 @@ def delete_comment(question_id, answer_id, comment_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
-@app.route('/comments/<comment_id>/edit')
+@app.route('/comments/<comment_id>/edit', methods=["GET", "POST"])
 def route_edit_comment(comment_id):
     comment_data = data_manager.get_single_entry('comment', comment_id)
     question_id = comment_data.get('question_id')
@@ -192,8 +192,8 @@ def route_edit_comment(comment_id):
     if request.method == 'GET':
         return render_template('new_comment.html', comment=comment_data)
 
-    user_inputs_for_comment = request.form.to_dict()
-    data_manager.update_entry('comment', comment_id, user_inputs_for_comment)
+    updated_comment = {'message': request.form['comment']}
+    data_manager.update_entry('comment', comment_id, updated_comment)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 

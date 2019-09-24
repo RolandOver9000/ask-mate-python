@@ -152,6 +152,7 @@ def update_entry(cursor, table, entry_id, entry_updater):
         ]),
         sql.Placeholder('id')
     )
+    print(query.as_string(cursor))
     cursor.execute(
         query,
         entry_updater
