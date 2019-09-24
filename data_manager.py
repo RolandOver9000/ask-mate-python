@@ -330,7 +330,25 @@ def get_questions_by_search_phrase(cursor, search_phrase):
 
 @connection.connection_handler
 def delete_data_by_id(cursor, table_name, row_id):
-    cursor.execute(sql.SQL("""
-                    DELETE FROM {table_name}
-                    WHERE id={row_id}
-                    """).format(table_name=sql.Identifier(table_name), row_id=sql.SQL(row_id)))
+    if table_name == 'question':
+        cursor.execute(
+            """
+            DELETE FROM question_tag WHERE question_id = %(question_id)s;
+            DELETE FROM comment WHERE question_id = %(question_id)s;
+            DELETE FROM answer WHERE question_id = %(question_id)s;
+            DELETE FROM question WHERE id = %(question_id)s;
+            """,
+            {'question_id': row_id})
+    elif table_name == 'answer':
+        cursor.execute(
+            """
+            DELETE FROM comment WHERE answer_id=%(answer_id)s;
+            DELETE FROM answer WHERE id=%(answer_id)s;
+            """,
+            {'answer_id': row_id})
+    elif table_name == 'comment':
+        cursor.execute(
+            """
+            DELETE FROM comment WHERE id=%(comment_id)s;    
+            """,
+            {'comment_id': row_id})
