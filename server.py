@@ -130,5 +130,18 @@ def add_new_comment_to_answer(question_id, answer_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
+@app.route('/question/<question_id>/new-comment', methods=["GET", "POST"])
+def route_add_comment_to_question(question_id):
+    if request.method == 'GET':
+        question = data_manager.get_single_entry('question', question_id)
+        return render_template('new_comment.html', answer_by_id=question)
+
+    new_comment_data = {'new_comment': request.form['comment'],
+                        'question_id': question_id,
+                        'answer_id': None}
+    data_manager.write_new_comment_data_to_table(new_comment_data)
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

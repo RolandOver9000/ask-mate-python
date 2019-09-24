@@ -47,6 +47,7 @@
         </div>
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
+            <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
             {% for answer in answers %}
                 <div id="answers">
                     <strong id="answer-id">Answer id_{{ answer.id }}</strong>
@@ -78,6 +79,7 @@
         {% else %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question-first">Be the first to answer this
                 question!</a>
+            <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
         {% endif %}
     {% else %}
         <p>Question not found!</p>
