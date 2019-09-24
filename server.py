@@ -47,7 +47,8 @@ def display_question_and_answers(question_id):
     question_ids = data_manager.get_question_ids()
     question = data_manager.get_single_question(question_id)
     answers = data_manager.get_answers_for_question(question_id)
-    return render_template('question.html', question=question, answers=answers, question_ids=question_ids)
+    tags = data_manager.get_tags_for_question(question_id)
+    return render_template('question.html', question=question, tags=tags, answers=answers, question_ids=question_ids)
 
 
 @app.route('/question/<question_id>/vote', methods=['POST'])
@@ -109,6 +110,23 @@ def route_edit_answer(answer_id):
     user_inputs_for_answer = request.form.to_dict()
     data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
 
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+@app.route('/question/<question_id>/new-tag')
+def route_new_tag(question_id):
+    pass
+
+
+@app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
+def add_new_comment_to_answer(question_id, answer_id):
+    if request.method == "GET":
+        answer_by_id = data_manager.get_single_entry('answer', answer_id)
+        return render_template('new_comment.html', answer_by_id=answer_by_id)
+
+    new_comment_data = {'new_comment': request.form['comment'],
+                        'answer_id': answer_id,
+                        'question_id': question_id}
+    data_manager.write_new_comment_data_to_table(new_comment_data)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
