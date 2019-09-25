@@ -8,27 +8,5 @@
     <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
     <h1>Search results</h1>
     <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
-    {% include 'table.html' %}
-    <table>
-        {% for result in search_results %}
-            <tr>
-                {% if search_phrase in result.q_title %}
-                    <td>{{ result.q_title }}</td>
-                    <td>{{ result.q_time }}</td>
-                    <td>{{ result.q_vote }}</td>
-                    <td>{{ result.answer_number }}</td>
-                {% elif search_phrase in result.q_message %}
-                    <td>{{ result.q_title }}<br>{{ result.q_message }}</td>
-                    <td>{{ result.q_time }}</td>
-                    <td>{{ result.q_vote }}</td>
-                    <td>{{ result.answer_number }}</td>
-                {% elif search_phrase in result.a_message %}
-                    <td>{{ result.a_message }}</td>
-                    <td>{{ result.a_time }}</td>
-                    <td>{{ result.a_vote }}</td>
-                    <td>-</td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </table>
+    {% include 'search_table.html' %}
 {% endblock %}
