@@ -115,7 +115,7 @@ def delete_question(cursor, question_id):
 @connection.connection_handler
 def insert_question(cursor, question_data):
     question_data['submission_time'] = datetime.now().replace(microsecond=0)
-    question_data['view_number'] = 0
+    question_data['view_number'] = -1
     question_data['vote_number'] = 0
     cursor.execute(
         """
