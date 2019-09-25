@@ -137,6 +137,12 @@ def route_new_tag(question_id):
     return render_template('new_tag.html', existing_tags=existing_tags)
 
 
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def remove_tag(question_id, tag_id):
+    data_manager.remove_tag(question_id, tag_id)
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
 def add_new_comment_to_answer(question_id, answer_id):
     if request.method == "GET":
@@ -148,7 +154,7 @@ def add_new_comment_to_answer(question_id, answer_id):
                         'question_id': question_id
                         }
     data_manager.write_new_comment_data_to_table(new_comment_data)
-    return redirect(url_for('display_question_and_answers', question_id=question_id, answer_id=answer_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/new-comment', methods=["GET", "POST"])
@@ -168,7 +174,7 @@ def route_add_comment_to_question(question_id):
 def route_search():
     search_phrase = request.args.get('search_phrase')
     sorted_questions = data_manager.get_questions_by_search_phrase(search_phrase)
-    return render_template('search.html', sorted_questions=sorted_questions)
+    return render_template('search.html', sorted_questions=sorted_questions, search_phrase=search_phrase)
 
 
 @app.route('/question/<question_id>/<answer_id>/<comment_id>/delete', methods=["GET", "POST"])
@@ -180,6 +186,26 @@ def delete_comment(question_id, answer_id, comment_id):
 
     if request.form['delete-button'] == 'Yes':
         data_manager.delete_data_by_id('comment', comment_id)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
+
+
+@app.route('/comments/<comment_id>/edit', methods=["GET", "POST"])
+def route_edit_comment(comment_id):
+    comment_data = data_manager.get_single_entry('comment', comment_id)
+    question_id = comment_data.get('question_id')
+    question_data = data_manager.get_single_entry('question', question_id)
+    answer_data = None
+    if comment_data['answer_id']:
+        answer_id = comment_data['answer_id']
+        answer_data = data_manager.get_single_entry('answer', answer_id)
+
+    if request.method == 'GET':
+        return render_template('new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
+
+    updated_comment_message = request.form['comment']
+    updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
+    data_manager.update_entry('comment', comment_id, updated_comment)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 

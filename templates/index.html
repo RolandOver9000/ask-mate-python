@@ -19,13 +19,7 @@
         <p>
             <a href="{{ url_for('route_list') }}" id="list-questions">List all questions</a>
         </p>
-        <div id="search-box">
-            <form id="search-form" action="{{ url_for('route_search')}}" method="get">
-                <input id="search-input" name="search_phrase" minlength="2" maxlength="200"
-                    placeholder="Search in questions and answers">
-                <input id="search-button" type="submit" value="Search">
-            </form>
-        </div>
+        {% include 'search_box.html' %}
     {% else %}
         <p>
             <a href="{{ url_for('route_add') }}" id="first-question">Be the fist to ask a question</a>
