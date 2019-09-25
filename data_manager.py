@@ -94,6 +94,7 @@ def get_all_comments(cursor, comment_id):
                            COALESCE(edited_count, 0) AS edited_count 
                     FROM comment
                     WHERE question_id = {comment_id}
+                    ORDER BY submission_time DESC
                     """).format(comment_id=sql.SQL(comment_id)))
     comment_data = cursor.fetchall()
     return comment_data
