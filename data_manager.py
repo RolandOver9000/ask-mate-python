@@ -205,16 +205,22 @@ def write_new_answer_data_to_table(cursor, user_inputs, question_id):
 
 @connection.connection_handler
 def write_new_comment_data_to_table(cursor, new_comment_data):
+    """
+    This function is filling the leftover data for the row that you want to insert and after that insert the row
+    into the table of comments.
+    :param cursor:
+    :param new_comment_data: dictionary where the keys are the column names
+    :return:
+    """
+    new_comment_data['submission_time'] = datetime.now().replace(microsecond=0)
+    new_comment_data['edited_count'] = 0
+
     cursor.execute("""
                     INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
                     VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                     """,
                    {
-                    'answer_id': new_comment_data['answer_id'],
-                    'question_id': new_comment_data['question_id'],
-                    'message': new_comment_data['new_comment'],
-                    'submission_time': datetime.now().replace(microsecond=0),
-                    'edited_count': 0
+                    new_comment_data
                     })
 
 
@@ -349,12 +355,16 @@ def get_questions_by_search_phrase(cursor, search_phrase):
 
 @connection.connection_handler
 def delete_data_by_id(cursor, table_name, row_id):
+    """
+    :param cursor:
+    :param table_name: string of table name
+    :param row_id: id integer of the row that you want to delete
+    :return:
+    """
     if table_name == 'question':
         cursor.execute(
             """
-            DELETE FROM question_tag WHERE question_id = %(question_id)s;
-            DELETE FROM comment WHERE question_id = %(question_id)s;
-            DELETE FROM answer WHERE question_id = %(question_id)s;
+            DELETE FROM question_tag, comment, answer WHERE question_id = %(question_id)s;
             DELETE FROM question WHERE id = %(question_id)s;
             """,
             {'question_id': row_id})
