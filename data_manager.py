@@ -330,15 +330,17 @@ def get_questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase.lower() + '%'
     cursor.execute(
         """
-        SELECT
-            question. *,
+        SELECT question.id,
+            MIN(question.submission_time) AS q_time, MIN(question.vote_number) AS q_vote, MIN(question.title) AS q_title,
+            MIN(question.message) AS q_message, MIN(answer.submission_time) AS a_time, MIN(answer.vote_number) AS a_vote,
+            MIN(answer.message) AS a_message,
             (SELECT COUNT(id) FROM answer WHERE answer.question_id=question.id) AS answer_number
         FROM question
-        FULL JOIN answer ON question.id = answer.question_id
+        LEFT JOIN answer ON question.id = answer.question_id
         WHERE LOWER(question.message) LIKE %(search_phrase)s OR
               LOWER(question.title) LIKE %(search_phrase)s OR
               LOWER(answer.message) LIKE %(search_phrase)s
-        ORDER BY submission_time DESC
+        GROUP BY question.id
         """,
         {'search_phrase': search_phrase}
     )

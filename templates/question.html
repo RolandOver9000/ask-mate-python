@@ -7,31 +7,32 @@
 </head>
 <body>
 <a href="/" id="back-to-main">&#x2B05; Return to main page</a>
-<div id="main-question-body">
+<div id="main">
     {% if question %}
         {% set current_question_index = question_ids.index(question.id) %}
-        <div id="operations">
-            <a href="{{ url_for('route_edit', question_id=question.id) }}" id="edit">Edit question</a>
-
-            <a href="{{ url_for('route_delete', question_id=question.id) }}" id="delete">Delete question</a>
-
+        <div id="next-previous-question">
             {% if current_question_index > 0 %}
                 <a href="{{ question_ids[current_question_index - 1] }}" id="previous-question">Previous question</a>
             {% else %}
                 <span id="previous-question">Previous question</span>
             {% endif %}
+
             {% if question_ids|length - 1 > current_question_index %}
                 <a href="{{ question_ids[current_question_index + 1] }}" id="next-question">Next question</a>
             {% else %}
                 <span id="next-question">Next question</span>
             {% endif %}
-            <span id="which-question">{{ current_question_index + 1 }}/{{ question_ids|length }}</span>
-        </div>
-        <h3>{{ question.title }}</h3>
-        <p id="question-message">{{ question.message }}</p>
-        <div id="question-without-answers">
+{#            <span id="which-question">{{ current_question_index + 1 }}/{{ question_ids|length }}</span>#}
+        </div><br>
+        <h3 id="question-title">{{ question.title }}</h3>
+            <div id="modify-question">
+                <a href="{{ url_for('route_delete', question_id=question.id) }}" id="delete-question">Delete question</a>
+                <a href="{{ url_for('route_edit', question_id=question.id) }}" id="edit-question">Edit question</a>
+            </div>
+        <div id="question-message-and-image">
+            <p id="question-message">{{ question.message }}</p>
             {% if question.image %}
-                <img src="{{ question.image }}" width="500" alt="missing_image">
+                <img id="question-image" src="{{ question.image }}" width="500" alt="missing_image">
             {% endif %}
         </div>
         {% for tag in tags %}
