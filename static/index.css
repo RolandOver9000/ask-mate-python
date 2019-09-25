@@ -1,0 +1,28 @@
+@import 'anchor.css';
+@import 'table.css';
+@import 'general.css';
+@import 'search_box.css';
+
+
+h3 {
+    display: inline;
+    margin: 0 auto;
+    margin-left: 10%;
+}
+
+#ask-question, #list-questions {
+    text-align: center;
+    display: block;
+    font-size: 140%;
+}
+
+#first-question {
+    margin-top: 7%;
+    text-align: center;
+    display: block;
+    font-size: 200%;
+}
+
+#index-page {
+    visibility: hidden;
+}
