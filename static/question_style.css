@@ -139,7 +139,32 @@ img {
     width: 10%;
 }
 
+#delete-button-link{
+    width: 400px;
+    margin-left: 440px;
+    padding-top: 10px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 #delete-button-image {
-    width: 3.5%;
     height: 3.5%;
+    width: 3.5%;
+    padding: 10px 10px 10px 10px;
+    margin: 0px 0px 0px 0px;
+}
+
+#main-question-body.comments.comment#delete-button-link {
+    width: 400px;
+    margin-left: 530px;
+    padding-top: 10px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+#main-question-body.comments.comment#delete-button-image {
+    height: 3.5%;
+    width: 3.5%;
+    padding: 10px 10px 10px 10px;
+    margin: 0px 0px 0px 0px;
 }
