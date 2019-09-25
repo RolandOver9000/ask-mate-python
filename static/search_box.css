@@ -1,0 +1,13 @@
+#search-input {
+    display: inline-block;
+    position: absolute;
+    width: 21%;
+    left: 39%;
+}
+
+
+#search-button {
+    display: inline-block;
+    position: absolute;
+    left: 61%;
+}

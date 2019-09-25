@@ -1,0 +1,10 @@
+#sort {
+    display: block;
+    float: right;
+    margin: 0 auto;
+    margin-right: 10%;
+}
+
+#sort_order_direction, #sort_order_by, button {
+    font-size: 110%;
+}
