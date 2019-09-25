@@ -1,0 +1,24 @@
+@import 'anchor.css';
+@import 'table.css';
+@import 'sort.css';
+@import 'general.css';
+
+h3 {
+    display: inline;
+    margin: 0 0 0 10%;
+}
+
+#ask-question, #list-questions, #first-question {
+    display: block;
+    text-align: center;
+    margin: 16px 0;
+}
+
+#ask-question, #list-questions {
+    font-size: 140%;
+}
+
+#first-question {
+    margin-top: 7%;
+    font-size: 200%;
+}
