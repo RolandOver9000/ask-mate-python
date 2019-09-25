@@ -26,3 +26,8 @@ def handle_updated_comment(comment_data, updated_comment_message):
                        'submission_time': datetime.now().replace(microsecond=0),
                        'edited_count': comment_data['edited_count'] + 1}
     return updated_comment
+
+
+def sort_search_results(results):
+    sorted_results = sorted(results, key=lambda k: k['q_time'], reverse=True)
+    return sorted_results
