@@ -9,7 +9,6 @@
     <h1>Search results</h1>
     <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
     {% include 'table.html' %}
-    <p id="show-search-phrase">Questions containing search phrase '{{ search_phrase }}':</p>
     <table>
         {% for result in search_results %}
             <tr>
