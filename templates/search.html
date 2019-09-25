@@ -1,23 +1,12 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='list_style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='clickables.css') }}">
-    <style type="text/css">
-        #show-search-phrase {
-            font-size: large;
-            font-weight: bolder;
-            display: inline-block;
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-left: 9em;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search.css') }}">
     {{ super() }}
 {% endblock %}
 {% block title %}Search results{% endblock %}
 {% block content %}
     <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
     <h1>Search results</h1>
-    <p id="show-search-phrase">Questions containing search phrase '{{ search_phrase }}':</p>
+    <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
     {% include 'table.html' %}
 {% endblock %}

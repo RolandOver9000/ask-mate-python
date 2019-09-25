@@ -5,19 +5,20 @@
 
 h3 {
     display: inline;
-    margin: 0 auto;
-    margin-left: 10%;
+    margin: 0 0 0 10%;
+}
+
+#ask-question, #list-questions, #first-question {
+    display: block;
+    text-align: center;
+    margin: 16px 0;
 }
 
 #ask-question, #list-questions {
-    text-align: center;
-    display: block;
     font-size: 140%;
 }
 
 #first-question {
     margin-top: 7%;
-    text-align: center;
-    display: block;
     font-size: 200%;
 }
