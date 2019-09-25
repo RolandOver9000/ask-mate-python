@@ -40,7 +40,6 @@ def route_add():
     user_inputs_for_question = request.form.to_dict()
     data_manager.insert_question(user_inputs_for_question)
     new_id = data_manager.get_latest_id('question')
-
     return redirect(url_for('display_question_and_answers', question_id=new_id))
 
 
@@ -84,13 +83,20 @@ def route_edit(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def post_an_answer(question_id):
+    """
+    If the method is POST: When the user wants to submit a new answer to the specific question, this function saves the inputs into the table
+    and redirect it to the page of the specific question.
+    If the method is GET: It redirects you to page where you can add your inputs for answer.
+    :param question_id: id integer of the specific question
+    :return:
+    """
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.write_new_answer_data_to_table(user_inputs_for_answer, question_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id))
-    else:
-        question = data_manager.get_single_question(question_id)
-        return render_template("new_answer.html", question=question)
+
+    question = data_manager.get_single_question(question_id)
+    return render_template("new_answer.html", question=question)
 
 
 @app.route('/question/<question_id>/delete')
@@ -145,11 +151,20 @@ def remove_tag(question_id, tag_id):
 
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
 def add_new_comment_to_answer(question_id, answer_id):
+    """
+    It redirects you to the page where you can add your inputs for comment, it also shows you the answer that you want to
+    comment.
+    :param question_id: id integer of the specific question
+    :param answer_id: id integer of the specific answer
+    :return:
+    """
     if request.method == "GET":
         answer_by_id = data_manager.get_single_entry('answer', answer_id)
         return render_template('new_comment.html', answer_by_id=answer_by_id)
 
-    new_comment_data = {'new_comment': request.form['comment'],
+# After you submit your comment for the specific answer this program part will make a dictionary with the inputs and
+# insert it as a row in the table of comments. After this process it redirects you to the specific page of the question.
+    new_comment_data = {'message': request.form['message'],
                         'answer_id': answer_id,
                         'question_id': question_id
                         }
@@ -163,7 +178,7 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('new_comment.html', answer_by_id=question)
 
-    new_comment_data = {'new_comment': request.form['comment'],
+    new_comment_data = {'message': request.form['message'],
                         'question_id': question_id,
                         'answer_id': None}
     data_manager.write_new_comment_data_to_table(new_comment_data)
@@ -177,17 +192,23 @@ def route_search():
     return render_template('search.html', search_results=search_results, search_phrase=search_phrase)
 
 
-@app.route('/question/<question_id>/<answer_id>/<comment_id>/delete', methods=["GET", "POST"])
-def delete_comment(question_id, answer_id, comment_id):
+@app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
+def delete_comment(comment_id):
+    comment = data_manager.get_single_entry('comment', comment_id)
+    answer_id_of_comment = comment['answer_id']
+    question_id_of_comment = comment['question_id']
+
     if request.method == "GET":
-        comment = data_manager.get_single_entry('comment', comment_id)
-        answer_data = data_manager.get_single_entry('answer', answer_id)
-        return render_template('delete_comment.html', answer=answer_data['message'], comment=comment)
+        if answer_id_of_comment:
+            answer_data = data_manager.get_single_entry('answer', answer_id_of_comment)
+            return render_template('delete_comment.html', answer=answer_data['message'], comment=comment)
+        question_data = data_manager.get_single_entry('question', question_id_of_comment)
+        return render_template('delete_comment.html', question=question_data['message'],  comment=comment)
 
     if request.form['delete-button'] == 'Yes':
         data_manager.delete_data_by_id('comment', comment_id)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=comment['question_id']))
 
 
 @app.route('/comments/<comment_id>/edit', methods=["GET", "POST"])
@@ -203,7 +224,7 @@ def route_edit_comment(comment_id):
     if request.method == 'GET':
         return render_template('new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
 
-    updated_comment_message = request.form['comment']
+    updated_comment_message = request.form['message']
     updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
     data_manager.update_entry('comment', comment_id, updated_comment)
 
