@@ -219,9 +219,8 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
                     INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
                     VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                     """,
-                   {
-                    new_comment_data
-                    })
+                   new_comment_data
+                   )
 
 
 @connection.connection_handler

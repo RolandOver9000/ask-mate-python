@@ -165,7 +165,7 @@ def add_new_comment_to_answer(question_id, answer_id):
 
 # After you submit your comment for the specific answer this program part will make a dictionary with the inputs and
 # insert it as a row in the table of comments. After this process it redirects you to the specific page of the question.
-    new_comment_data = {'new_comment': request.form['comment'],
+    new_comment_data = {'message': request.form['comment'],
                         'answer_id': answer_id,
                         'question_id': question_id
                         }
