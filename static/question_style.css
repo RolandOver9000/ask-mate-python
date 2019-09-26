@@ -96,7 +96,7 @@
     margin: 4px 1px;
 }
 
-#likes-and-views {
+#likes-and-views, .like-and-counter {
     display: block;
     width: inherit;
     height: max-content;
@@ -104,12 +104,12 @@
     margin-bottom: 1em;
 }
 
-#view-counter {
+#view-counter, #answers-like-counter{
     display: inline;
     margin-right: 0.5em;
 }
 
-#question-voting {
+.like-and-dislike {
     display: inline-block;
 }
 
@@ -117,28 +117,30 @@
     display: block;
     border: 2px solid black;
     border-radius: 20px;
-    width: inherit;
     padding: 10px;
+    margin-top: 1em;
 }
 
 #comment-header {
-    display: inline-block;
+    display: block;
     width: inherit;
 }
 
 #comment-submission-time{
+    display: inline;
     float: right;
-}
-
-#comment-operations {
-    display: inline-block;
-    margin-top: 2em;
-    width: inherit;
 }
 
 #comment-message {
     white-space: pre-line;
+    word-break: break-word;
     padding-left: 2em;
+}
+
+#comment-operations {
+    display: block;
+    margin-top: 2em;
+    width: inherit;
 }
 
 #delete-button-link {
@@ -150,7 +152,7 @@
     height: 40px;
     width: 40px;
     float: right;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     transition: transform 0.3s ease;
 }
 
@@ -161,28 +163,21 @@
 }
 
 #edit-comment {
-    display: inherit;
-    line-height: 2.1em;
+    display: inline;
+    line-height: 2.5em;
+    padding-top: 0.3em;
 }
 
 #answers {
     margin-left: 4%;
     margin-top: 4%;
     width: fit-content;
-    border: 1px solid darkkhaki;
+    border: 2px solid darkkhaki;
     padding: 2%;
 }
 
 #answer-question, #answer-question-first {
     font-size: 110%;
-}
-
-#upvote-answer, #downvote-answer, #answers-like-counter{
-    display: inline-block;
-}
-
-#upvote-answer {
-    margin-left: 5%;
 }
 
 #answer-message {

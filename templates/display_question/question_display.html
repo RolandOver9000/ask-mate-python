@@ -19,7 +19,11 @@
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
         {% endif %}
-        {% include 'display_question/question_comments.html' %}
+        {% for comment in comments %}
+        {% if comment.answer_id == None %}
+            {% include 'display_question/comments.html' %}
+        {% endif %}
+        {% endfor %}
         {% include 'display_question/question_answers.html' %}
     {% else %}
     {% endif %}
