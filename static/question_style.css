@@ -209,6 +209,7 @@
 
 #answer-message {
     word-break: break-word;
+    white-space: pre-line;
     margin-right: 2%;
 }
 
