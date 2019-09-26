@@ -2,6 +2,14 @@
 @import "general.css";
 
 
+#main {
+    width: 90em;
+    margin: 2% auto;
+    border: 1px solid darkkhaki;
+    padding: 2%;
+    background: whitesmoke;
+}
+
 #back-to-main {
     display: inline-block;
     margin-top: 2%;
@@ -23,53 +31,46 @@
 }
 
 #question-title-plus-editing {
-    display: inline-block;
-    margin: 0.4em;
-    padding: 0.2em;
+    display: block;
+    padding: 0.2em 0.2em 0.2em 0;
     width: inherit;
+    margin: 0.4em 0.4em 1em 0;
 }
 
 #question-title {
-    display: inherit;
+    display: inline;
     font-size: 1.5em;
-    padding: inherit;
-    margin: inherit;
+    /*margin: inherit inherit inherit 0;*/
+    /*padding: inherit inherit inherit 0;*/
     margin-left: 0;
     padding-left: 0;
-
 }
 
 #delete-question, #edit-question {
-    margin: inherit;
+    display: inline-block;
+    margin-left: 0.5em;
     border: 1px solid grey;
     border-radius: 4px;
     line-height: 1.5em;
-    padding: inherit;
+    padding: 0.2em;
     float: right;
 }
 
-#main {
-    width: 90em;
-    margin: 2% auto;
-    border: 1px solid darkkhaki;
-    padding: 2%;
-    background: whitesmoke;
+#question-message-and-image-and-likes{
+    display: block;
+    margin-bottom: 1em;
 }
 
-#question-message-and-image-and-likes{
-    display: inline-block;
-}
 #question-message-and-image {
     width: inherit;
-    display: inherit;
-    margin-left: 8em;
+    display: inline-block;
     border-left: 5px solid darkkhaki;
-    padding-left: 10px;
+    padding-left: 2em;
 }
 
 #question-voting {
     display: inline-grid;
-    float: left;
+    float: right;
 }
 
 #question-message {

@@ -10,6 +10,7 @@ def add_new_tag_to_question(question_id, new_tag):
 
 
 def add_tag_to_question(question_id, tag_id):
+    if not_duplicate_tag()
     data_manager.add_tag_to_question(question_id, tag_id)
 
 
