@@ -76,7 +76,7 @@ def highlight_search_phrase_in_search_results(questions, search_phrase):
     return questions
 
 
-def get_answers_by_question_id(questions):
+def get_answers_by_question_id(questions, search_phrase):
     answers_by_question_id = {}
 
     for question in questions:
@@ -85,7 +85,7 @@ def get_answers_by_question_id(questions):
         if question_id not in answers_by_question_id:
             answers_by_question_id[question_id] = []
 
-        if question['a_id']:
+        if question['a_id'] and search_phrase.lower() in question['a_message'].lower():
             answers_by_question_id[question_id].append(
                 {'id': question['a_id'], 'message': question['a_message']})
 
