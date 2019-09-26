@@ -23,3 +23,8 @@ h3 {
     border: black solid thin;
     padding: 2pt 4pt;
 }
+
+em {
+    font-style: normal;
+    background-color: burlywood;
+}
