@@ -54,7 +54,7 @@ def display_question_and_answers(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     tags = data_manager.get_tags_for_question(question_id)
     comments = data_manager.get_all_comments(question_id)
-    return render_template('question.html', question=question, tags=tags,
+    return render_template('display_question/question_display.html', question=question, tags=tags,
                            answers=answers, question_ids=question_ids, comments=comments)
 
 
@@ -129,7 +129,7 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
-    existing_tags = data_manager.get_existing_tags()
+    existing_tags = data_manager.get_existing_tags(question_id)
 
     if request.method == "POST":
         tag = request.form.to_dict()

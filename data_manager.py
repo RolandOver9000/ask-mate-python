@@ -284,12 +284,15 @@ def get_tags_for_question(cursor, question_id):
 
 
 @connection.connection_handler
-def get_existing_tags(cursor):
+def get_existing_tags(cursor, question_id):
     cursor.execute("""
                     SELECT id, name
                     FROM tag
+                    WHERE tag.id not in (SELECT tag_id
+                    FROM question_tag
+                    WHERE question_id=%(question_id)s)
                     ORDER BY id
-                    """)
+                    """, {'question_id': question_id})
     existing_tags = cursor.fetchall()
     return existing_tags
 
