@@ -1,0 +1,13 @@
+{% if answers %}
+{% for answer in answers %}
+    <div id="answers">
+        {% include 'question_answers_body.html' %}
+        {% include 'question_answers_comments.html' %}
+    </div>
+{% endfor %}
+{% else %}
+    <a href="/question/{{ question.id }}/new-answer"
+       id="answer-question-first">Be the first to answer this question!</a>
+    <a href="/question/{{ question.id }}/new-comment"
+       id="add-comment">Comment this question</a>
+{% endif %}

@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='question_style.css') }}">
+{% endblock %}
+{% block title %}
+    <title>{{ question.title[:20] }}{{ '...' if question.title|length>20 }} | AskMate</title>
+{% endblock %}
+{% block content %}
+    <a href="{{ url_for('route_index') }}" id="back-to-main">&#x2B05; Return to main page</a>
+    <div id="main">
+    {% if question %}
+        {% set current_question_index = question_ids.index(question.id) %}
+        {% include 'question_stepper.html' %}
+        {% include 'question_header.html' %}
+        {% include 'question_body.html' %}
+        {% include 'question_tags.html' %}
+        <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+        {% if answers %}
+            <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
+            <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
+        {% endif %}
+        {% include 'question_comments.html' %}
+        {% include 'question_answers.html' %}
+    {% else %}
+    {% endif %}
+    </div>
+{% endblock %}

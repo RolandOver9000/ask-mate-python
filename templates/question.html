@@ -40,6 +40,7 @@
             <button type="submit" name="vote" value="Downvote,{{ question.id }},question" id="downvote">&#x1F44E;</button>
         </form>
         </div>
+        <div id="tag-block">
         {% for tag in tags %}
             <div id="tags">
                 <span id="tag-text">{{ tag.name }}</span>
@@ -48,6 +49,7 @@
         {% endfor %}
         <div id="add-new-tag">
             <a href="{{ url_for('route_new_tag', question_id=question.id) }}">Add new tag</a>
+        </div>
         </div>
         <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
         {% if answers %}

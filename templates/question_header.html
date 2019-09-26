@@ -1,0 +1,7 @@
+<div id="question-title-plus-editing">
+    <h3 id="question-title">{{ question.title }}</h3>
+    <a href="{{ url_for('route_delete', question_id=question.id) }}"
+       id="delete-question">Delete question</a>
+    <a href="{{ url_for('route_edit', question_id=question.id) }}"
+       id="edit-question">Edit question</a>
+</div>

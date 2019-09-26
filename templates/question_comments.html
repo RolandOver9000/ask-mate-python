@@ -1,0 +1,20 @@
+{% for comment in comments %}
+    {% if comment.answer_id == None %}
+        <div id="comment">
+            <div id="comment-header">
+            <span id="comment-id">Comment id_{{ comment.id }}</span>
+            {% if comment.edited_count > 0 %}
+                <span id="comment-edit-count">Edited {{ comment.edited_count }} times</span>
+            {% endif %}
+            <span id="comment-submission-time">posted on {{ comment.submission_time }}</span>
+            </div>
+            <p id="comment-message">{{ comment.message }}</p>
+        <div id="comment-operations">
+            <a id="edit-comment" href="/comments/{{ comment.id }}/edit">Edit comment</a>
+            <a id='delete-button-link' href="{{ url_for('delete_comment',
+                                                  comment_id=comment.id) }}">
+            <img id="delete-button-image" src="https://image.flaticon.com/icons/png/512/70/70388.png"></a>
+        </div>
+        </div>
+    {% endif %}
+{% endfor %}

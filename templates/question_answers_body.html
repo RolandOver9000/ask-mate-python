@@ -1,0 +1,22 @@
+<strong id="answer-id">Answer id_{{ answer.id }}</strong>
+<p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
+<p id="answer-message">{{ answer.message }}</p>
+{% if answer.image %}
+    <br><img src="{{ answer.image }}" width="500" alt="answer_image">
+{% endif %}
+<form action="{{ url_for('route_vote', question_id=question.id) }}" method="post">
+    <p id="answers-like-counter">Likes: {{ answer.vote_number }}</p>
+    <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">
+        &#x1F44D;
+    </button>&emsp;
+    <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer" id="downvote-answer">
+        &#x1F44E;
+    </button>
+</form>
+<a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment this answer!</a>
+&emsp;
+<a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
+   id="delete-answer">Delete answer</a>
+&emsp;
+<a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}"
+   id="delete-answer">Edit answer</a>
