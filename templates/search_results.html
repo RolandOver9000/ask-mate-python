@@ -30,16 +30,18 @@
             {% if answers_by_question_id[question.id] %}
             <div class="answers-container">
                 {% for answer in answers_by_question_id[question.id] %}
-                    <div class="a-container">
-                        <div class="a-id">
-                            <span>Answer ID: </span>
-                            <span>{{ answer.id }}</span>
+                    {% if search_phrase|lower in answer.message|lower %}
+                        <div class="a-container">
+                            <div class="a-id">
+                                <span>Answer ID: </span>
+                                <span>{{ answer.id }}</span>
+                            </div>
+                            <div class="a-message">
+                                <span>Message: </span>
+                                <span>{{ answer.message|safe }}</span>
+                            </div>
                         </div>
-                        <div class="a-message">
-                            <span>Message: </span>
-                            <span>{{ answer.message|safe }}</span>
-                        </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
