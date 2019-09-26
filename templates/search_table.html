@@ -7,17 +7,17 @@
     </thead>
     {% for result in search_results %}
     <tr>
-        {% if search_phrase in result.a_message|lower %}
+        {% if search_phrase|lower in result.a_message|lower %}
             <td><a href="{{ url_for('display_question_and_answers', question_id=result.q_id) }}">{{ result.q_title|safe }}</a><br>A: {{ result.a_message|safe }}</td>
             <td>{{ result.q_time }}</td>
             <td>{{ result.a_vote }}</td>
             <td>-</td>
-        {% elif search_phrase in result.q_title|lower %}
+        {% elif search_phrase|lower in result.q_title|lower %}
             <td><a href="{{ url_for('display_question_and_answers', question_id=result.q_id) }}">{{ result.q_title|safe }}</a><br>Q: {{ result.q_message|safe }}</td>
             <td>{{ result.q_time }}</td>
             <td>{{ result.q_vote }}</td>
             <td>{{ result.answer_number }}</td>
-        {% elif search_phrase in result.q_message|lower %}
+        {% elif search_phrase|lower in result.q_message|lower %}
             <td><a href="{{ url_for('display_question_and_answers', question_id=result.q_id) }}">{{ result.q_title|safe }}</a><br>Q: {{ result.q_message|safe }}</td>
             <td>{{ result.q_time }}</td>
             <td>{{ result.q_vote }}</td>
