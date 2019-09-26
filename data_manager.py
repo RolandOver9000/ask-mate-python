@@ -386,3 +386,36 @@ def delete_data_by_id(cursor, table_name, row_id):
             DELETE FROM comment WHERE id=%(comment_id)s;    
             """,
             {'comment_id': row_id})
+
+
+@connection.connection_handler
+def find_questions_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase.lower() + '%'
+    cursor.execute(
+        """
+        SELECT id, title, message
+        FROM question
+        WHERE LOWER(title) LIKE %(search_phrase)s OR LOWER(message) LIKE %(search_phrase)s
+        ORDER BY submission_time
+        """,
+        {'search_phrase': search_phrase}
+    )
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def find_answers_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase.lower() + '%'
+    cursor.execute(
+        """
+        SELECT a.question_id, a.id, a.message, q.title AS q_title, q.message AS q_message
+        FROM answer a
+        LEFT JOIN question q on a.question_id = q.id
+        WHERE LOWER(a.message) LIKE %(search_phrase)s
+        ORDER BY a.question_id
+        """,
+        {'search_phrase': search_phrase}
+    )
+    answers = cursor.fetchall()
+    return answers

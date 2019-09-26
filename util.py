@@ -1,5 +1,6 @@
 import data_manager
 from datetime import datetime
+import re
 
 
 def add_new_tag_to_question(question_id, new_tag):
@@ -53,3 +54,26 @@ def handle_search(search_phrase):
     sorted_search_results = sort_search_results(search_results)
     hl_sorted_search_results = highlight_search_result(sorted_search_results, search_phrase)
     return hl_sorted_search_results
+
+
+def emphasize(substr, text):
+    current = 0
+    while True:
+        try:
+            left = text[current:].lower().index(substr.lower()) + current
+        except (ValueError, IndexError):
+            break
+        right = left + len(substr)
+        text = text[:left] + '<em>' + text[left:right] + '</em>' + text[right:]
+        current = right + len('<em></em>')
+    return text
+
+
+def highlight_search_phrase_in_search_results(question_results, answer_results, search_phrase):
+    for entry_type_results in (question_results, answer_results):
+        keys = ('title', 'message') if entry_type_results is question_results else ('message',)
+        for result in entry_type_results:
+            for key in keys:
+                text = result[key]
+                result[key] = emphasize(search_phrase, text)
+    return question_results, answer_results
