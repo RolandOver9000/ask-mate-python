@@ -151,19 +151,23 @@
 }
 
 #delete-button-link {
+    background-image: url('trashcan_closed.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flow-root;
+    height: 40px;
+    width: 40px;
     float: right;
-    width: 2em;
+}
+
+#delete-button-link:hover {
+    background-image: url("trashcan_opened.png");
 }
 
 #edit-comment {
     display: inherit;
     line-height: 2.1em;
-}
-
-#delete-button-image{
-    width: 100%;
-    display: inherit;
-    float: right;
 }
 
 #answers {

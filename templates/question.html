@@ -68,8 +68,7 @@
                 <div id="comment-operations">
                     <a id="edit-comment" href="/comments/{{ comment.id }}/edit">Edit comment</a>
                     <a id='delete-button-link' href="{{ url_for('delete_comment',
-                                                          comment_id=comment.id) }}">
-                    <img id="delete-button-image" src="https://image.flaticon.com/icons/png/512/70/70388.png"></a>
+                                                          comment_id=comment.id) }}"></a>
                 </div>
                 </div>
             {% endif %}
@@ -113,7 +112,6 @@
                                     <a href="/comments/{{ comment.id }}/edit">Edit comment</a>
                                     <a id='delete-button-link' href="{{ url_for('delete_comment',
                                                                           comment_id=comment.id) }}">
-                                        <img id="delete-button-image" src="https://image.flaticon.com/icons/png/512/70/70388.png">
                                     </a>
                                 </div>
                             {% endif %}
