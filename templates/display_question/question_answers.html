@@ -1,8 +1,8 @@
 {% if answers %}
 {% for answer in answers %}
     <div id="answers">
-        {% include 'question_answers_body.html' %}
-        {% include 'question_answers_comments.html' %}
+        {% include 'display_question/question_answers_body.html' %}
+        {% include 'display_question/question_answers_comments.html' %}
     </div>
 {% endfor %}
 {% else %}
