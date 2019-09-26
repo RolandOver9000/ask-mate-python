@@ -93,7 +93,7 @@ def post_an_answer(question_id):
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.write_new_answer_data_to_table(user_inputs_for_answer, question_id)
-        return redirect(url_for('display_question_and_answers', question_id=question_id))
+        return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     question = data_manager.get_single_question(question_id)
     return render_template("new_answer.html", question=question)
