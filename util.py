@@ -10,12 +10,11 @@ def add_new_tag_to_question(question_id, new_tag):
 
 
 def add_tag_to_question(question_id, tag_id):
-    if not_duplicate_tag()
     data_manager.add_tag_to_question(question_id, tag_id)
 
 
 def not_duplicate_tag(tag_text):
-    existing_tags = data_manager.get_existing_tags()
+    existing_tags = data_manager.get_existing_tags(-1)
     for tag in existing_tags:
         if tag_text == tag['name']:
             return False

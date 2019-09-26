@@ -129,7 +129,7 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
-    existing_tags = data_manager.get_existing_tags()
+    existing_tags = data_manager.get_existing_tags(question_id)
 
     if request.method == "POST":
         tag = request.form.to_dict()
