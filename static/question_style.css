@@ -44,16 +44,19 @@
 }
 
 #question-title-plus-editing {
-    display: inline;
+    display: inline-block;
     margin: 0.4em;
     padding: 0.2em;
+    width: inherit;
 }
 
 #question-title {
     display: inherit;
     font-size: 1.5em;
-    padding: 0.1em;
-    margin: inherit inherit inherit 0;
+    padding: inherit;
+    margin: inherit;
+    margin-left: 0;
+    padding-left: 0;
 
 }
 
@@ -67,7 +70,7 @@
 }
 
 #main {
-    width: 95em;
+    width: 90em;
     margin: 2% auto;
     border: 1px solid darkkhaki;
     padding: 2%;
@@ -75,7 +78,7 @@
 }
 
 #question-message-and-image-and-likes{
-    display: inline;
+    display: inline-block;
 }
 #question-message-and-image {
     width: max-content;
@@ -118,6 +121,50 @@
     display: block;
 }
 
+#comment {
+    display: block;
+    border: 2px solid black;
+    width: inherit;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+
+#comment-header {
+    display: inline-block;
+    width: inherit;
+}
+
+#comment-submission-time{
+    float: right;
+}
+
+#comment-operations {
+    display: inline-block;
+    margin-top: 2em;
+    width: inherit;
+}
+
+#comment-message {
+    white-space: pre-line;
+    margin: inherit;
+    margin-left: 2em;
+}
+
+#delete-button-link {
+    float: right;
+}
+
+#edit-comment {
+    display: inherit;
+    line-height: 2.3em;
+}
+
+#delete-button-image{
+    width: 7%;
+    display: inherit;
+    float: right;
+}
+
 #answers {
     margin-left: 4%;
     margin-top: 4%;
@@ -138,10 +185,6 @@
     margin-left: 5%;
 }
 
-#comment-message {
-    white-space: pre-line;
-}
-
 #answer-message {
     word-break: break-word;
     margin-right: 2%;
@@ -154,44 +197,7 @@
     font-size: small;
 }
 
-.comment {
-    border-style: solid;
-}
-
 #answer-id {
     display: inline;
 }
 
-#delete-comment {
-    width: 10%;
-}
-
-#delete-button-link{
-    width: 400px;
-    margin-left: 440px;
-    padding-top: 10px;
-    padding-right: 0px;
-    padding-left: 0px;
-}
-
-#delete-button-image {
-    height: 3.5%;
-    width: 3.5%;
-    padding: 10px 10px 10px 10px;
-    margin: 0px 0px 0px 0px;
-}
-
-#main-question-body.comments.comment#delete-button-link {
-    width: 400px;
-    margin-left: 530px;
-    padding-top: 10px;
-    padding-right: 0px;
-    padding-left: 0px;
-}
-
-#main-question-body.comments.comment#delete-button-image {
-    height: 3.5%;
-    width: 3.5%;
-    padding: 10px 10px 10px 10px;
-    margin: 0px 0px 0px 0px;
-}
