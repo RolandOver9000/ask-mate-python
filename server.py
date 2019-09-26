@@ -228,7 +228,7 @@ def route_edit_comment(comment_id):
     updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
     data_manager.update_entry('comment', comment_id, updated_comment)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 if __name__ == '__main__':
