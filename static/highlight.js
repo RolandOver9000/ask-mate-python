@@ -18,7 +18,7 @@ function doSearch(text, backgroundColor) {
             if (count > 0) {
             document.execCommand("HiliteColor", false, backgroundColor);
             sel.collapseToEnd(); }
-            count = count + 1;
+            else {count = count + 1;}
         }
         document.designMode = "off";
     }
