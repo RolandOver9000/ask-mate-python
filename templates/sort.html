@@ -2,7 +2,7 @@
     <select name="order_by" id="sort_order_by">
         {% for column in ('id', 'submission_time', 'view_number', 'vote_number', 'answer_number', 'title') %}
             <option value="{{ column }}" {{ 'selected' if selected_sorting==column else '' }}>
-                {{ column.capitalize() }}
+                {{ column.replace('_', ' ').capitalize() }}
             </option>
         {% endfor %}
     </select>
