@@ -152,15 +152,16 @@
 
 #delete-button-link {
     float: right;
+    width: 2em;
 }
 
 #edit-comment {
     display: inherit;
-    line-height: 2.3em;
+    line-height: 2.1em;
 }
 
 #delete-button-image{
-    width: 7%;
+    width: 100%;
     display: inherit;
     float: right;
 }
