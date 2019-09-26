@@ -81,7 +81,7 @@
     display: inline-block;
 }
 #question-message-and-image {
-    width: max-content;
+    width: inherit;
     display: inherit;
     margin-left: 8em;
     border-left: 5px solid darkkhaki;
@@ -92,13 +92,13 @@
     display: inline-grid;
     float: left;
 }
-/*#question-message {*/
-/*    border-left: 5px solid blue;*/
-/*    display: block;*/
-/*    white-space: pre-line;*/
-/*    text-align: justify;*/
-/*    padding-left: 20px;*/
-/*}*/
+
+#question-message {
+    display: inherit;
+    white-space: pre-line;
+    text-align: justify;
+    word-break: break-word;
+}
 
 /*#question-message-and-image {*/
 /*    border-left: 6px solid black;*/
