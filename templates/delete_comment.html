@@ -9,7 +9,8 @@
     {% if answer %}
         <p id="answer-message">{{ answer }}</p>
     {% else %}
-        <p id="answer-message">VDSASADDAAS</p>
+        <h3>{{ question.title }}</h3>
+        <p id="answer-message">{{ question.message }}</p>
     {% endif %}
     </br>
     <p>Your comment: </p>

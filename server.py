@@ -78,7 +78,7 @@ def route_edit(question_id):
     user_inputs_for_question = request.form.to_dict()
     data_manager.update_entry('question', question_id, user_inputs_for_question)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
@@ -93,7 +93,7 @@ def post_an_answer(question_id):
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.write_new_answer_data_to_table(user_inputs_for_answer, question_id)
-        return redirect(url_for('display_question_and_answers', question_id=question_id))
+        return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     question = data_manager.get_single_question(question_id)
     return render_template("new_answer.html", question=question)
@@ -124,7 +124,7 @@ def route_edit_answer(answer_id):
     user_inputs_for_answer = request.form.to_dict()
     data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
@@ -138,7 +138,7 @@ def route_new_tag(question_id):
         else:
             util.add_new_tag_to_question(question_id, tag['new_tag'])
 
-        return redirect(url_for('display_question_and_answers', question_id=question_id))
+        return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     return render_template('new_tag.html', existing_tags=existing_tags)
 
@@ -169,7 +169,7 @@ def add_new_comment_to_answer(question_id, answer_id):
                         'question_id': question_id
                         }
     data_manager.write_new_comment_data_to_table(new_comment_data)
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route('/question/<question_id>/new-comment', methods=["GET", "POST"])
@@ -182,7 +182,7 @@ def route_add_comment_to_question(question_id):
                         'question_id': question_id,
                         'answer_id': None}
     data_manager.write_new_comment_data_to_table(new_comment_data)
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route('/search')
@@ -203,12 +203,12 @@ def delete_comment(comment_id):
             answer_data = data_manager.get_single_entry('answer', answer_id_of_comment)
             return render_template('delete_comment.html', answer=answer_data['message'], comment=comment)
         question_data = data_manager.get_single_entry('question', question_id_of_comment)
-        return render_template('delete_comment.html', question=question_data['message'],  comment=comment)
+        return render_template('delete_comment.html', question=question_data,  comment=comment)
 
     if request.form['delete-button'] == 'Yes':
         data_manager.delete_data_by_id('comment', comment_id)
 
-    return redirect(url_for('display_question_and_answers', question_id=comment['question_id']))
+    return redirect(url_for('display_question_and_answers', question_id=comment['question_id']), code=307)
 
 
 @app.route('/comments/<comment_id>/edit', methods=["GET", "POST"])
