@@ -1,10 +1,7 @@
-<div id="likes-and-views">
+<div class="like-and-counter">
 <span id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</span>
-<form action="{{ url_for('route_vote', question_id=question.id) }}"
-      id="question-voting" method="post">
-    <button type="submit" name="vote" value="Upvote,{{ question.id }},question"
-            id="upvote">&#x1F44D;</button>
-    <button type="submit" name="vote" value="Downvote,{{ question.id }},question"
-            id="downvote">&#x1F44E;</button>
+<form class="like-and-dislike" action="{{ url_for('route_vote', question_id=question.id) }}" method="post">
+    <button type="submit" name="vote" value="Upvote,{{ question.id }},question">&#x1F44D;</button>
+    <button type="submit" name="vote" value="Downvote,{{ question.id }},question">&#x1F44E;</button>
 </form>
 </div>

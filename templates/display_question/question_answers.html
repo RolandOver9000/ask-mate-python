@@ -2,7 +2,11 @@
 {% for answer in answers %}
     <div id="answers">
         {% include 'display_question/question_answers_body.html' %}
-        {% include 'display_question/question_answers_comments.html' %}
+        {% for comment in comments %}
+        {% if comment.answer_id == answer.id %}
+            {% include 'display_question/comments.html' %}
+        {% endif %}
+        {% endfor %}
     </div>
 {% endfor %}
 {% else %}
