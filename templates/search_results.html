@@ -8,6 +8,9 @@
     <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
     <h1>Search results</h1>
     <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
+    {% if not questions and not answers %}
+        <div>No results.</div>
+    {% endif %}
     {% if questions %}
     {% for question in questions %}
         <div>Question ID: {{ question.id }}</div>
