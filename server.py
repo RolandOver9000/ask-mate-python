@@ -40,7 +40,7 @@ def route_add():
     user_inputs_for_question = request.form.to_dict()
     data_manager.insert_question(user_inputs_for_question)
     new_id = data_manager.get_latest_id('question')
-    return redirect(url_for('display_question_and_answers', question_id=new_id))
+    return redirect(url_for('display_question_and_answers', question_id=new_id), code=307)
 
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
