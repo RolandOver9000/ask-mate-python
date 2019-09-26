@@ -46,13 +46,20 @@
     padding-left: 0;
 }
 
-#delete-question, #edit-question {
+#edit-question {
     display: inline-block;
     margin-left: 0.5em;
     border: 1px solid grey;
     border-radius: 4px;
     line-height: 1.5em;
     padding: 0.2em;
+    float: right;
+}
+
+#delete-question {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
     float: right;
 }
 
@@ -144,19 +151,21 @@
 }
 
 #delete-button-link {
+    display: flow-root;
+    float: right;
+}
+
+.delete {
     background-image: url('trashcan_closed.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    display: flow-root;
     height: 40px;
     width: 40px;
-    float: right;
-    /*margin-bottom: 10px;*/
     transition: transform 0.3s ease;
 }
 
-#delete-button-link:hover {
+.delete:hover {
     background-image: url("trashcan_opened.png");
     transition: transform 0.3s ease;
     transform: scale(1.3);
