@@ -1,12 +1,14 @@
 <div id="next-previous-question">
     {% if current_question_index > 0 %}
-        <a href="{{ question_ids[current_question_index - 1] }}" id="previous-question">Previous question</a>
+        <a href="{{ question_ids[current_question_index - 1] }}"
+           class="stepper-link" id="previous-question">Previous question</a>
     {% else %}
         <span id="previous-question">Previous question</span>
     {% endif %}
 
     {% if question_ids|length - 1 > current_question_index %}
-        <a href="{{ question_ids[current_question_index + 1] }}" id="next-question">Next question</a>
+        <a href="{{ question_ids[current_question_index + 1] }}"
+           class="stepper-link" id="next-question">Next question</a>
     {% else %}
         <span id="next-question">Next question</span>
     {% endif %}

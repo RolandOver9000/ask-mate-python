@@ -1,0 +1,37 @@
+#edit-comment:hover,
+#delete-button-link:hover,
+#answer-question-first:hover,
+#add-comment:hover,
+#new_comment:hover,
+#delete-answer:hover,
+#edit-answer:hover,
+#answer-question:hover,
+a #previous-question:hover,
+a #next-question:hover,
+#add-new-tag a:hover,
+#tags a:hover,
+#back-to-main:hover,
+.stepper-link:hover
+{
+    color: orange;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#back-to-main,
+#edit-comment,
+#delete-button-link,
+#answer-question-first,
+#add-comment,
+#new_comment,
+#delete-answer,
+#edit-answer,
+#answer-question,
+a #previous-question,
+a #next-question,
+#add-new-tag a,
+#tags a,
+.stepper-link
+{
+    text-decoration: none;
+}
