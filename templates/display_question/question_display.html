@@ -14,7 +14,7 @@
         {% include 'display_question/question_header.html' %}
         {% include 'display_question/question_body.html' %}
         {% include 'display_question/question_tags.html' %}
-        <p id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</p>
+        {% include 'display_question/question_likes_and_views.html' %}
         {% if answers %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
