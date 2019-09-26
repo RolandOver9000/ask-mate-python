@@ -1,0 +1,25 @@
+@import 'general.css';
+@import 'anchor.css';
+
+h3 {
+    display: inline;
+    margin: 0 0 0 10%;
+}
+
+#questions-container {
+    margin: 2% 10% 0 15%;
+    border: darkblue solid;
+    padding: 2% 4%;
+}
+
+.q-container {
+    margin-top: 12pt;
+    border: black solid thick;
+    padding: 3pt 6pt;
+}
+
+.answers-container {
+    margin-top: 6pt;
+    border: black solid thin;
+    padding: 2pt 4pt;
+}

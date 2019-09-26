@@ -396,29 +396,16 @@ def find_questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase.lower() + '%'
     cursor.execute(
         """
-        SELECT id, title, message
-        FROM question
-        WHERE LOWER(title) LIKE %(search_phrase)s OR LOWER(message) LIKE %(search_phrase)s
-        ORDER BY submission_time
+        SELECT q.id, q.submission_time, q.title, q.message, a.id AS a_id, a.message AS a_message
+        FROM question q
+        LEFT JOIN answer a on q.id = a.question_id
+        WHERE
+            LOWER(q.title) LIKE %(search_phrase)s OR
+            LOWER(q.message) LIKE %(search_phrase)s OR
+            LOWER(a.message) LIKE %(search_phrase)s
+        ORDER BY q.submission_time DESC
         """,
         {'search_phrase': search_phrase}
     )
     questions = cursor.fetchall()
     return questions
-
-
-@connection.connection_handler
-def find_answers_by_search_phrase(cursor, search_phrase):
-    search_phrase = '%' + search_phrase.lower() + '%'
-    cursor.execute(
-        """
-        SELECT a.question_id, a.id, a.message, q.title AS q_title, q.message AS q_message
-        FROM answer a
-        LEFT JOIN question q on a.question_id = q.id
-        WHERE LOWER(a.message) LIKE %(search_phrase)s
-        ORDER BY a.question_id
-        """,
-        {'search_phrase': search_phrase}
-    )
-    answers = cursor.fetchall()
-    return answers

@@ -1,39 +1,50 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_results.css') }}">
     {{ super() }}
 {% endblock %}
 {% block title %}Search results{% endblock %}
 {% block content %}
-    <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
+    <a href="{{ url_for('route_index') }}" class="back-to-main">&#x2B05; Return to main page</a>
     <h1>Search results</h1>
     <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
-    {% if not questions and not answers %}
-        <div>No results.</div>
-    {% endif %}
     {% if questions %}
+    <div id="questions-container">
     {% for question in questions %}
-        <div>Question ID: {{ question.id }}</div>
-        <div>{{ question.title|safe }}</div>
-        {% if search_phrase|lower in question.message|lower %}
-            <div>{{ question.message|safe }}</div>
-        {% endif %}
-        {% for answer in answers %}
-            {% if answer.question_id == question.id %}
-                <div>Answer ID: {{ answer.id }}</div>
-                <div>{{ answer.message|safe }}</div>
+        <div class="q-container">
+            <div class="q-id">
+                <span>Question ID: </span>
+                <span>{{ question.id }}</span>
+            </div>
+            <div class="q-title">
+                <span>Title: </span>
+                <a href="{{ url_for('display_question_and_answers', question_id=question.id) }}">
+                    {{ question.title|safe }}</a>
+            </div>
+            <div class="q-message">
+                <span>Message: </span>
+                {% if search_phrase|lower in question.message|lower %}
+                    <span>{{ question.message|safe }}</span>
+                {% endif %}
+            </div>
+            {% if answers_by_question_id[question.id] %}
+            <div class="answers-container">
+                {% for answer in answers_by_question_id[question.id] %}
+                    <div class="a-container">
+                        <div class="a-id">
+                            <span>Answer ID: </span>
+                            <span>{{ answer.id }}</span>
+                        </div>
+                        <div class="a-message">
+                            <span>Message: </span>
+                            <span>{{ answer.message|safe }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
             {% endif %}
-        {% endfor %}
+        </div>
     {% endfor %}
-    {% endif %}
-    {% if answers %}
-    {% for answer in answers %}
-        {% if search_phrase not in answer.q_title and search_phrase not in answer.q_message %}
-            <div>Question ID: {{ answer.question_id }}</div>
-            <div>{{ answer.q_title }}</div>
-            <div>Answer ID: {{ answer.id }}</div>
-            <div>{{ answer.message|safe }}</div>
-        {% endif %}
-    {% endfor %}
+    </div>
     {% endif %}
 {% endblock %}

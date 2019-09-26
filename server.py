@@ -187,22 +187,22 @@ def route_add_comment_to_question(question_id):
 
 @app.route('/search')
 def route_search():
-    search_phrase = request.args.get('search_phrase')
-    search_results = util.handle_search(search_phrase)
-    return render_template('search.html', search_results=search_results, search_phrase=search_phrase)
+    # search_phrase = request.args.get('search_phrase')
+    # search_results = util.handle_search(search_phrase)
+    # return render_template('search.html', search_results=search_results, search_phrase=search_phrase)
 
     # ALTERNATIVE, COMPLETELY PERFECTLY CASE-INSENSITIVE AND MAGICAL SEARCHING
 
-    # search_phrase = request.args.get('search_phrase')
-    # question_results = data_manager.find_questions_by_search_phrase(search_phrase)
-    # answer_results = data_manager.find_answers_by_search_phrase(search_phrase)
-    # question_results, answer_results = util.highlight_search_phrase_in_search_results(
-    #     question_results, answer_results, search_phrase)
-    #
-    # return render_template(
-    #     'search_results.html',
-    #     questions=question_results, answers=answer_results, search_phrase=search_phrase
-    # )
+    search_phrase = request.args.get('search_phrase')
+    questions = data_manager.find_questions_by_search_phrase(search_phrase)
+    questions = util.highlight_search_phrase_in_search_results(questions, search_phrase)
+    answers_by_question_id = util.get_answers_by_question_id(questions)
+    questions = util.remove_duplicate_questions_from_search_results(questions)
+
+    return render_template(
+        'search_results.html',
+        questions=questions, answers_by_question_id=answers_by_question_id, search_phrase=search_phrase
+    )
 
 
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])

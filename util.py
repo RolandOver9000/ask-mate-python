@@ -1,6 +1,5 @@
 import data_manager
 from datetime import datetime
-import re
 
 
 def add_new_tag_to_question(question_id, new_tag):
@@ -69,11 +68,36 @@ def emphasize(substr, text):
     return text
 
 
-def highlight_search_phrase_in_search_results(question_results, answer_results, search_phrase):
-    for entry_type_results in (question_results, answer_results):
-        keys = ('title', 'message') if entry_type_results is question_results else ('message',)
-        for result in entry_type_results:
-            for key in keys:
-                text = result[key]
-                result[key] = emphasize(search_phrase, text)
-    return question_results, answer_results
+def highlight_search_phrase_in_search_results(questions, search_phrase):
+    for question in questions:
+        for text in ('title', 'message', 'a_message'):
+            if question[text]:
+                question[text] = emphasize(search_phrase, question[text])
+    return questions
+
+
+def get_answers_by_question_id(questions):
+    answers_by_question_id = {}
+
+    for question in questions:
+        question_id = question['id']
+
+        if question_id not in answers_by_question_id:
+            answers_by_question_id[question_id] = []
+
+        if question['a_id']:
+            answers_by_question_id[question_id].append(
+                {'id': question['a_id'], 'message': question['a_message']})
+
+    return answers_by_question_id
+
+
+def remove_duplicate_questions_from_search_results(questions):
+    questions_orig = [dict(question) for question in questions]
+    question_ids = set()
+    for question in questions_orig:
+        if question['id'] in question_ids:
+            questions.remove(question)
+        else:
+            question_ids.add(question['id'])
+    return questions
