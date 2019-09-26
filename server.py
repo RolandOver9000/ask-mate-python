@@ -78,7 +78,7 @@ def route_edit(question_id):
     user_inputs_for_question = request.form.to_dict()
     data_manager.update_entry('question', question_id, user_inputs_for_question)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
