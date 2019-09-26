@@ -8,14 +8,14 @@ h3 {
 
 #questions-container {
     margin: 2% 10% 0 15%;
-    border: darkblue solid;
+    border: black solid thick;
     padding: 2% 4%;
 }
 
 .q-container {
     margin-top: 12pt;
-    border: black solid thick;
-    padding: 3pt 6pt;
+    border: darkblue solid thick;
+    padding: 12pt 6pt;
 }
 
 .answers-container {
@@ -27,4 +27,31 @@ h3 {
 em {
     font-style: normal;
     background-color: burlywood;
+}
+
+.q-id, .q-message, .q-title {
+    font-size: large;
+}
+
+.q-id .label,
+.q-title .label,
+.q-message .label
+{
+    font-weight: bold;
+}
+
+.a-container .label {
+    font-weight: bold;
+}
+
+.q-title, .q-id {
+    margin-bottom: 6pt;
+}
+
+.q-title, .q-id {
+    display: inline-block;
+}
+
+.q-id {
+    float: right;
 }

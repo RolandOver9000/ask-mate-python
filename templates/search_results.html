@@ -12,19 +12,19 @@
     <div id="questions-container">
     {% for question in questions %}
         <div class="q-container">
-            <div class="q-id">
-                <span>Question ID: </span>
-                <span>{{ question.id }}</span>
-            </div>
             <div class="q-title">
-                <span>Title: </span>
-                <a href="{{ url_for('display_question_and_answers', question_id=question.id) }}">
+                <span class="label">Question title: </span>
+                <a class="text-value" href="{{ url_for('display_question_and_answers', question_id=question.id) }}">
                     {{ question.title|safe }}</a>
             </div>
+            <div class="q-id">
+                <span class="label">ID: </span>
+                <span class="text-value">{{ question.id }}</span>
+            </div>
             <div class="q-message">
-                <span>Message: </span>
+                <span class="label">Message: </span>
                 {% if search_phrase|lower in question.message|lower %}
-                    <span>{{ question.message|safe }}</span>
+                    <span class="text-value">{{ question.message|safe }}</span>
                 {% endif %}
             </div>
             {% if answers_by_question_id[question.id] %}
@@ -33,12 +33,12 @@
                     {% if search_phrase|lower in answer.message|lower %}
                         <div class="a-container">
                             <div class="a-id">
-                                <span>Answer ID: </span>
-                                <span>{{ answer.id }}</span>
+                                <span class="label">Answer ID: </span>
+                                <span class="text-value">{{ answer.id }}</span>
                             </div>
                             <div class="a-message">
-                                <span>Message: </span>
-                                <span>{{ answer.message|safe }}</span>
+                                <span class="label">Message: </span>
+                                <span class="text-value">{{ answer.message|safe }}</span>
                             </div>
                         </div>
                     {% endif %}
