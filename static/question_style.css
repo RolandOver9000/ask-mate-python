@@ -160,6 +160,7 @@
     height: 40px;
     width: 40px;
     float: right;
+    margin-bottom: 10px;
 }
 
 #delete-button-link:hover {
