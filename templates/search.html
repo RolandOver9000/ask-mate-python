@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='highlight.js') }}"></script>
     {{ super() }}
 {% endblock %}
 {% block title %}Search results{% endblock %}
@@ -14,5 +13,4 @@
     {% else %}
     <p>No results</p>
     {% endif %}
-    <script>doSearch({{ search_phrase|tojson }}, 'yellow')</script>
 {% endblock %}

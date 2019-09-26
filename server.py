@@ -188,8 +188,7 @@ def route_add_comment_to_question(question_id):
 @app.route('/search')
 def route_search():
     search_phrase = request.args.get('search_phrase')
-    search_results = data_manager.get_questions_by_search_phrase(search_phrase)
-    search_results = util.sort_search_results(search_results)
+    search_results = util.handle_search(search_phrase)
     return render_template('search.html', search_results=search_results, search_phrase=search_phrase)
 
 
