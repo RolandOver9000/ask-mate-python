@@ -48,13 +48,6 @@ def highlight_search_result(search_results, highlight):
     return search_results
 
 
-def handle_search(search_phrase):
-    search_results = data_manager.get_questions_by_search_phrase(search_phrase)
-    sorted_search_results = sort_search_results(search_results)
-    hl_sorted_search_results = highlight_search_result(sorted_search_results, search_phrase)
-    return hl_sorted_search_results
-
-
 def emphasize(substr, text):
     current = 0
     while True:
@@ -101,3 +94,24 @@ def remove_duplicate_questions_from_search_results(questions):
         else:
             question_ids.add(question['id'])
     return questions
+
+
+def split_text_at_substring_occurrences(substr, text):
+    char_seq = []
+    current_split_point = 0
+    text_split = []
+
+    for i, char in enumerate(text):
+        char_seq.append(char)
+
+        if len(char_seq) > len(substr):
+            del char_seq[0]
+
+        current_substr = ''.join(char_seq)
+        if current_substr.lower() == substr.lower():
+            left_split_point = i - (len(substr) - 1)
+            text_split.append(text[current_split_point:left_split_point])
+            current_split_point = i + 1
+            text_split.append((text[left_split_point:current_split_point]))
+
+    return text_split
