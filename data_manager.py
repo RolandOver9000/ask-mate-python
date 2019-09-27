@@ -334,34 +334,6 @@ def remove_tag(cursor, question_id, tag_id):
 
 
 @connection.connection_handler
-def get_questions_by_search_phrase(cursor, search_phrase):
-    search_phrase = '%' + search_phrase.lower() + '%'
-    cursor.execute(
-        """
-        SELECT DISTINCT  question.id AS q_id, question.title AS q_title, question.message AS q_message, question.submission_time AS q_time,
-        question.vote_number AS q_vote,
-            (SELECT COUNT(id) FROM answer WHERE answer.question_id=question.id) AS answer_number
-        FROM question
-        FULL JOIN answer ON question.id = answer.question_id
-        WHERE LOWER(question.message) LIKE %(search_phrase)s OR
-              LOWER(question.title) LIKE %(search_phrase)s
-        ORDER BY question.submission_time DESC
-        """,
-        {'search_phrase': search_phrase})
-    questions = cursor.fetchall()
-    cursor.execute("""
-        SELECT question.id AS q_id, question.title AS q_title, answer.message AS a_message, question.submission_time AS q_time,
-        answer.vote_number AS a_vote
-        FROM answer
-        JOIN question ON answer.question_id = question.id
-        WHERE LOWER(answer.message) LIKE %(search_phrase)s
-        ORDER BY answer.submission_time DESC
-        """, {'search_phrase': search_phrase})
-    questions += cursor.fetchall()
-    return questions
-
-
-@connection.connection_handler
 def delete_data_by_id(cursor, table_name, row_id):
     """
     :param cursor:
@@ -392,11 +364,11 @@ def delete_data_by_id(cursor, table_name, row_id):
 
 
 @connection.connection_handler
-def find_questions_by_search_phrase(cursor, search_phrase):
+def select_questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase.lower() + '%'
     cursor.execute(
         """
-        SELECT q.id, q.submission_time, q.title, q.message, a.id AS a_id, a.message AS a_message
+        SELECT DISTINCT q.id, q.submission_time, q.title, q.message
         FROM question q
         LEFT JOIN answer a on q.id = a.question_id
         WHERE
@@ -409,3 +381,52 @@ def find_questions_by_search_phrase(cursor, search_phrase):
     )
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def select_answers_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase.lower() + '%'
+    cursor.execute(
+        """
+        SELECT a.question_id, a.id, a.message, a.submission_time
+        FROM answer a
+        WHERE LOWER(a.message) LIKE %(search_phrase)s
+        ORDER BY a.question_id
+        """,
+        {'search_phrase': search_phrase}
+    )
+    answers = cursor.fetchall()
+    return answers
+
+
+def split_text_values_in_search_results(search_results, text_keys, search_phrase):
+    for search_result in search_results:
+        for text_key in text_keys:
+            text = search_result[text_key]
+            if search_phrase.lower() in text.lower():
+                search_result[text_key] = util.split_text_at_substring_occurrences(search_phrase, text)
+            elif text_key == 'title':
+                search_result[text_key] = [text]
+            else:
+                search_result[text_key] = []
+    return search_results
+
+
+def handle_questions_by_search_phrase(search_phrase):
+    questions = select_questions_by_search_phrase(search_phrase)
+    questions = split_text_values_in_search_results(questions, ['title', 'message'], search_phrase)
+    return questions
+
+
+def handle_answers_by_search_phrase(search_phrase):
+    answers = select_answers_by_search_phrase(search_phrase)
+    answers = split_text_values_in_search_results(answers, ['message'], search_phrase)
+    return answers
+
+
+def get_search_results(search_phrase):
+    questions = handle_questions_by_search_phrase(search_phrase)
+    answers = handle_answers_by_search_phrase(search_phrase)
+    answers_by_question_id = util.get_answers_by_question_id(answers)
+    search_results = util.merge_answers_by_question_id_into_questions(answers_by_question_id, questions)
+    return search_results
