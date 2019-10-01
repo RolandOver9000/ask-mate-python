@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route("/")
 def route_index():
     sorted_questions = data_manager.get_most_recent_questions()
-    return render_template('index.html', sorted_questions=sorted_questions)
+    return render_template('home/index.html', sorted_questions=sorted_questions)
 
 
 @app.route("/list")
@@ -27,7 +27,7 @@ def route_list():
         order_by, order = 'submission_time', 'desc'
 
     sorted_questions = data_manager.get_all_questions(order_by, order)
-    return render_template('list.html', sorted_questions=sorted_questions,
+    return render_template('home/list.html', sorted_questions=sorted_questions,
                            selected_sorting=order_by, selected_order=order)
 
 
