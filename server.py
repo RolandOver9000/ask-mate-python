@@ -70,9 +70,9 @@ def route_vote(question_id):
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit(question_id):
-    question_data = data_manager.get_single_question(question_id)
 
     if request.method == 'GET':
+        question_data = data_manager.get_single_question(question_id)
         return render_template('database_ops/add-question.html', question_data=question_data)
 
     user_inputs_for_question = request.form.to_dict()
