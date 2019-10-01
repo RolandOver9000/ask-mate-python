@@ -189,7 +189,7 @@ def route_add_comment_to_question(question_id):
 def route_search():
     search_phrase = request.args.get('search_phrase')
     search_results = data_manager.get_search_results(search_phrase)
-    return render_template('search_results.html', questions=search_results, search_phrase=search_phrase)
+    return render_template('search/search_results.html', questions=search_results, search_phrase=search_phrase)
 
 
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])

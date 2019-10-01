@@ -1,0 +1,14 @@
+<div id="questions-container">
+    {% for question in questions %}
+        <div class="q-container">
+            {% include 'search/question_result.html' %}
+            {% if question.answers %}
+                <div class="answers-container">
+                    {% for answer in question.answers %}
+                        {% include 'search/answer_result.html' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
