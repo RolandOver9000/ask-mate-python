@@ -5,8 +5,13 @@
 {% endblock %}
 {% block title %}Homepage{% endblock %}
 {% block content %}
-    <div class="back-to-main" id="index-page">
-        <span>Hidden</span>
+    <div class="page-header">
+        <div class="back-to-main" id="index-page">
+            <span>Hidden</span>
+        </div>
+        <div class="register">
+            <a href="{{ url_for('route_register') }}">Register</a>
+        </div>
     </div>
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}

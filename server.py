@@ -231,5 +231,10 @@ def route_edit_comment(comment_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
+@app.route('/register')
+def route_register():
+    return redirect(url_for('route_index'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
