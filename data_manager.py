@@ -200,7 +200,8 @@ def get_user_id_for(cursor, username):
                     WHERE username = %(username)s
                    """,
                    {'username': username})
-    user_id = cursor.fetchone()
+    user_data = cursor.fetchone()
+    user_id = user_data['id']
     return user_id
 
 # ------------------------------------------------------------------
