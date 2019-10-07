@@ -168,7 +168,8 @@ def get_hashed_password_for(cursor, username):
                    """,
                    {'username': username})
     hashed_password = cursor.fetchone()
-    return hashed_password
+    if hashed_password:
+        return hashed_password['password']
 
 
 # ------------------------------------------------------------------
@@ -452,7 +453,12 @@ def get_search_results(search_phrase):
 # ------------------------------------------------------------------
 
 def validate_user_credentials(username, password):
+    print(username)
+    print(password)
     hashed_password = get_hashed_password_for(username)
+    print(hashed_password)
     if hashed_password:
-        return True
+        password_valid = util.verify_password(password, hashed_password)
+        return True if password_valid else False
+
     return False
