@@ -21,10 +21,18 @@ def route_login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def route_logout():
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
+
+
 @app.route("/")
 def route_index():
+    if 'username' in session:
+        username = session['username']
     sorted_questions = data_manager.get_most_recent_questions()
-    return render_template('home/index.html', sorted_questions=sorted_questions)
+    return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
 
 
 @app.route("/list")
