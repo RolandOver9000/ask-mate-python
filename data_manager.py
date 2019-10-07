@@ -113,34 +113,16 @@ def handle_votes(vote_option, message_id, message_type):
 # ------------------------------------------------------------------
 
 
-@connection.connection_handler
-def delete_question(cursor, question_id):
-    cursor.execute(
-        """
-        DELETE FROM question_tag WHERE question_id = %(question_id)s;
-        DELETE FROM comment WHERE question_id = %(question_id)s;
-        DELETE FROM answer WHERE question_id = %(question_id)s;
-        DELETE FROM question WHERE id = %(question_id)s;
-        """,
-        {'question_id': question_id})
+def delete_question(question_id):
+    delete.question(question_id)
 
 
-@connection.connection_handler
-def delete_answer(cursor, answer_id):
-    cursor.execute("""
-                   DELETE FROM comment WHERE answer_id=%(answer_id)s;
-                   DELETE FROM answer WHERE id=%(answer_id)s;
-                   """,
-                   {'answer_id': answer_id})
+def delete_answer(answer_id):
+    delete.answer(answer_id)
 
 
-@connection.connection_handler
-def remove_tag(cursor, question_id, tag_id):
-    cursor.execute("""
-                    DELETE FROM question_tag
-                    WHERE question_id=%(question_id)s AND
-                          tag_id=%(tag_id)s
-                    """, {'question_id': question_id, 'tag_id': tag_id})
+def delete_tag(question_id, tag_id):
+    delete.tag(question_id, tag_id)
 
 
 @connection.connection_handler

@@ -142,7 +142,7 @@ def route_new_tag(question_id):
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
 def remove_tag(question_id, tag_id):
-    data_manager.remove_tag(question_id, tag_id)
+    data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
