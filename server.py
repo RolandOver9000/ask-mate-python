@@ -203,7 +203,7 @@ def delete_comment(comment_id):
         return render_template('database_ops/delete_comment.html', question=question_data, comment=comment)
 
     if request.form['delete-button'] == 'Yes':
-        data_manager.delete_data_by_id('comment', comment_id)
+        data_manager.delete_comment(comment_id)
 
     return redirect(url_for('display_question_and_answers', question_id=comment['question_id']), code=307)
 

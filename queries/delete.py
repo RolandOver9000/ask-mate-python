@@ -30,3 +30,12 @@ def tag(cursor, question_id, tag_id):
                     WHERE question_id=%(question_id)s AND
                           tag_id=%(tag_id)s
                     """, {'question_id': question_id, 'tag_id': tag_id})
+
+
+@connection.connection_handler
+def comment(cursor, comment_id):
+    cursor.execute(
+        """
+        DELETE FROM comment WHERE id=%(comment_id)s;    
+        """,
+        {'comment_id': comment_id})

@@ -125,38 +125,14 @@ def delete_tag(question_id, tag_id):
     delete.tag(question_id, tag_id)
 
 
-@connection.connection_handler
-def delete_data_by_id(cursor, table_name, row_id):
-    """
-    :param cursor:
-    :param table_name: string of table name
-    :param row_id: id integer of the row that you want to delete
-    :return:
-    """
-    if table_name == 'question':
-        cursor.execute(
-            """
-            DELETE FROM question_tag, comment, answer WHERE question_id = %(question_id)s;
-            DELETE FROM question WHERE id = %(question_id)s;
-            """,
-            {'question_id': row_id})
-    elif table_name == 'answer':
-        cursor.execute(
-            """
-            DELETE FROM comment WHERE answer_id=%(answer_id)s;
-            DELETE FROM answer WHERE id=%(answer_id)s;
-            """,
-            {'answer_id': row_id})
-    elif table_name == 'comment':
-        cursor.execute(
-            """
-            DELETE FROM comment WHERE id=%(comment_id)s;    
-            """,
-            {'comment_id': row_id})
+def delete_comment(comment_id):
+    delete.comment(comment_id)
+
 
 # ------------------------------------------------------------------
 # ------------------------------SEARCH------------------------------
 # ------------------------------------------------------------------
+
 
 @connection.connection_handler
 def select_questions_by_search_phrase(cursor, search_phrase):
