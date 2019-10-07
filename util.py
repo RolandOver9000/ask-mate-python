@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from queries import select
+
 
 def handle_updated_comment(comment_data, updated_comment_message):
     updated_comment = {'message': updated_comment_message,
@@ -53,3 +55,35 @@ def merge_answers_by_question_id_into_questions(answers_by_question_id, question
         else:
             question['answers'] = []
     return questions
+
+
+def not_duplicate_tag(tag_text):
+    existing_tags = select.existing_tags_for_question(-1)
+    for tag in existing_tags:
+        if tag_text == tag['name']:
+            return False
+    return True
+
+
+def amend_user_inputs_for_question(question_data):
+    question_data['submission_time'] = datetime.now().replace(microsecond=0)
+    question_data['view_number'] = 0
+    question_data['vote_number'] = 0
+    return question_data
+
+
+def amend_user_inputs_for_answer(question_id, user_inputs):
+    new_answer_data = {
+        'submission_time': datetime.now().replace(microsecond=0),
+        'vote_number': 0,
+        'question_id': question_id,
+        'new_answer': user_inputs['message'],
+        'image': user_inputs['image']
+    }
+    return new_answer_data
+
+
+def amend_user_inputs_for_comment(new_comment_data):
+    new_comment_data['submission_time'] = datetime.now().replace(microsecond=0)
+    new_comment_data['edited_count'] = 0
+    return new_comment_data

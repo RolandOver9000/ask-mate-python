@@ -92,7 +92,7 @@ def post_an_answer(question_id):
     """
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
-        data_manager.write_new_answer_data_to_table(user_inputs_for_answer, question_id)
+        data_manager.insert_answer(user_inputs_for_answer, question_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     question = data_manager.get_single_question(question_id)
@@ -129,15 +129,12 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
-    existing_tags = data_manager.get_existing_tags(question_id)
+    existing_tags = data_manager.get_existing_tags_for_question(question_id, )
 
     if request.method == "POST":
-        tag = request.form.to_dict()
-        if tag['new_tag'] == '':
-            data_manager.add_tag_to_question(question_id, int(tag['existing_tag']))
-        else:
-            data_manager.add_new_tag_to_question(question_id, tag['new_tag'])
-
+        new_tag = request.form.get('new_tag')
+        existing_tag_id = request.form.get('existing_tag')
+        data_manager.handle_tag(question_id, new_tag, existing_tag_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
@@ -168,7 +165,7 @@ def add_new_comment_to_answer(question_id, answer_id):
                         'answer_id': answer_id,
                         'question_id': question_id
                         }
-    data_manager.write_new_comment_data_to_table(new_comment_data)
+    data_manager.insert_comment(new_comment_data)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -181,7 +178,7 @@ def route_add_comment_to_question(question_id):
     new_comment_data = {'message': request.form['message'],
                         'question_id': question_id,
                         'answer_id': None}
-    data_manager.write_new_comment_data_to_table(new_comment_data)
+    data_manager.insert_comment(new_comment_data)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
