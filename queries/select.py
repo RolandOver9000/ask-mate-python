@@ -151,3 +151,39 @@ def tag_id(cursor, tag_text):
                     """, {'tag_text': tag_text})
     tag = cursor.fetchone()
     return tag['id']
+
+
+@connection.connection_handler
+def questions_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase.lower() + '%'
+    cursor.execute(
+        """
+        SELECT DISTINCT q.id, q.submission_time, q.title, q.message
+        FROM question q
+        LEFT JOIN answer a on q.id = a.question_id
+        WHERE
+            LOWER(q.title) LIKE %(search_phrase)s OR
+            LOWER(q.message) LIKE %(search_phrase)s OR
+            LOWER(a.message) LIKE %(search_phrase)s
+        ORDER BY q.submission_time DESC
+        """,
+        {'search_phrase': search_phrase}
+    )
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def answers_by_search_phrase(cursor, search_phrase):
+    search_phrase = '%' + search_phrase.lower() + '%'
+    cursor.execute(
+        """
+        SELECT a.question_id, a.id, a.message, a.submission_time
+        FROM answer a
+        WHERE LOWER(a.message) LIKE %(search_phrase)s
+        ORDER BY a.question_id
+        """,
+        {'search_phrase': search_phrase}
+    )
+    answers = cursor.fetchall()
+    return answers

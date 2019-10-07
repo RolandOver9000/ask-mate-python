@@ -190,7 +190,7 @@ def route_search():
 
 
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
-def delete_comment(comment_id):
+def route_delete_comment(comment_id):
     comment = data_manager.get_single_entry('comment', comment_id)
     answer_id_of_comment = comment['answer_id']
     question_id_of_comment = comment['question_id']
