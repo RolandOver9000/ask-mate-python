@@ -29,6 +29,7 @@ def route_logout():
 
 @app.route("/")
 def route_index():
+    username = None
     if 'username' in session:
         username = session['username']
     sorted_questions = data_manager.get_most_recent_questions()
