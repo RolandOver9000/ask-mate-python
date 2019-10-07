@@ -159,6 +159,10 @@ def get_tag_id(cursor, tag_text):
     return tag_id
 
 
+@connection.connection_handler
+def login(cursor, username, password):
+    pass
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
