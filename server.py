@@ -147,7 +147,7 @@ def remove_tag(question_id, tag_id):
 
 
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
-def add_new_comment_to_answer(question_id, answer_id):
+def route_add_comment_to_answer(question_id, answer_id):
     """
     It redirects you to the page where you can add your inputs for comment, it also shows you the answer that you want to
     comment.
@@ -159,8 +159,11 @@ def add_new_comment_to_answer(question_id, answer_id):
         answer_by_id = data_manager.get_single_entry('answer', answer_id)
         return render_template('database_ops/new_comment.html', answer_by_id=answer_by_id)
 
-# After you submit your comment for the specific answer this program part will make a dictionary with the inputs and
-# insert it as a row in the table of comments. After this process it redirects you to the specific page of the question.
+    # After you submit your comment for the specific answer
+    # this program part will make a dictionary with the inputs and
+    # insert it as a row in the table of comments.
+    # After this process it redirects you to the specific page of the question.
+
     new_comment_data = {'message': request.form['message'],
                         'answer_id': answer_id,
                         'question_id': question_id
