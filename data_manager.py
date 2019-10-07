@@ -108,6 +108,11 @@ def update_entry(table, entry_id, entry_updater):
     update.entry(table, entry_updater)
 
 
+def update_comment_message(comment_data, new_comment_message):
+    updated_comment = util.handle_updated_comment(comment_data, new_comment_message)
+    update.entry('comment', updated_comment)
+
+
 def increment_view_number(question_id):
     update.increment_view_number(question_id)
 

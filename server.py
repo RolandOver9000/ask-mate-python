@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
-import util
 
 app = Flask(__name__)
 
@@ -225,9 +224,8 @@ def route_edit_comment(comment_id):
     if request.method == 'GET':
         return render_template('database_ops/new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
 
-    updated_comment_message = request.form['message']
-    updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
-    data_manager.update_entry('comment', comment_id, updated_comment)
+    new_comment_message = request.form['message']
+    data_manager.update_comment_message(comment_data, new_comment_message)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 

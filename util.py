@@ -4,10 +4,11 @@ from queries import select
 
 
 def handle_updated_comment(comment_data, updated_comment_message):
-    updated_comment = {'message': updated_comment_message,
-                       'submission_time': datetime.now().replace(microsecond=0),
-                       'edited_count': comment_data['edited_count'] + 1}
-    return updated_comment
+    comment_data.update({
+        'message': updated_comment_message,
+        'submission_time': datetime.now().replace(microsecond=0),
+        'edited_count': comment_data['edited_count'] + 1})
+    return comment_data
 
 
 def not_duplicate_tag(tag_text):
