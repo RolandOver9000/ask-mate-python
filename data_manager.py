@@ -159,6 +159,14 @@ def get_tag_id(cursor, tag_text):
     return tag_id
 
 
+def not_duplicate_tag(tag_text):
+    existing_tags = get_existing_tags(-1)
+    for tag in existing_tags:
+        if tag_text == tag['name']:
+            return False
+    return True
+
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
@@ -213,6 +221,14 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
 
 
 @connection.connection_handler
+def add_new_tag(cursor, tag_text):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES ( %(name)s)
+                    """, {'name': tag_text})
+
+
+@connection.connection_handler
 def add_tag_to_question(cursor, question_id, tag_id):
     cursor.execute("""
                     INSERT INTO question_tag
@@ -220,12 +236,11 @@ def add_tag_to_question(cursor, question_id, tag_id):
                     """, {'question_id': question_id, 'tag_id': tag_id})
 
 
-@connection.connection_handler
-def add_new_tag(cursor, tag_text):
-    cursor.execute("""
-                    INSERT INTO tag (name)
-                    VALUES ( %(name)s)
-                    """, {'name': tag_text})
+def add_new_tag_to_question(question_id, new_tag):
+    if not_duplicate_tag(new_tag):
+        add_new_tag(new_tag)
+    tag_id = get_tag_id(new_tag)
+    add_tag_to_question(question_id, tag_id['id'])
 
 # ------------------------------------------------------------------
 # ------------------------------UPDATE------------------------------

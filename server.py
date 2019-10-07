@@ -134,9 +134,9 @@ def route_new_tag(question_id):
     if request.method == "POST":
         tag = request.form.to_dict()
         if tag['new_tag'] == '':
-            util.add_tag_to_question(question_id, int(tag['existing_tag']))
+            data_manager.add_tag_to_question(question_id, int(tag['existing_tag']))
         else:
-            util.add_new_tag_to_question(question_id, tag['new_tag'])
+            data_manager.add_new_tag_to_question(question_id, tag['new_tag'])
 
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
