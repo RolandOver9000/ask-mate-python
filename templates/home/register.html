@@ -5,15 +5,24 @@
 {% endblock %}
 {% block title %}Registration{% endblock %}
 {% block content %}
-    <h1>Register to AskMate</h1>
+    <div class="page-header">
+        <div class="back-to-main">
+            <a href="{{ url_for('route_index') }}">&#x2B05; Return to main page</a>
+        </div>
+    </div>
+    <h1>Register to AskMate!</h1>
     <div class="container">
         <form action="{{ url_for('route_register') }}" method="post">
             <div class="input username">
-                <label for="username">User name</label>
-                <input id="username" name="user_name">
+                <div class="label-container">
+                    <label for="username">Username</label>
+                </div>
+                    <input id="username" name="user_name">
             </div>
             <div class="input password">
-                <label for="password">Password</label>
+                <div class="label-container">
+                    <label for="password">Password</label>
+                </div>
                 <input type="password" id="password" name="password">
             </div>
             <button type="submit">Register account</button>

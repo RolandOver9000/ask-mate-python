@@ -1,3 +1,4 @@
+@import 'anchor.css';
 @import 'general.css';
 
 .container {
@@ -10,12 +11,35 @@ form {
 
 .input {
     display: block;
+    margin-left: 200px;
 }
 
 label, input {
     display: inline-block;
 }
 
+.label-container {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    /*border: black solid;*/
+}
+
+input {
+    margin-left: 25px;
+    width: 300px;
+    /*border: black solid;*/
+}
+
 button {
     display: block;
+    height: 35px;
+    width: 150px;
+    margin-top: 10px;
+    margin-left: 330px;
+    /*border: black solid;*/
+}
+
+.password {
+    margin-top: 10px;
 }
