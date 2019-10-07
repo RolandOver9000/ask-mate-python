@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="back-to-main" id="index-page">
+        <span>Hidden</span>
+    </div>
+    <section>
+        <form method="post">
+            <p><input type="text" name="username"></p>
+            <p><input type="submit" value="Log in"></p>
+        </form>
+    </section>
+{% endblock %}
