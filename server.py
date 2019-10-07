@@ -1,8 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import \
+    Flask, \
+    render_template, \
+    request, \
+    redirect, \
+    url_for, \
+    session, \
+    escape
 import data_manager
 import util
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def route_login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        return redirect(url_for('route_index'))
+    return render_template('login.html')
 
 
 @app.route("/")
