@@ -45,3 +45,14 @@ def tag_into_question_table(cursor, question_id, tag_id):
                     INSERT INTO question_tag
                     VALUES (%(question_id)s, %(tag_id)s)
                     """, {'question_id': question_id, 'tag_id': tag_id})
+
+
+@connection.connection_handler
+def new_user(cursor, user_data):
+    cursor.execute(
+        """
+        INSERT INTO user_data (username, password, reg_date)
+        VALUES (%(username)s, %(password)s, %(reg_date)s)
+        """,
+        user_data
+    )
