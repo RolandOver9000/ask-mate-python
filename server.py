@@ -17,10 +17,9 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def route_login():
     if request.method == 'POST':
         user_credentials = request.form.to_dict()
-        valid_user_credentials = data_manager.validate_user_credentials(
-                                                            user_credentials['username'],
-                                                            user_credentials['password'])
-        if valid_user_credentials:
+        user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
+                                                                        user_credentials['password'])
+        if user_credentials_valid:
             session['username'] = user_credentials['username']
 
         return redirect(url_for('route_index'))
