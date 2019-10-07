@@ -21,6 +21,7 @@ def route_login():
                                                                         user_credentials['password'])
         if user_credentials_valid:
             session['username'] = user_credentials['username']
+            session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
 
         return redirect(url_for('route_index'))
 
