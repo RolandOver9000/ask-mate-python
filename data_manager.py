@@ -160,8 +160,16 @@ def get_tag_id(cursor, tag_text):
 
 
 @connection.connection_handler
-def login(cursor, username, password):
-    pass
+def get_hashed_password_for(cursor, username):
+    cursor.execute("""
+                    SELECT password
+                    FROM user_data
+                    WHERE username = %(username)s
+                   """,
+                   {'username': username})
+    hashed_password = cursor.fetchone()
+    return hashed_password
+
 
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
@@ -369,6 +377,7 @@ def delete_data_by_id(cursor, table_name, row_id):
 # ------------------------------SEARCH------------------------------
 # ------------------------------------------------------------------
 
+
 @connection.connection_handler
 def select_questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase.lower() + '%'
@@ -436,3 +445,14 @@ def get_search_results(search_phrase):
     answers_by_question_id = util.get_answers_by_question_id(answers)
     search_results = util.merge_answers_by_question_id_into_questions(answers_by_question_id, questions)
     return search_results
+
+
+# ------------------------------------------------------------------
+# ------------------------------LOGIN-------------------------------
+# ------------------------------------------------------------------
+
+def validate_user_credentials(username, password):
+    hashed_password = get_hashed_password_for(username)
+    if hashed_password:
+        return True
+    return False
