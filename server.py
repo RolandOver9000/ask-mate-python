@@ -233,6 +233,8 @@ def route_edit_comment(comment_id):
 @app.route('/register', methods=['GET', 'POST'])
 def route_register():
     if request.method == 'POST':
+        user_data = request.form.to_dict()
+        data_manager.insert_user(user_data)
         return redirect('/')
 
     return render_template('home/register.html')

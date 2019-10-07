@@ -98,6 +98,12 @@ def handle_tag(question_id, new_tag, existing_tag_id):
     insert.tag_into_question_table(question_id, tag_id)
 
 
+def insert_user(user_data):
+    user_data['password'] = util.get_hashed_password(user_data['password'])
+    user_data.update({'reg_date': util.get_datetime()})
+    insert.new_user(user_data)
+
+
 # ------------------------------------------------------------------
 # ------------------------------UPDATE------------------------------
 # ------------------------------------------------------------------

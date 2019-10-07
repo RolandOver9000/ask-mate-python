@@ -1,6 +1,6 @@
 from datetime import datetime
-
 from queries import select
+from password import hash_password, verify_password
 
 
 def handle_updated_comment(comment_data, updated_comment_message):
@@ -101,3 +101,11 @@ def merge_answers_by_question_id_into_questions(answers_by_question_id, question
         else:
             question['answers'] = []
     return questions
+
+
+def get_hashed_password(plain_text_pasword):
+    return hash_password(plain_text_pasword)
+
+
+def get_datetime():
+    return datetime.now().replace(microsecond=0)
