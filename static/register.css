@@ -1,0 +1,21 @@
+@import 'general.css';
+
+.container {
+    display: block;
+}
+
+form {
+    display: block;
+}
+
+.input {
+    display: block;
+}
+
+label, input {
+    display: inline-block;
+}
+
+button {
+    display: block;
+}

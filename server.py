@@ -231,9 +231,12 @@ def route_edit_comment(comment_id):
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def route_register():
-    return redirect(url_for('route_index'))
+    if request.method == 'POST':
+        return redirect('/')
+
+    return render_template('home/register.html')
 
 
 if __name__ == '__main__':
