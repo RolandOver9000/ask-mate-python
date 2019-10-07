@@ -56,35 +56,9 @@ def get_existing_tags_for_question(question_id):
     return existing_tags
 
 
-@connection.connection_handler
-def get_tag_id(cursor, tag_text):
-    cursor.execute("""
-                    SELECT id
-                    FROM tag
-                    WHERE name=%(tag_text)s
-                    """, {'tag_text': tag_text})
-    tag_id = cursor.fetchone()
-    return tag_id
-
-
-@connection.connection_handler
-def get_tags_counted(cursor):
-    cursor.execute("""
-                    SELECT tag.name, COUNT(question_id) as count
-                    FROM tag
-                    RIGHT JOIN question_tag qt on tag.id = qt.tag_id
-                    GROUP BY tag.name
-                    """)
-    tags_counted = cursor.fetchall()
+def get_tags_counted():
+    tags_counted = select.tags_counted()
     return tags_counted
-
-
-def not_duplicate_tag(tag_text):
-    existing_tags = get_existing_tags(-1)
-    for tag in existing_tags:
-        if tag_text == tag['name']:
-            return False
-    return True
 
 
 # ------------------------------------------------------------------
