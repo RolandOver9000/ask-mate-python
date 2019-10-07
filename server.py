@@ -82,7 +82,7 @@ def route_edit(question_id):
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
-def post_an_answer(question_id):
+def route_new_answer(question_id):
     """
     If the method is POST: When the user wants to submit a new answer to the specific question, this function saves the inputs into the table
     and redirect it to the page of the specific question.
@@ -100,7 +100,7 @@ def post_an_answer(question_id):
 
 
 @app.route('/question/<question_id>/delete')
-def route_delete(question_id):
+def route_delete_question(question_id):
     data_manager.delete_question(question_id)
 
     return redirect(url_for('route_list'))
@@ -141,7 +141,7 @@ def route_new_tag(question_id):
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
-def remove_tag(question_id, tag_id):
+def route_delete_tag(question_id, tag_id):
     data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 

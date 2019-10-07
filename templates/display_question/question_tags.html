@@ -3,7 +3,7 @@
     <div id="tags">
         <span id="tag-text">{{ tag.name }}</span>
         <span>
-            <a href="{{ url_for('remove_tag', question_id=question.id, tag_id=tag.id) }}">
+            <a href="{{ url_for('route_delete_tag', question_id=question.id, tag_id=tag.id) }}">
                 <strong>x</strong>
             </a>
         </span>
