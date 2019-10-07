@@ -8,6 +8,9 @@
     <div class="back-to-main" id="index-page">
         <span>Hidden</span>
     </div>
+    {% if user %}
+        <p>Logged in as {{ user }}</p>
+    {% endif %}
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
         <h3 id="help-out">Help out your fellow AskMates:</h3>
