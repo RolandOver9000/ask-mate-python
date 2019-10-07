@@ -159,6 +159,18 @@ def get_tag_id(cursor, tag_text):
     return tag_id
 
 
+@connection.connection_handler
+def get_tags_counted(cursor):
+    cursor.execute("""
+                    SELECT tag.name, COUNT(question_id) as count
+                    FROM tag
+                    RIGHT JOIN question_tag qt on tag.id = qt.tag_id
+                    GROUP BY tag.name
+                    """)
+    tags_counted = cursor.fetchall()
+    return tags_counted
+
+
 def not_duplicate_tag(tag_text):
     existing_tags = get_existing_tags(-1)
     for tag in existing_tags:

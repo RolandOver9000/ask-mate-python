@@ -192,6 +192,12 @@ def route_search():
     return render_template('search/search_results.html', questions=search_results, search_phrase=search_phrase)
 
 
+@app.route('/tags')
+def route_tags():
+    tags_counted = data_manager.get_tags_counted()
+    return render_template('home/tags.html', tags_counted=tags_counted)
+
+
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
 def delete_comment(comment_id):
     comment = data_manager.get_single_entry('comment', comment_id)
