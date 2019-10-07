@@ -1,8 +1,11 @@
-from time import time
 import connection
 import util
 from psycopg2 import sql
 from datetime import datetime
+
+# ------------------------------------------------------------------
+# ------------------------------SELECT------------------------------
+# ------------------------------------------------------------------
 
 
 @connection.connection_handler
@@ -84,67 +87,12 @@ def get_all_comments(cursor, comment_id):
 
 
 @connection.connection_handler
-def delete_question(cursor, question_id):
-    cursor.execute(
-        """
-        DELETE FROM question_tag WHERE question_id = %(question_id)s;
-        DELETE FROM comment WHERE question_id = %(question_id)s;
-        DELETE FROM answer WHERE question_id = %(question_id)s;
-        DELETE FROM question WHERE id = %(question_id)s;
-        """,
-        {'question_id': question_id})
-
-
-@connection.connection_handler
-def insert_question(cursor, question_data):
-    question_data['submission_time'] = datetime.now().replace(microsecond=0)
-    question_data['view_number'] = 0
-    question_data['vote_number'] = 0
-    cursor.execute(
-        """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
-        """,
-        question_data
-    )
-
-
-@connection.connection_handler
 def get_latest_id(cursor, table):
     cursor.execute(sql.SQL("SELECT id FROM {} ORDER BY id DESC LIMIT 1;").format(
         sql.Identifier(table)
     ))
     entry_data = cursor.fetchone()
     return entry_data['id']
-
-
-@connection.connection_handler
-def update_entry(cursor, table, entry_id, entry_updater):
-    """
-
-    :param cursor:
-    :param table:
-    :param entry_id:
-    :param entry_updater:
-    :return:
-    """
-
-    entry_updater.update({'id': entry_id})
-    composable_sets = [
-            sql.SQL(' = ').join([sql.Identifier(key), sql.Placeholder(key)])
-            for key in entry_updater.keys()
-    ]
-
-    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
-        sql.Identifier(table),
-        sql.SQL(', ').join(composable_sets),
-        sql.Placeholder('id')
-    )
-
-    cursor.execute(
-        query,
-        entry_updater
-    )
 
 
 @connection.connection_handler
@@ -158,86 +106,6 @@ def get_question_ids(cursor):
     questions = cursor.fetchall()
     return [question['id'] for question in questions]
 
-
-@connection.connection_handler
-def increment_view_number(cursor, question_id):
-    cursor.execute(
-        """
-        UPDATE question
-        SET view_number = view_number + 1
-        WHERE id = %(question_id)s;
-        """,
-        {'question_id': question_id}
-    )
-
-
-@connection.connection_handler
-def write_new_answer_data_to_table(cursor, user_inputs, question_id):
-    cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
-                    """,
-                   {
-                    'submission_time': datetime.now().replace(microsecond=0),
-                    'vote_number': 0,
-                    'question_id': question_id,
-                    'new_answer': user_inputs['message'],
-                    'image': user_inputs['image']
-                    })
-
-
-@connection.connection_handler
-def write_new_comment_data_to_table(cursor, new_comment_data):
-    """
-    This function is filling the leftover data for the row that you want to insert and after that insert the row
-    into the table of comments.
-    :param cursor:
-    :param new_comment_data: dictionary where the keys are the column names
-    :return:
-    """
-    new_comment_data['submission_time'] = datetime.now().replace(microsecond=0)
-    new_comment_data['edited_count'] = 0
-    cursor.execute("""
-                    INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
-                    VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
-                    """,
-                   new_comment_data
-                   )
-
-
-@connection.connection_handler
-def delete_answer(cursor, answer_id):
-    cursor.execute("""
-                   DELETE FROM comment WHERE answer_id=%(answer_id)s;
-                   DELETE FROM answer WHERE id=%(answer_id)s;
-                   """,
-                   {'answer_id': answer_id})
-
-
-@connection.connection_handler
-def handle_votes(cursor, vote_option, message_id, message_type):
-    """
-    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
-    and updates the SQL table.
-    :param cursor:
-    :param vote_option:  ("Upvote" or "Downvote"[str])
-    :param message_id:   (id of question/answer[str])
-    :param message_type: ("answer" or "question"[str])
-    :return:
-    """
-    vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
-    table = 'answer' if message_type == 'answer' else 'question'
-    cursor.execute(
-        sql.SQL("""
-                    UPDATE {table}
-                    SET vote_number={vote_calculation}
-                    WHERE id={message_id}
-                    """)
-        .format(table=sql.Identifier(table),
-                vote_calculation=sql.SQL(vote_calculation),
-                message_id=sql.SQL(message_id))
-                )
-    
 
 @connection.connection_handler
 def get_single_entry(cursor, table, entry_id):
@@ -291,6 +159,59 @@ def get_tag_id(cursor, tag_text):
     return tag_id
 
 
+# ------------------------------------------------------------------
+# ------------------------------INSERT------------------------------
+# ------------------------------------------------------------------
+
+
+@connection.connection_handler
+def insert_question(cursor, question_data):
+    question_data['submission_time'] = datetime.now().replace(microsecond=0)
+    question_data['view_number'] = 0
+    question_data['vote_number'] = 0
+    cursor.execute(
+        """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+        VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+        """,
+        question_data
+    )
+
+
+@connection.connection_handler
+def write_new_answer_data_to_table(cursor, user_inputs, question_id):
+    cursor.execute("""
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
+                    """,
+                   {
+                    'submission_time': datetime.now().replace(microsecond=0),
+                    'vote_number': 0,
+                    'question_id': question_id,
+                    'new_answer': user_inputs['message'],
+                    'image': user_inputs['image']
+                    })
+
+
+@connection.connection_handler
+def write_new_comment_data_to_table(cursor, new_comment_data):
+    """
+    This function is filling the leftover data for the row that you want to insert and after that insert the row
+    into the table of comments.
+    :param cursor:
+    :param new_comment_data: dictionary where the keys are the column names
+    :return:
+    """
+    new_comment_data['submission_time'] = datetime.now().replace(microsecond=0)
+    new_comment_data['edited_count'] = 0
+    cursor.execute("""
+                    INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
+                    VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                    """,
+                   new_comment_data
+                   )
+
+
 @connection.connection_handler
 def add_tag_to_question(cursor, question_id, tag_id):
     cursor.execute("""
@@ -305,6 +226,101 @@ def add_new_tag(cursor, tag_text):
                     INSERT INTO tag (name)
                     VALUES ( %(name)s)
                     """, {'name': tag_text})
+
+# ------------------------------------------------------------------
+# ------------------------------UPDATE------------------------------
+# ------------------------------------------------------------------
+
+
+@connection.connection_handler
+def update_entry(cursor, table, entry_id, entry_updater):
+    """
+
+    :param cursor:
+    :param table:
+    :param entry_id:
+    :param entry_updater:
+    :return:
+    """
+
+    entry_updater.update({'id': entry_id})
+    composable_sets = [
+            sql.SQL(' = ').join([sql.Identifier(key), sql.Placeholder(key)])
+            for key in entry_updater.keys()
+    ]
+
+    query = sql.SQL("UPDATE {} SET {} WHERE id = {}").format(
+        sql.Identifier(table),
+        sql.SQL(', ').join(composable_sets),
+        sql.Placeholder('id')
+    )
+
+    cursor.execute(
+        query,
+        entry_updater
+    )
+
+
+@connection.connection_handler
+def increment_view_number(cursor, question_id):
+    cursor.execute(
+        """
+        UPDATE question
+        SET view_number = view_number + 1
+        WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id}
+    )
+
+
+@connection.connection_handler
+def handle_votes(cursor, vote_option, message_id, message_type):
+    """
+    Check if the "message_type" is question or answer, and updates the votes for the given answer/question by writing
+    and updates the SQL table.
+    :param cursor:
+    :param vote_option:  ("Upvote" or "Downvote"[str])
+    :param message_id:   (id of question/answer[str])
+    :param message_type: ("answer" or "question"[str])
+    :return:
+    """
+    vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
+    table = 'answer' if message_type == 'answer' else 'question'
+    cursor.execute(
+        sql.SQL("""
+                    UPDATE {table}
+                    SET vote_number={vote_calculation}
+                    WHERE id={message_id}
+                    """)
+        .format(table=sql.Identifier(table),
+                vote_calculation=sql.SQL(vote_calculation),
+                message_id=sql.SQL(message_id))
+                )
+
+# ------------------------------------------------------------------
+# ------------------------------DELETE------------------------------
+# ------------------------------------------------------------------
+
+
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute(
+        """
+        DELETE FROM question_tag WHERE question_id = %(question_id)s;
+        DELETE FROM comment WHERE question_id = %(question_id)s;
+        DELETE FROM answer WHERE question_id = %(question_id)s;
+        DELETE FROM question WHERE id = %(question_id)s;
+        """,
+        {'question_id': question_id})
+
+
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                   DELETE FROM comment WHERE answer_id=%(answer_id)s;
+                   DELETE FROM answer WHERE id=%(answer_id)s;
+                   """,
+                   {'answer_id': answer_id})
 
 
 @connection.connection_handler
@@ -345,6 +361,9 @@ def delete_data_by_id(cursor, table_name, row_id):
             """,
             {'comment_id': row_id})
 
+# ------------------------------------------------------------------
+# ------------------------------SEARCH------------------------------
+# ------------------------------------------------------------------
 
 @connection.connection_handler
 def select_questions_by_search_phrase(cursor, search_phrase):
