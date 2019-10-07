@@ -6,17 +6,16 @@
 
 h3 {
     display: inline;
-    margin: 0 auto;
-    margin-left: 10%;
+    margin: 0 auto 0 10%;
 }
 
-#ask-question, #list-questions, #first-question {
+#ask-question, #list-questions, #first-question, #list-tags {
     display: block;
-    text-align: center;
-    margin: 16px 0;
+    width: max-content;
+    margin: 15px auto auto;
 }
 
-#ask-question, #list-questions {
+#ask-question, #list-questions, #list-tags {
     font-size: 140%;
 }
 
