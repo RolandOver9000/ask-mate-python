@@ -165,9 +165,9 @@ def route_new_tag(question_id):
     if request.method == "POST":
         tag = request.form.to_dict()
         if tag['new_tag'] == '':
-            util.add_tag_to_question(question_id, int(tag['existing_tag']))
+            data_manager.add_tag_to_question(question_id, int(tag['existing_tag']))
         else:
-            util.add_new_tag_to_question(question_id, tag['new_tag'])
+            data_manager.add_new_tag_to_question(question_id, tag['new_tag'])
 
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -221,6 +221,12 @@ def route_search():
     search_phrase = request.args.get('search_phrase')
     search_results = data_manager.get_search_results(search_phrase)
     return render_template('search/search_results.html', questions=search_results, search_phrase=search_phrase)
+
+
+@app.route('/tags')
+def route_tags():
+    tags_counted = data_manager.get_tags_counted()
+    return render_template('home/tags.html', tags_counted=tags_counted)
 
 
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])

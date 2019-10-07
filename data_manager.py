@@ -160,6 +160,26 @@ def get_tag_id(cursor, tag_text):
 
 
 @connection.connection_handler
+def get_tags_counted(cursor):
+    cursor.execute("""
+                    SELECT tag.name, COUNT(question_id) as count
+                    FROM tag
+                    RIGHT JOIN question_tag qt on tag.id = qt.tag_id
+                    GROUP BY tag.name
+                    """)
+    tags_counted = cursor.fetchall()
+    return tags_counted
+
+
+def not_duplicate_tag(tag_text):
+    existing_tags = get_existing_tags(-1)
+    for tag in existing_tags:
+        if tag_text == tag['name']:
+            return False
+    return True
+
+
+@connection.connection_handler
 def get_hashed_password_for(cursor, username):
     cursor.execute("""
                     SELECT password
@@ -226,6 +246,14 @@ def write_new_comment_data_to_table(cursor, new_comment_data):
 
 
 @connection.connection_handler
+def add_new_tag(cursor, tag_text):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES ( %(name)s)
+                    """, {'name': tag_text})
+
+
+@connection.connection_handler
 def add_tag_to_question(cursor, question_id, tag_id):
     cursor.execute("""
                     INSERT INTO question_tag
@@ -233,12 +261,11 @@ def add_tag_to_question(cursor, question_id, tag_id):
                     """, {'question_id': question_id, 'tag_id': tag_id})
 
 
-@connection.connection_handler
-def add_new_tag(cursor, tag_text):
-    cursor.execute("""
-                    INSERT INTO tag (name)
-                    VALUES ( %(name)s)
-                    """, {'name': tag_text})
+def add_new_tag_to_question(question_id, new_tag):
+    if not_duplicate_tag(new_tag):
+        add_new_tag(new_tag)
+    tag_id = get_tag_id(new_tag)
+    add_tag_to_question(question_id, tag_id['id'])
 
 # ------------------------------------------------------------------
 # ------------------------------UPDATE------------------------------
@@ -456,6 +483,7 @@ def validate_user_credentials(username, password):
     hashed_password = get_hashed_password_for(username)
     if hashed_password:
         password_valid = util.verify_password(password, hashed_password)
-        return True if password_valid else False
+        if password_valid:
+            return True
 
     return False
