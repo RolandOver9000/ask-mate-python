@@ -1,4 +1,5 @@
 import data_manager
+import bcrypt
 from datetime import datetime
 
 
@@ -73,3 +74,8 @@ def merge_answers_by_question_id_into_questions(answers_by_question_id, question
         else:
             question['answers'] = []
     return questions
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
