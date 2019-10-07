@@ -1,6 +1,17 @@
 {% extends 'layout.html' %}
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <style>
+        label {
+            display: block;
+            font: .9rem 'Fira Sans', sans-serif;
+        }
+
+        input[type='submit'],
+        label {
+            margin-top: 1rem;
+        }
+    </style>
 {% endblock %}
 {% block title %}Login{% endblock %}
 {% block content %}
@@ -9,7 +20,14 @@
     </div>
     <section>
         <form method="post">
-            <p><input type="text" name="username"></p>
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div>
+                <label for="password ">Password (8 characters minimum):</label>
+                <input type="password" id="password "name="password">
+            </div>
             <p><input type="submit" value="Log in"></p>
         </form>
     </section>
