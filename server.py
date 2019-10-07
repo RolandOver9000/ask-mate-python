@@ -164,11 +164,8 @@ def route_add_comment_to_answer(question_id, answer_id):
     # insert it as a row in the table of comments.
     # After this process it redirects you to the specific page of the question.
 
-    new_comment_data = {'message': request.form['message'],
-                        'answer_id': answer_id,
-                        'question_id': question_id
-                        }
-    data_manager.insert_comment(new_comment_data)
+    comment_message = request.form['message']
+    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -178,10 +175,8 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('database_ops/new_comment.html', answer_by_id=question)
 
-    new_comment_data = {'message': request.form['message'],
-                        'question_id': question_id,
-                        'answer_id': None}
-    data_manager.insert_comment(new_comment_data)
+    comment_message = request.form['message']
+    data_manager.insert_comment(comment_message, question_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 

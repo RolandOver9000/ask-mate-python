@@ -71,7 +71,12 @@ def insert_answer(user_inputs, question_id):
     insert.answer(new_answer_data)
 
 
-def insert_comment(new_comment_data):
+def insert_comment(message, question_id, answer_id=None):
+    new_comment_data = {
+        'message': message,
+        'answer_id': answer_id,
+        'question_id': question_id
+    }
     new_comment_data = util.amend_user_inputs_for_comment(new_comment_data)
     insert.comment(new_comment_data)
 
