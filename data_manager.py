@@ -192,6 +192,17 @@ def get_hashed_password_for(cursor, username):
         return hashed_password['password']
 
 
+@connection.connection_handler
+def get_user_id_for(cursor, username):
+    cursor.execute("""
+                    SELECT id
+                    FROM user_data
+                    WHERE username = %(username)s
+                   """,
+                   {'username': username})
+    user_id = cursor.fetchone()
+    return user_id
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
