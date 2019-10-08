@@ -105,6 +105,7 @@ def display_question_and_answers(question_id):
 def route_vote(question_id):
     vote_option, message_id, message_type = request.form['vote'].split(',')
     data_manager.handle_votes(vote_option, message_id, message_type)
+    data_manager.handle_user_reputation(vote_option, message_id, message_type)
 
     # the code=307 argument ensures that the request type (POST) is preserved after redirection
     # so that the view number of the question doesn't increase after voting
