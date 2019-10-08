@@ -297,5 +297,15 @@ def route_register():
     return render_template('home/register.html')
 
 
+@app.route('/user/<user_id>')
+def route_user_page(user_id):
+    user_id = int(user_id)
+    if not ('user_id' in session and session['user_id'] == user_id):
+        return redirect('/')
+
+    user_data = {'user_id': user_id, 'username': session['username']}
+    return render_template('user_page/main.html', user_data=user_data)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
