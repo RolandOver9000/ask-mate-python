@@ -7,6 +7,7 @@ from flask import \
     session, \
     escape
 import data_manager
+import util
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -181,7 +182,12 @@ def route_new_tag(question_id):
         data_manager.handle_tag(question_id, new_tag, existing_tag_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
-    return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
+    if 'user_id' in session:
+        user_id_for_question = data_manager.get_user_id_for_question(question_id)
+        if session['user_id'] == user_id_for_question:
+            return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
