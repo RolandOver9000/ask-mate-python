@@ -56,7 +56,9 @@ def most_recent_questions(cursor, number_of_entries):
 def answers_for_question(cursor, question_id):
     cursor.execute(
         """
-        SELECT * FROM answer
+        SELECT answer.*, user_data.username as username, user_data.reputation as reputation
+        FROM answer
+        LEFT JOIN user_data ON answer.user_id = user_data.id
         WHERE question_id = %(question_id)s
         ORDER BY submission_time desc;
         """,

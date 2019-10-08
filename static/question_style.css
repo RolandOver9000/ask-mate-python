@@ -220,7 +220,16 @@
     font-size: small;
 }
 
-#answer-id {
+#answer-id, #answers-user {
     display: inline;
 }
 
+#answers-user em{
+    font-style: oblique;
+}
+
+em {
+    color: deeppink;
+    font-style: normal;
+    font-size: medium;
+}

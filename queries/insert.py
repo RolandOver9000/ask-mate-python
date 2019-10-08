@@ -15,8 +15,8 @@ def question(cursor, question_data):
 @connection.connection_handler
 def answer(cursor, new_answer_data):
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(new_answer)s, %(image)s, %(user_id)s)
                     """,
                    new_answer_data)
 
