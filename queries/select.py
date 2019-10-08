@@ -224,4 +224,5 @@ def user_id_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['id']
+    if user_data:
+        return user_data['id']
