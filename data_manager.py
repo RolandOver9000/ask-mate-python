@@ -148,11 +148,12 @@ def handle_votes(vote_option, message_id, message_type):
 def handle_user_reputation(vote_option, message_id, message_type):
     if message_type == 'question':
         reputation_calculation = 'reputation + 5' if vote_option == 'Upvote' else 'reputation - 2'
-        table = 'question'
+        user_id = str(select.user_id_for_question(message_id))
     elif message_type == 'answer':
         reputation_calculation = 'reputation + 10' if vote_option == 'Upvote' else 'reputation -2'
-        table = 'answer'
-    update.reputation(reputation_calculation, message_id, message_type)
+        user_id = str(select.user_id_for_answer(message_id))
+
+    update.reputation(reputation_calculation, user_id)
 
 # ------------------------------------------------------------------
 # ------------------------------DELETE------------------------------
