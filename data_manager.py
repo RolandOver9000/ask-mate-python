@@ -71,6 +71,11 @@ def get_user_id_for(username):
     user_id = select.user_id_for(username)
     return user_id
 
+
+def get_user_id_for_question(question_id):
+    user_id = select.user_id_for_question(question_id)
+    return user_id
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------

@@ -109,8 +109,12 @@ def route_vote(question_id):
 def route_edit_question(question_id):
 
     if request.method == 'GET':
-        question_data = data_manager.get_single_question(question_id)
-        return render_template('database_ops/add-question.html', question_data=question_data)
+        if 'user_id' in session:
+            user_id_for_question = data_manager.get_user_id_for_question(question_id)
+            if session['user_id'] == user_id_for_question:
+                question_data = data_manager.get_single_question(question_id)
+                return render_template('database_ops/add-question.html', question_data=question_data)
+        return redirect(url_for('display_question_and_answers', question_id=question_id))
 
     user_inputs_for_question = request.form.to_dict()
     data_manager.update_entry('question', question_id, user_inputs_for_question)
