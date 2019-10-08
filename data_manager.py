@@ -71,6 +71,11 @@ def get_user_id_for(username):
     user_id = select.user_id_for(username)
     return user_id
 
+
+def get_user_id_for_question(question_id):
+    user_id = select.user_id_for_question(question_id)
+    return user_id
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
@@ -189,3 +194,9 @@ def validate_user_credentials(username, password):
         if password_valid:
             return True
     return False
+
+
+def is_username_unique(username):
+    user_id = select.user_id_for(username)
+    if not user_id:
+        return True
