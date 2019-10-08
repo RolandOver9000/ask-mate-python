@@ -61,29 +61,14 @@ def get_tags_counted():
     return tags_counted
 
 
-@connection.connection_handler
-def get_hashed_password_for(cursor, username):
-    cursor.execute("""
-                    SELECT password
-                    FROM user_data
-                    WHERE username = %(username)s
-                   """,
-                   {'username': username})
-    hashed_password = cursor.fetchone()
+def get_hashed_password_for(username):
+    hashed_password = select.hashed_password_for(username)
     if hashed_password:
-        return hashed_password['password']
+        return hashed_password
 
 
-@connection.connection_handler
-def get_user_id_for(cursor, username):
-    cursor.execute("""
-                    SELECT id
-                    FROM user_data
-                    WHERE username = %(username)s
-                   """,
-                   {'username': username})
-    user_data = cursor.fetchone()
-    user_id = user_data['id']
+def get_user_id_for(username):
+    user_id = select.user_id_for(username)
     return user_id
 
 # ------------------------------------------------------------------
@@ -199,8 +184,7 @@ def get_search_results(search_phrase):
 def validate_user_credentials(username, password):
     hashed_password = get_hashed_password_for(username)
     if hashed_password:
-        password_valid = util.verify_password(password, hashed_password)
+        password_valid = util.is_password_valid(password, hashed_password)
         if password_valid:
             return True
-
     return False

@@ -199,3 +199,27 @@ def tags_counted(cursor):
                     """)
     tags_counted_ = cursor.fetchall()
     return tags_counted_
+
+
+@connection.connection_handler
+def hashed_password_for(cursor, username):
+    cursor.execute("""
+                    SELECT password
+                    FROM user_data
+                    WHERE username = %(username)s
+                   """,
+                   {'username': username})
+    user_data = cursor.fetchone()
+    return user_data['password']
+
+
+@connection.connection_handler
+def user_id_for(cursor, username):
+    cursor.execute("""
+                    SELECT id
+                    FROM user_data
+                    WHERE username = %(username)s
+                   """,
+                   {'username': username})
+    user_data = cursor.fetchone()
+    return user_data['id']
