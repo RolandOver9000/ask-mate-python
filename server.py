@@ -192,7 +192,11 @@ def route_new_tag(question_id):
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
 def route_delete_tag(question_id, tag_id):
-    data_manager.delete_tag(question_id, tag_id)
+    if 'user_id' in session:
+        user_id_for_question = data_manager.get_user_id_for_question(question_id)
+        if session['user_id'] == user_id_for_question:
+            data_manager.delete_tag(question_id, tag_id)
+
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
