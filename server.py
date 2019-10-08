@@ -16,15 +16,19 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def route_login():
     if request.method == 'POST':
         user_credentials = request.form.to_dict()
-        user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
-                                                                        user_credentials['password'])
-        if user_credentials_valid:
-            session['username'] = user_credentials['username']
-            session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
+        log_in_user(user_credentials)
 
         return redirect(url_for('route_index'))
 
-    return render_template('login.html')
+    return render_template('home/login.html')
+
+
+def log_in_user(user_credentials):
+    user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
+                                                                    user_credentials['password'])
+    if user_credentials_valid:
+        session['username'] = user_credentials['username']
+        session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
 
 
 @app.route('/logout')
@@ -33,6 +37,17 @@ def route_logout():
     session.pop('user_id', None)
     return redirect(url_for('route_index'))
 
+
+@app.route('/login_or_register', methods=["GET", "POST"])
+def login_or_register():
+    if request.method == "POST":
+        user_credentials = request.form.to_dict()
+            if request.form["login"]:
+                log_in_user(user_credentials)
+            elif request.form['register']:
+
+            else:
+                print('ERROR')
 
 @app.route("/")
 def route_index():
@@ -127,7 +142,9 @@ def route_new_answer(question_id):
     :param question_id: id integer of the specific question
     :return:
     """
-    pass
+    if not session:
+        return render_template('home/login_or_register.html')
+
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.insert_answer(user_inputs_for_answer, question_id, session['user_id'])
