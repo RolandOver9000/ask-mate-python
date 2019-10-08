@@ -285,7 +285,9 @@ def route_edit_comment(comment_id):
 def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        data_manager.insert_user(user_data)
+        username_is_unique = data_manager.is_username_unique(user_data['username'])
+        if username_is_unique:
+            data_manager.insert_user(user_data)
         return redirect('/')
 
     return render_template('home/register.html')

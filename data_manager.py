@@ -194,3 +194,9 @@ def validate_user_credentials(username, password):
         if password_valid:
             return True
     return False
+
+
+def is_username_unique(username):
+    user_id = select.user_id_for(username)
+    if not user_id:
+        return True
