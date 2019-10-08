@@ -127,6 +127,7 @@ def route_new_answer(question_id):
     :param question_id: id integer of the specific question
     :return:
     """
+    pass
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.insert_answer(user_inputs_for_answer, question_id, session['user_id'])
