@@ -5,7 +5,14 @@
 {% endblock %}
 {% block title %}All questions{% endblock %}
 {% block content %}
-    <a href="{{ url_for('route_index') }}" class="back-to-main" id="list-page">&#x2B05; Return to main page</a>
+    <div class="page-header">
+        <div class="back-to-main">
+            <a href="{{ url_for('route_index') }}">&#x2B05; Return to main page</a>
+        </div>
+        <div class="register">
+            <a href="{{ url_for('route_register') }}">Register</a>
+        </div>
+    </div>
     <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
         <h3>Help out your fellow AskMates:</h3>

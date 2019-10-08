@@ -7,7 +7,6 @@ from flask import \
     session, \
     escape
 import data_manager
-import util
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -116,7 +115,7 @@ def route_edit(question_id):
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
-def post_an_answer(question_id):
+def route_new_answer(question_id):
     """
     If the method is POST: When the user wants to submit a new answer to the specific question, this function saves the inputs into the table
     and redirect it to the page of the specific question.
@@ -126,7 +125,7 @@ def post_an_answer(question_id):
     """
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
-        data_manager.write_new_answer_data_to_table(user_inputs_for_answer, question_id)
+        data_manager.insert_answer(user_inputs_for_answer, question_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     question = data_manager.get_single_question(question_id)
@@ -134,7 +133,7 @@ def post_an_answer(question_id):
 
 
 @app.route('/question/<question_id>/delete')
-def route_delete(question_id):
+def route_delete_question(question_id):
     data_manager.delete_question(question_id)
 
     return redirect(url_for('route_list'))
@@ -163,28 +162,25 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
-    existing_tags = data_manager.get_existing_tags(question_id)
+    existing_tags = data_manager.get_existing_tags_for_question(question_id, )
 
     if request.method == "POST":
-        tag = request.form.to_dict()
-        if tag['new_tag'] == '':
-            data_manager.add_tag_to_question(question_id, int(tag['existing_tag']))
-        else:
-            data_manager.add_new_tag_to_question(question_id, tag['new_tag'])
-
+        new_tag = request.form.get('new_tag')
+        existing_tag_id = request.form.get('existing_tag')
+        data_manager.handle_tag(question_id, new_tag, existing_tag_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
-def remove_tag(question_id, tag_id):
-    data_manager.remove_tag(question_id, tag_id)
+def route_delete_tag(question_id, tag_id):
+    data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/answer/<question_id>/<answer_id>/new_comment', methods=["GET", "POST"])
-def add_new_comment_to_answer(question_id, answer_id):
+def route_add_comment_to_answer(question_id, answer_id):
     """
     It redirects you to the page where you can add your inputs for comment, it also shows you the answer that you want to
     comment.
@@ -196,13 +192,13 @@ def add_new_comment_to_answer(question_id, answer_id):
         answer_by_id = data_manager.get_single_entry('answer', answer_id)
         return render_template('database_ops/new_comment.html', answer_by_id=answer_by_id)
 
-# After you submit your comment for the specific answer this program part will make a dictionary with the inputs and
-# insert it as a row in the table of comments. After this process it redirects you to the specific page of the question.
-    new_comment_data = {'message': request.form['message'],
-                        'answer_id': answer_id,
-                        'question_id': question_id
-                        }
-    data_manager.write_new_comment_data_to_table(new_comment_data)
+    # After you submit your comment for the specific answer
+    # this program part will make a dictionary with the inputs and
+    # insert it as a row in the table of comments.
+    # After this process it redirects you to the specific page of the question.
+
+    comment_message = request.form['message']
+    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -212,10 +208,8 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('database_ops/new_comment.html', answer_by_id=question)
 
-    new_comment_data = {'message': request.form['message'],
-                        'question_id': question_id,
-                        'answer_id': None}
-    data_manager.write_new_comment_data_to_table(new_comment_data)
+    comment_message = request.form['message']
+    data_manager.insert_comment(comment_message, question_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -233,7 +227,7 @@ def route_tags():
 
 
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
-def delete_comment(comment_id):
+def route_delete_comment(comment_id):
     comment = data_manager.get_single_entry('comment', comment_id)
     answer_id_of_comment = comment['answer_id']
     question_id_of_comment = comment['question_id']
@@ -246,7 +240,7 @@ def delete_comment(comment_id):
         return render_template('database_ops/delete_comment.html', question=question_data, comment=comment)
 
     if request.form['delete-button'] == 'Yes':
-        data_manager.delete_data_by_id('comment', comment_id)
+        data_manager.delete_comment(comment_id)
 
     return redirect(url_for('display_question_and_answers', question_id=comment['question_id']), code=307)
 
@@ -264,11 +258,20 @@ def route_edit_comment(comment_id):
     if request.method == 'GET':
         return render_template('database_ops/new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
 
-    updated_comment_message = request.form['message']
-    updated_comment = util.handle_updated_comment(comment_data, updated_comment_message)
-    data_manager.update_entry('comment', comment_id, updated_comment)
+    new_comment_message = request.form['message']
+    data_manager.update_comment_message(comment_data, new_comment_message)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def route_register():
+    if request.method == 'POST':
+        user_data = request.form.to_dict()
+        data_manager.insert_user(user_data)
+        return redirect('/')
+
+    return render_template('home/register.html')
 
 
 if __name__ == '__main__':
