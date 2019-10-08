@@ -27,13 +27,14 @@ def amend_user_inputs_for_question(question_data):
     return question_data
 
 
-def amend_user_inputs_for_answer(question_id, user_inputs):
+def amend_user_inputs_for_answer(question_id, user_inputs, user_id):
     new_answer_data = {
         'submission_time': datetime.now().replace(microsecond=0),
         'vote_number': 0,
         'question_id': question_id,
         'new_answer': user_inputs['message'],
-        'image': user_inputs['image']
+        'image': user_inputs['image'],
+        'user_id': user_id
     }
     return new_answer_data
 
