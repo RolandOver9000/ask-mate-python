@@ -30,6 +30,7 @@ def route_login():
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
+    session.pop('user_id', None)
     return redirect(url_for('route_index'))
 
 
@@ -68,10 +69,13 @@ def route_list():
 def route_add():
 
     if request.method == 'GET':
-        return render_template('database_ops/add-question.html', question_data={})
+        if 'user_id' in session:
+            return render_template('database_ops/add-question.html', question_data={})
+        else:
+            return redirect('/')
 
     user_inputs_for_question = request.form.to_dict()
-    data_manager.insert_question(user_inputs_for_question)
+    data_manager.insert_question(user_inputs_for_question, session['user_id'])
     new_id = data_manager.get_latest_id('question')
     return redirect(url_for('display_question_and_answers', question_id=new_id), code=307)
 

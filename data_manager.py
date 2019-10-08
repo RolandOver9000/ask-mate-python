@@ -76,7 +76,8 @@ def get_user_id_for(username):
 # ------------------------------------------------------------------
 
 
-def insert_question(question_data):
+def insert_question(question_data, user_id):
+    question_data['user_id'] = user_id
     question_data = util.amend_user_inputs_for_question(question_data)
     insert.question(question_data)
 
