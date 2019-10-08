@@ -1,4 +1,5 @@
 <strong id="answer-id">Answer id_{{ answer.id }}</strong>
+<p id="answers-user">by <strong>{{ answer.username }}</strong>(<em>{{ answer.reputation }}</em>)</p>
 <p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
 <p id="answer-message">{{ answer.message }}</p>
 {% if answer.image %}
