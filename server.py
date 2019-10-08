@@ -27,6 +27,7 @@ def route_login():
 def log_in_user(user_credentials):
     user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
                                                                     user_credentials['password'])
+    print(user_credentials_valid)
     if user_credentials_valid:
         session['username'] = user_credentials['username']
         session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
@@ -43,12 +44,15 @@ def route_logout():
 def login_or_register():
     if request.method == "POST":
         user_credentials = request.form.to_dict()
-            if request.form["login"]:
-                log_in_user(user_credentials)
-            elif request.form['register']:
+        if request.form.get('login'):
+            log_in_user(user_credentials)
+        elif request.form.get('register'):
+            record_user(user_credentials)
+            log_in_user(user_credentials)
+        return redirect(session['url'])
 
-            else:
-                print('ERROR')
+    return render_template('home/login_or_register.html')
+
 
 @app.route("/")
 def route_index():
@@ -147,8 +151,9 @@ def route_new_answer(question_id):
     :param question_id: id integer of the specific question
     :return:
     """
-    if not session:
-        return render_template('home/login_or_register.html')
+    if 'username' not in session:
+        session['url'] = url_for('display_question_and_answers', question_id=question_id)
+        return redirect(url_for('login_or_register'))
 
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
@@ -307,12 +312,16 @@ def route_edit_comment(comment_id):
 def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        username_is_unique = data_manager.is_username_unique(user_data['username'])
-        if username_is_unique:
-            data_manager.insert_user(user_data)
+        record_user(user_data)
         return redirect('/')
 
     return render_template('home/register.html')
+
+
+def record_user(user_data):
+    username_is_unique = data_manager.is_username_unique(user_data['username'])
+    if username_is_unique:
+        data_manager.insert_user(user_data)
 
 
 if __name__ == '__main__':
