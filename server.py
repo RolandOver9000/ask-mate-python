@@ -303,7 +303,7 @@ def route_user_page(user_id):
     if not ('user_id' in session and session['user_id'] == user_id):
         return redirect('/')
 
-    user_data = {'user_id': user_id, 'username': session['username']}
+    user_data = data_manager.get_user_data_for_user_page(session['user_id'], session['username'])
     return render_template('user_page/main.html', user_data=user_data)
 
 

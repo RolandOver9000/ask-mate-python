@@ -240,3 +240,18 @@ def user_id_for_question(cursor, question_id):
     )
     question_data = cursor.fetchone()
     return question_data['user_id']
+
+
+@connection.connection_handler
+def questions_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT id, title, submission_time
+        FROM question
+        WHERE user_id = %(user_id)s
+        ORDER BY submission_time DESC
+        """,
+        {'user_id': user_id}
+    )
+    questions = cursor.fetchall()
+    return questions
