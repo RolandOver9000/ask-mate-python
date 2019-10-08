@@ -212,7 +212,8 @@ def hashed_password_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['password']
+    if user_data:
+        return user_data['password']
 
 
 @connection.connection_handler
