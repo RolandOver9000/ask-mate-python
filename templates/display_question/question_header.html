@@ -2,6 +2,6 @@
     <h3 id="question-title">{{ question.title }}</h3>
     <a href="{{ url_for('route_delete_question', question_id=question.id) }}"
        class="delete" id="delete-question"></a>
-    <a href="{{ url_for('route_edit', question_id=question.id) }}"
+    <a href="{{ url_for('route_edit_question', question_id=question.id) }}"
        id="edit-question"></a>
 </div>

@@ -66,7 +66,7 @@ def route_list():
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
-def route_add():
+def route_add_question():
 
     if request.method == 'GET':
         if 'user_id' in session:
@@ -106,7 +106,7 @@ def route_vote(question_id):
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
-def route_edit(question_id):
+def route_edit_question(question_id):
 
     if request.method == 'GET':
         question_data = data_manager.get_single_question(question_id)
