@@ -87,8 +87,8 @@ def insert_question(question_data, user_id):
     insert.question(question_data)
 
 
-def insert_answer(user_inputs, question_id):
-    new_answer_data = util.amend_user_inputs_for_answer(question_id, user_inputs)
+def insert_answer(user_inputs, question_id, user_id):
+    new_answer_data = util.amend_user_inputs_for_answer(question_id, user_inputs, user_id)
     insert.answer(new_answer_data)
 
 
