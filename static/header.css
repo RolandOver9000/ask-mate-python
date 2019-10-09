@@ -5,6 +5,7 @@
     background-color: grey;
     width: auto;
     height: 85px;
+    text-align: center;
 }
 
 #back-to-main, #user-area {
@@ -17,6 +18,7 @@ h1 {
 
 #back-to-main {
     margin-left: 33px;
+    float: left;
 }
 
 #user-area {
@@ -26,4 +28,12 @@ h1 {
 
 a {
     text-decoration: none;
+}
+
+.flashes {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    margin-top: 12px;
 }
