@@ -6,6 +6,11 @@
         <th class="submission_time">Submission time</th>
     </tr>
     </thead>
+    {% if not user_data.questions %}
+        <tr>
+            <td colspan="3">You haven't asked any questions yet.</td>
+        </tr>
+    {% endif %}
     {% for question in user_data.questions %}
         <tr>
             <td>{{ question.id }}</td>
