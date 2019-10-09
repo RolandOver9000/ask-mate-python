@@ -1,2 +1,12 @@
 @import "general.css";
 @import "anchor.css";
+
+#body-of-inputs, h2 {
+    margin-left: 33px;
+    color: black;
+}
+
+form {
+    display: block;
+    margin-left: 33px;
+}
