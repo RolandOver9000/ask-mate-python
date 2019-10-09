@@ -120,6 +120,11 @@ def get_user_data_for_user_page(user_id, username):
 
     return user_data
 
+
+def get_user_stats():
+    user_stats = select.user_stats()
+    return user_stats
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
