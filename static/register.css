@@ -26,5 +26,9 @@ label, input {
 }
 
 input {
-    width: 200px;
+    width: 250px;
+}
+
+button {
+    width: 80px;
 }
