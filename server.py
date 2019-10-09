@@ -248,8 +248,10 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('database_ops/new_comment.html', answer_by_id=question)
 
+    user_id = session['user_id']
     comment_message = request.form['message']
-    data_manager.insert_comment(comment_message, question_id)
+    data_manager.insert_comment(comment_message, question_id, user_id)
+
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
