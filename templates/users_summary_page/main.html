@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
+    {{ super() }}
+{% endblock %}
+{% block title %}User stats{% endblock %}
+{% block content %}
+    <h2>User stats</h2>
+    {% for user in user_stats %}
+        <div>{{ user.username }}
+             {{ user.reputation }}
+             {{ user.question_count }}
+             {{ user.answer_count }}
+             {{ user.comment_count }}
+             {{ user.accepted_answer_count }}
+             {{ user.reg_date }}</div>
+    {% endfor %}
+{% endblock %}

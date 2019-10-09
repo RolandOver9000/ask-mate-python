@@ -347,5 +347,11 @@ def route_user_page(user_id):
     return render_template('user_page/main.html', user_data=user_data)
 
 
+@app.route('/users')
+def route_users():
+    user_stats = data_manager.get_user_stats()
+    return render_template('users_summary_page/main.html', user_stats=user_stats)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

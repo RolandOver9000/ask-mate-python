@@ -1,0 +1,13 @@
+@import 'general.css';
+@import 'anchor.css';
+@import 'header.css';
+
+#body-of-inputs h1 {
+    margin-left: 33px;
+    color: black;
+}
+
+form {
+    display: block;
+    margin-left: 33px;
+}
