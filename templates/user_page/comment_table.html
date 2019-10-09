@@ -15,9 +15,9 @@
         <tr>
             <td>{{ comment.id }}</td>
             {% if comment.answer_id %}
-                <td>Answer</td>
+                <td class="posted-to">Answer</td>
             {% else %}
-                <td>Question</td>
+                <td class="posted-to">Question</td>
             {% endif %}
             <td class="c-message">{{ comment.message }}</td>
             <td>{{ comment.submission_time }}</td>
