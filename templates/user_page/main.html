@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
     {{ super() }}
 {% endblock %}
 {% block title %}{{ user_data.username }}{% endblock %}
