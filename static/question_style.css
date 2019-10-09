@@ -146,12 +146,12 @@
     padding-left: 2em;
 }
 
-#comment-operations {
+#comment-operations, .answer-operations {
     display: block;
     height: 40px;
 }
 
-#delete-comment, #edit-comment {
+#delete-comment, #edit-comment, #accepted-answer-button-link {
     display: inline-block;
     float: right;
 }
@@ -232,19 +232,39 @@ em {
     float: right;
 }
 
-.accepted_answer {
+.not_accepted_answer {
     background-image: url('accepted_answer.png');
     filter: grayscale(100);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 40px;
-    width: 40px;
+    height: 50px;
+    width: 50px;
     transition: transform 0.3s ease;
 }
 
-.accepted_answer:hover {
+.not_accepted_answer:hover {
     transition: transform 0.3s ease;
     filter:grayscale(0);
     transform: scale(1.3);
+}
+
+.accepted_answer {
+    background-image: url('accepted_answer.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 50px;
+    width: 50px;
+    transform: scale(1.3);
+}
+
+.never_will_be_accepted_answer {
+    background-image: url('accepted_answer.png');
+    filter: grayscale(100);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 50px;
+    width: 50px;
 }
