@@ -102,7 +102,6 @@ def comment_belongs_to_user(username, comment_id):
         return False
 
 
-
 def get_user_data_for_user_page(user_id, username):
     questions = select.questions_by_user_id(user_id)
     answers = select.answers_by_user_id(user_id)
