@@ -5,6 +5,7 @@ from flask import \
     redirect, \
     url_for, \
     session, \
+    flash, \
     escape
 import data_manager
 import util
@@ -15,13 +16,15 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route('/login', methods=['GET', 'POST'])
 def route_login():
+    error = None
     if request.method == 'POST':
         user_credentials = request.form.to_dict()
-        log_in_user(user_credentials)
+        if log_in_user(user_credentials):
+            flash("Login successful")
+            return redirect(url_for('route_index'))
 
-        return redirect(url_for('route_index'))
-
-    return render_template('home/login.html')
+    error = 'Invalid password and/or username!'
+    return render_template('home/login.html', error=error)
 
 
 def log_in_user(user_credentials):
@@ -30,12 +33,16 @@ def log_in_user(user_credentials):
     if user_credentials_valid:
         session['username'] = user_credentials['username']
         session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
+        return True
+    else:
+        return False
 
 
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
     session.pop('user_id', None)
+    flash("You've logged out successfully")
     return redirect(url_for('route_index'))
 
 
@@ -57,10 +64,7 @@ def login_or_register():
 def route_index():
     session['url'] = url_for('route_index')
     sorted_questions = data_manager.get_most_recent_questions()
-    #
-    # if 'username' in session:
-    #     username = session['username']
-    #     return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
+
     return render_template('home/index.html', sorted_questions=sorted_questions)
 
 
