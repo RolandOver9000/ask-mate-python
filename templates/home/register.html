@@ -5,11 +5,6 @@
 {% endblock %}
 {% block title %}Registration{% endblock %}
 {% block content %}
-    <div class="page-header">
-        <div class="back-to-main">
-            <a href="{{ url_for('route_index') }}">&#x2B05; Return to main page</a>
-        </div>
-    </div>
-    <h1>Register to AskMate!</h1>
+    <h1 class="page-title">Register to AskMate!</h1>
     {% include 'home/register_form.html' %}
 {% endblock %}

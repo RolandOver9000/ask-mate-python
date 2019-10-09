@@ -1,45 +1,32 @@
 @import 'anchor.css';
 @import 'general.css';
 
+h1.page-title {
+    color: black;
+    width: max-content;
+    margin: auto;
+}
+
 .container {
     display: block;
+    width: max-content;
+    margin: 75px auto;
+    border: 1px darkkhaki solid;
+    padding: 20px;
 }
 
 form {
     display: block;
 }
 
-.input {
-    display: block;
-    margin-left: 200px;
+.user-data-input {
+    margin-bottom: 10px;
 }
 
 label, input {
     display: inline-block;
 }
 
-.label-container {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-    /*border: black solid;*/
-}
-
 input {
-    margin-left: 25px;
     width: 200px;
-    /*border: black solid;*/
-}
-
-button {
-    display: block;
-    height: 35px;
-    width: 150px;
-    margin-top: 10px;
-    margin-left: 330px;
-    /*border: black solid;*/
-}
-
-.password {
-    margin-top: 10px;
 }
