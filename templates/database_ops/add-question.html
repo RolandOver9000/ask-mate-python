@@ -1,37 +1,47 @@
 {% extends 'layout.html' %}
 {% block head %}
-        <meta charset="UTF-8">
-        {% block title %}<title>New question | AskMate</title>{% endblock %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+    <meta charset="UTF-8">
+    {% block title %}<title>New question | AskMate</title>{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
 {% endblock %}
 {% block content %}
-    {% if question_data %}
-        <p><a id="link-back" href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">&#x2B05; Return to question</a></p>
-        <div id="body-of-inputs">
-            <h2>Edit question</h2>
-    {% else %}
-            <div id="body-of-inputs">
-            <h2>Ask a question</h2>
-    {% endif %}
-            <form action="" method="post">
-                <p id="add-question-title">
-                    <label for="title">Question title:</label><br>
-                    <input id="title" name="title" minlength="5" maxlength="100" size="50" required
-                           value="{{ question_data.title if question_data else '' }}">
-                </p>
-                <p id="add-question-message">
-                    <label for="message">Message:</label><br>
-                    <textarea id="message" name="message" rows="15" cols="100" required
-                    >{{ question_data.message if question_data else ''}}</textarea>
-                </p>
-                <p id="add-image-url">
-                    <label for="image">Image URL:</label><br>
-                    <input id="image" name="image" size="30"
-                           value="{{ question_data.image if question_data else '' }}">
-                </p>
-                <p id="question-submit-button">
-                    <input type="submit" value="{{ 'Save changes' if question_data else 'Submit question' }}">
-                </p>
-            </form>
+    <div id="body-of-inputs">
+        <div class="form-header">
+            <div id="heading">
+                {% if question_data %}
+                    <h2>Edit question</h2>
+                {% else %}
+                    <h2>Ask a question</h2>
+                {% endif %}
+            </div>
+            <div id="back-to-question">
+                {% if question_data %}
+                    <a href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">
+                        &#x2B05; Return to question</a>
+                {% else %}
+                    <div>Hidden</div>
+                {% endif %}
+            </div>
         </div>
+        <form action="" method="post">
+            <p id="add-question-title">
+                <label for="title">Question title:</label><br>
+                <input id="title" name="title" minlength="5" maxlength="100" size="50" required
+                       value="{{ question_data.title if question_data else '' }}">
+            </p>
+            <p id="add-question-message">
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="15" required
+                >{{ question_data.message if question_data else '' }}</textarea>
+            </p>
+            <p id="add-image-url">
+                <label for="image">Image URL:</label><br>
+                <input id="image" name="image" size="30"
+                       value="{{ question_data.image if question_data else '' }}">
+            </p>
+            <p id="question-submit-button">
+                <input type="submit" value="{{ 'Save changes' if question_data else 'Submit question' }}">
+            </p>
+        </form>
+    </div>
 {% endblock %}

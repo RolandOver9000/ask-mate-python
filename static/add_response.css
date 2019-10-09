@@ -1,7 +1,44 @@
 @import "general.css";
 @import "anchor.css";
 
-#body-of-inputs, h2 {
+.form-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 650px;
+    margin-left: 66px;
+}
+
+#heading {
+    color: black;
+    margin: 20px 0;
+    flex: 0 0 200px;
+}
+
+h2 {
+    margin: 0;
+}
+
+#back-to-question {
+    margin: 20px 0;
+}
+
+#back-to-question a {
+    display: block;
+    background: whitesmoke;
+    border: 1px darkkhaki solid;
+    padding: 5px;
+}
+
+#back-to-question div {
+    visibility: hidden;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#body-of-inputs {
     margin-left: 33px;
     color: black;
 }
@@ -13,4 +50,8 @@ form {
 
 p {
     margin-left: 33px;
+}
+
+textarea {
+    width: 650px;
 }
