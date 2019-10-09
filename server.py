@@ -23,7 +23,7 @@ def route_login():
             flash("Login successful")
             return redirect(url_for('route_index'))
 
-    error = 'Invalid password and/or username!'
+        error = 'Invalid password and/or username!'
     return render_template('home/login.html', error=error)
 
 
