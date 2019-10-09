@@ -1,32 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+{% extends 'layout.html' %}
+{% block head %}
         <meta charset="UTF-8">
-        <title>New question | AskMate</title>
-        <style type="text/css">
-            html {
-                background: #d5ecff;
-            }
-            #body-of-inputs {
-                margin-left: 2%;
-            }
-            h1 {
-                margin-top: 2%;
-            }
-            #link-back {
-                display: inline-block;
-                margin-top: 2%;
-                border: 1px solid darkkhaki;
-                background-color: whitesmoke;
-                padding: 5px;
-            }
-        </style>
-    </head>
-    <body>
+        {% block title %}<title>New question | AskMate</title>{% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+{% endblock %}
+{% block content %}
     {% if question_data %}
         <p><a id="link-back" href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">&#x2B05; Return to question</a></p>
         <div id="body-of-inputs">
-            <h1>Edit question</h1>
+            <h2>Edit question</h2>
     {% else %}
             <p><a id="link-back" href="{{ url_for('route_index')}}">&#x2B05; Return to homepage</a></p>
             <div id="body-of-inputs">
@@ -53,5 +35,4 @@
                 </p>
             </form>
         </div>
-    </body>
-</html>
+{% endblock %}

@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'layout.html' %}
+{% block head %}
     <meta charset="UTF-8">
-    <title>New comment for answer</title>
-    <style type="text/css">
-            html {
-                background: whitesmoke;
-            }
-            #body-of-inputs {
-                margin-left: 2%;
-            }
-            h1 {
-                margin-top: 2%;
-            }
-            #question-message {
-                white-space: pre-line;
-                text-align: justify;
-            }
-        </style>
-</head>
-<body>
+    {% block title %}<title>New comment for answer</title>{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+{% endblock %}
+{% block content %}
     {% if answer_by_id %}
         <p>{{ answer_by_id.message }}</p>
     {% elif comment.answer_id %}
@@ -27,11 +12,10 @@
     {% else %}
         <p>{{ question.message }}</p>
     {% endif %}
-    <form action="", method="POST">
+    <form action="" method="POST">
         <textarea name="message" cols="40" rows="10" required>{{ comment.message if comment }}</textarea>
         <button type="submit">
             {{"Post comment" if answer_by_id else "Save changes"}}
         </button>
     </form>
-</body>
-</html>
+{% endblock %}

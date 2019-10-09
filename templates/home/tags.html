@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tags | AskMate</title>
+{% extends 'layout.html' %}
+{% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tags.css') }}">
-</head>
-<body>
+{% endblock %}
+{% block content %}
     <div>
         {% for tag in tags_counted %}
             <table>
@@ -16,5 +13,4 @@
             </table>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

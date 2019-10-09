@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+{% extends 'layout.html' %}
+{% block head %}
         <meta charset="UTF-8">
-        <title>Post an answer</title>
-        <style type="text/css">
-            html {
-                background: whitesmoke;
-            }
-            #body-of-inputs {
-                margin-left: 2%;
-            }
-            h1 {
-                margin-top: 2%;
-            }
-            #question-message {
-                white-space: pre-line;
-                text-align: justify;
-            }
-        </style>
-    </head>
-    <body>
+        {% block title %}<title>Post an answer</title>{% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+{% endblock %}
+{% block content %}
         <div>
             {% if question %}
             <a id="link-back-to-question" href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to question</a>
@@ -28,7 +13,7 @@
             {% endif %}
         </div>
         <div id="body-of-inputs">
-            <h1>{{ question.title}}</h1>
+            <h2>{{ question.title}}</h2>
             <span id="question-message">{{ question.message}}</span>
             <form action="" method="post">
                 <p>
@@ -44,5 +29,4 @@
                 </p>
             </form>
         </div>
-    </body>
-</html>
+{% endblock %}
