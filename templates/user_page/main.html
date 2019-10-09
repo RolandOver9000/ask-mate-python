@@ -1,12 +1,18 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_page.css') }}">
     {{ super() }}
 {% endblock %}
 {% block title %}{{ user_data.username }}{% endblock %}
 {% block content %}
-    <h3>Your page</h3>
+    <h2>Personal profile</h2>
+    <div class="username">
+        <strong>Username: </strong><span>{{ user_data.username }}</span>
+    </div>
+    <div class="table-name">Your questions</div>
     {% include 'user_page/question_table.html' %}
+    <div class="table-name">Your answers</div>
     {% include 'user_page/answer_table.html' %}
+    <div class="table-name">Your comments</div>
     {% include 'user_page/comment_table.html' %}
 {% endblock %}

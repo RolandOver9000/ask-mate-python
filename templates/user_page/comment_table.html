@@ -1,17 +1,19 @@
 <table>
     <thead>
     <tr>
+        <th>ID</th>
         <th>Posted to</th>
         <th>Message</th>
-        <th>Submission time</th>
-        <th>Question title</th>
-        <th>Question<br>submission time</th>
+        <th class="submission_time">Submission time</th>
+        <th class="q-title">Question title</th>
+        <th class="submission_time">Question<br>submission time</th>
         <th>Answer message</th>
-        <th>Answer<br>submission time</th>
+        <th class="submission_time">Answer<br>submission time</th>
     </tr>
     </thead>
     {% for comment in user_data.comments %}
         <tr>
+            <td>{{ comment.id }}</td>
             {% if comment.answer_id %}
                 <td>Answer</td>
             {% else %}

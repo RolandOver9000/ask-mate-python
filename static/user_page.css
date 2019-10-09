@@ -1,0 +1,40 @@
+@import 'general.css';
+@import 'anchor.css';
+
+.username {
+    margin: 0 0 50px 50px;
+}
+
+h2 {
+    margin: 50px 0 20px 50px;
+    padding: 0;
+}
+
+.table-name {
+    font-weight: bold;
+    margin: 50px 0 30px 100px;
+}
+
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: black solid 2px;
+    margin: 0 100px;
+}
+
+th, td {
+    border: black solid 2px;
+    padding: 6px;
+}
+
+table thead th:nth-child(1) {
+    width: 50px;
+}
+
+th.q-title {
+    width: 400px;
+}
+
+th.submission_time {
+    width: 200px;
+}
