@@ -248,8 +248,10 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('database_ops/new_comment.html', answer_by_id=question)
 
+    user_id = session['user_id']
     comment_message = request.form['message']
-    data_manager.insert_comment(comment_message, question_id)
+    data_manager.insert_comment(comment_message, question_id, user_id)
+
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -314,6 +316,16 @@ def route_register():
         return redirect('/')
 
     return render_template('home/register.html')
+
+
+@app.route('/user/<user_id>')
+def route_user_page(user_id):
+    user_id = int(user_id)
+    if not ('user_id' in session and session['user_id'] == user_id):
+        return redirect('/')
+
+    user_data = data_manager.get_user_data_for_user_page(session['user_id'], session['username'])
+    return render_template('user_page/main.html', user_data=user_data)
 
 
 if __name__ == '__main__':
