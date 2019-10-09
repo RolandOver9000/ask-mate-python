@@ -23,3 +23,7 @@ h1 {
     float: right;
     margin: 33px;
 }
+
+a {
+    text-decoration: none;
+}
