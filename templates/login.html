@@ -18,6 +18,9 @@
     <div class="back-to-main" id="index-page">
         <span>Hidden</span>
     </div>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
     <section>
         <form method="post">
             <div>

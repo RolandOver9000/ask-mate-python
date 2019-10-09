@@ -5,6 +5,7 @@ from flask import \
     redirect, \
     url_for, \
     session, \
+    flash, \
     escape
 import data_manager
 import util
@@ -23,6 +24,7 @@ def get_session_data(data_type):
 
 @app.route('/login', methods=['GET', 'POST'])
 def route_login():
+    error = None
     if request.method == 'POST':
         user_credentials = request.form.to_dict()
         user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
@@ -30,16 +32,19 @@ def route_login():
         if user_credentials_valid:
             session['username'] = user_credentials['username']
             session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
+            flash('Login successful')
+            return redirect(url_for('route_index'))
 
-        return redirect(url_for('route_index'))
+        error = 'Invalid password and/or username!'
 
-    return render_template('login.html')
+    return render_template('login.html', error=error)
 
 
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
     session.pop('user_id', None)
+    flash("You've logged out successfully")
     return redirect(url_for('route_index'))
 
 
