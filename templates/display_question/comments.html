@@ -1,6 +1,7 @@
 <div class="comment" id="comment">
 <div class="" id="comment-header">
     <span id="comment-id">Comment id_{{ comment.id }}</span>
+    <span class="display-username">by <strong>{{ comment.username }}</strong>(<em>{{ comment.reputation }}</em>)</span>
     {% if comment.edited_count > 0 %}
         <span id="comment-edit-count">Edited {{ comment.edited_count }} times</span>
     {% endif %}
@@ -8,7 +9,7 @@
     </div>
     <p id="comment-message">{{ comment.message }}</p>
     {% if user_id == comment.user_id %}
-    <div id="comment-operations">
+    <div class="answer-comment-operations" id="comment-operations">
         <a class="delete" id='delete-comment' href="{{ url_for('route_delete_comment',
                                                     comment_id=comment.id) }}"></a>
         <a class="edit" id="edit-comment" href="/comments/{{ comment.id }}/edit"></a>

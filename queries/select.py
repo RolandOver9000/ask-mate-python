@@ -27,8 +27,10 @@ def all_questions(cursor, order_by, order):
 def single_question(cursor, question_id):
     cursor.execute(
         """
-        SELECT * FROM question
-        WHERE id = %(question_id)s
+        SELECT question.*, user_data.username as username, user_data.reputation as reputation
+        FROM question
+        LEFT JOIN user_data ON question.user_id = user_data.id
+        WHERE question.id = %(question_id)s
         """,
         {'question_id': question_id}
     )
@@ -72,9 +74,11 @@ def answers_for_question(cursor, question_id):
 def all_comments(cursor, comment_id):
     cursor.execute(
         sql.SQL("""
-                    SELECT id, question_id, answer_id, message, submission_time,
-                           COALESCE(edited_count, 0) AS edited_count, user_id
+                    SELECT comment.id as id, question_id, answer_id, message, submission_time,
+                           COALESCE(edited_count, 0) AS edited_count, user_id, ud.username as username, ud.reputation as
+                           reputation
                     FROM comment
+                    LEFT JOIN user_data ud on comment.user_id = ud.id
                     WHERE question_id = {comment_id}
                     ORDER BY submission_time DESC
                     """).format(comment_id=sql.SQL(comment_id)))
