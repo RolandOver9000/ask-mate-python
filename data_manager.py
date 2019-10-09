@@ -87,11 +87,12 @@ def insert_answer(user_inputs, question_id, user_id):
     insert.answer(new_answer_data)
 
 
-def insert_comment(message, question_id, answer_id=None):
+def insert_comment(message, question_id, user_id, answer_id=None):
     new_comment_data = {
         'message': message,
         'answer_id': answer_id,
-        'question_id': question_id
+        'question_id': question_id,
+        'user_id': user_id
     }
     new_comment_data = util.amend_user_inputs_for_comment(new_comment_data)
     insert.comment(new_comment_data)
@@ -139,6 +140,9 @@ def handle_votes(vote_option, message_id, message_type):
     table = 'answer' if message_type == 'answer' else 'question'
     update.votes(vote_calculation, message_id, table)
 
+
+def handle_accepted_answer(question_id, answer_id):
+    update.accepted_answer(question_id, answer_id)
 # ------------------------------------------------------------------
 # ------------------------------DELETE------------------------------
 # ------------------------------------------------------------------

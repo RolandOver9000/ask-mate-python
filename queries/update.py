@@ -45,3 +45,16 @@ def votes(cursor, vote_calculation, message_id, table):
                 vote_calculation=sql.SQL(vote_calculation),
                 message_id=sql.SQL(message_id))
                 )
+
+
+@connection.connection_handler
+def accepted_answer(cursor, question_id, answer_id):
+    cursor.execute(
+        sql.SQL("""
+                    UPDATE question
+                    SET accepted_answer_id={answer_id}
+                    WHERE id={question_id}
+                    """)
+        .format(answer_id=sql.SQL(answer_id),
+                question_id=sql.SQL(question_id))
+                )
