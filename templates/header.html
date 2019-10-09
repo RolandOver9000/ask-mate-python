@@ -1,0 +1,14 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='header.css') }}">
+<div class="header">
+    <a href="{{ url_for('route_index') }}" id="back-to-main"><h1>AskMate</h1></a>
+    {% if session.username %}
+    <div id="user-area">
+        Hello, <a href="{{ url_for('route_user_page', user_id=session.user_id) }}">
+        {{ session.username }}</a> | <a href="{{ url_for('route_logout') }}">Log out</a>
+    </div>
+    {% else %}
+    <div id="user-area">
+        <a href="{{ url_for('route_login') }}">Log in</a> | <a href="{{ url_for('route_register') }}">Register</a>
+    </div>
+    {% endif %}
+</div>

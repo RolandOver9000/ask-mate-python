@@ -5,7 +5,6 @@
 {% endblock %}
 {% block title %}{{ question.title[:20] }}{{ '...' if question.title|length>20 }}{% endblock %}
 {% block content %}
-    <a href="{{ url_for('route_index') }}" id="back-to-main">&#x2B05; Return to main page</a>
     <div id="main">
     {% if question %}
         {% set current_question_index = question_ids.index(question.id) %}
@@ -14,12 +13,12 @@
         {% include 'display_question/question_body.html' %}
         {% include 'display_question/question_tags.html' %}
         {% include 'display_question/question_likes_and_views.html' %}
-        {% if answers %}
+        {% if answers and user_id %}
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
         {% endif %}
         {% for comment in comments %}
-        {% if comment.answer_id == None %}
+        {% if comment.answer_id == False %}
             {% include 'display_question/comments.html' %}
         {% endif %}
         {% endfor %}

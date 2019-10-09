@@ -1,0 +1,29 @@
+.header {
+    margin: 0;
+    display: block;
+    border-bottom: 2px solid blue;
+    background-color: grey;
+    width: auto;
+    height: 85px;
+}
+
+#back-to-main, #user-area {
+    display: inline-block;
+}
+
+h1 {
+    color: white;
+}
+
+#back-to-main {
+    margin-left: 33px;
+}
+
+#user-area {
+    float: right;
+    margin: 33px;
+}
+
+a {
+    text-decoration: none;
+}
