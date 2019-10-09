@@ -1,7 +1,9 @@
 <div id="question-title-plus-editing">
     <h3 id="question-title">{{ question.title }}</h3>
+    {% if user_id == question.user_id %}
     <a  href="{{ url_for('route_delete_question', question_id=question.id) }}"
        class="delete" id="delete-question"></a>
     <a href="{{ url_for('route_edit_question', question_id=question.id) }}"
        class="edit" id="edit-question"></a>
+    {% endif %}
 </div>

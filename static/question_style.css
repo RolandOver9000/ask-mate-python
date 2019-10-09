@@ -226,3 +226,25 @@ em {
     font-style: normal;
     font-size: medium;
 }
+
+#accepted-answer-button-link {
+    display: flow-root;
+    float: right;
+}
+
+.accepted_answer {
+    background-image: url('accepted_answer.png');
+    filter: grayscale(100);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 40px;
+    width: 40px;
+    transition: transform 0.3s ease;
+}
+
+.accepted_answer:hover {
+    transition: transform 0.3s ease;
+    filter:grayscale(0);
+    transform: scale(1.3);
+}

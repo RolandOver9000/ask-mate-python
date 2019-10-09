@@ -7,9 +7,11 @@
     <span id="comment-submission-time">posted on {{ comment.submission_time }}</span>
     </div>
     <p id="comment-message">{{ comment.message }}</p>
+    {% if user_id == comment.user_id %}
     <div id="comment-operations">
         <a class="delete" id='delete-comment' href="{{ url_for('route_delete_comment',
                                                     comment_id=comment.id) }}"></a>
         <a class="edit" id="edit-comment" href="/comments/{{ comment.id }}/edit"></a>
     </div>
+    {% endif %}
 </div>
