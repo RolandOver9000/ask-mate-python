@@ -1,8 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
 {% endblock %}
 {% block title %}Login{% endblock %}
 {% block content %}
+    <h2>Log in</h2>
     {% include 'home/login_form.html' %}
 {% endblock %}

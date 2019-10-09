@@ -1,16 +1,14 @@
 @import 'anchor.css';
 @import 'general.css';
 
-h1.page-title {
-    color: black;
-    width: max-content;
-    margin: auto;
+h2 {
+    text-align: center;
 }
 
 .container {
     display: block;
     width: max-content;
-    margin: 75px auto;
+    margin:  auto;
     border: 1px darkkhaki solid;
     padding: 20px;
 }
