@@ -282,6 +282,7 @@ def answers_by_user_id(cursor, user_id):
         FROM answer a
         JOIN question q on a.question_id = q.id
         WHERE a.user_id = %(user_id)s
+        ORDER BY a.submission_time DESC
         """,
         {'user_id': user_id}
     )
@@ -299,8 +300,9 @@ def comments_by_user_id(cursor, user_id):
             a.message AS a_message, a.submission_time AS a_submission_time
         FROM comment c
         JOIN question q on c.question_id = q.id
-        JOIN answer a on c.answer_id = a.id
+        LEFT JOIN answer a on c.answer_id = a.id
         WHERE c.user_id = %(user_id)s
+        ORDER BY c.submission_time DESC
         """,
         {'user_id': user_id}
     )
