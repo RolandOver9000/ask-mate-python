@@ -1,5 +1,5 @@
 <strong id="answer-id">Answer id_{{ answer.id }}</strong>
-<p id="answers-user">by <strong>{{ answer.username }}</strong>(<em>{{ answer.reputation }}</em>)</p>
+<p class="display-username">by <strong>{{ answer.username }}</strong>(<em>{{ answer.reputation }}</em>)</p>
 <p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
 <p id="answer-message">{{ answer.message }}</p>
 {% if answer.image %}
@@ -14,7 +14,7 @@
         </form>
     {% endif %}
 </div>
-<div id="answer-operations">
+<div class="answer-comment-operations" id="answer-operations">
     <a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment on this answer!</a>
     {% if user_id == answer.user_id %}
         <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"

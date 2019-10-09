@@ -27,8 +27,10 @@ def all_questions(cursor, order_by, order):
 def single_question(cursor, question_id):
     cursor.execute(
         """
-        SELECT * FROM question
-        WHERE id = %(question_id)s
+        SELECT question.*, user_data.username as username, user_data.reputation as reputation
+        FROM question
+        LEFT JOIN user_data ON question.user_id = user_data.id
+        WHERE question.id = %(question_id)s
         """,
         {'question_id': question_id}
     )
