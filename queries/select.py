@@ -320,3 +320,29 @@ def comments_by_user_id(cursor, user_id):
     )
     comments = cursor.fetchall()
     return comments
+
+
+@connection.connection_handler
+def user_stats(cursor):
+    cursor.execute(
+        """
+         SELECT username,
+                reputation,
+                COUNT (DISTINCT answer.id) AS answer_count,
+                COUNT (DISTINCT question.id) AS question_count,
+                COUNT (DISTINCT comment.id) AS comment_count,
+                COUNT (DISTINCT question.accepted_answer_id) AS accepted_answer_count,
+                reg_date
+         FROM user_data
+         LEFT JOIN question
+            ON user_data.id = question.user_id
+         LEFT JOIN answer
+            ON answer.user_id = question.user_id
+         LEFT JOIN comment
+            ON user_data.id = comment.user_id
+         GROUP BY username, reputation, reg_date
+        """)
+    stats = cursor.fetchall()
+
+    return stats
+
