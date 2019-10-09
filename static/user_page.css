@@ -31,6 +31,7 @@ table.comment {
 th, td {
     border: black solid 2px;
     padding: 6px;
+    text-align: center;
 }
 
 table thead th:nth-child(1) {

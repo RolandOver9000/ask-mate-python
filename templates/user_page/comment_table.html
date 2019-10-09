@@ -19,13 +19,13 @@
             {% else %}
                 <td class="posted-to">Question</td>
             {% endif %}
-            <td class="c-message">{{ comment.message }}</td>
+            <td class="c-message">{{ comment.message | replace('\n', '&#8629; '|safe) }}</td>
             <td>{{ comment.submission_time }}</td>
             <td class="q-title"><a href="{{ url_for('display_question_and_answers', question_id=comment.question_id) }}">
                 {{ comment.q_title }}</a></td>
             <td>{{ comment.q_submission_time }}</td>
             {% if comment.answer_id %}
-                <td class="a-message">{{ comment.a_message }}</td>
+                <td class="a-message">{{ comment.a_message | replace('\n', '&#8629; '|safe) }}</td>
                 <td>{{ comment.a_submission_time }}</td>
             {% else %}
                 <td>-</td>
