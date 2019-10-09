@@ -5,11 +5,6 @@
 {% endblock %}
 {% block title %}All questions{% endblock %}
 {% block content %}
-        <div class="register">
-            <a href="{{ url_for('route_register') }}">Register</a>
-        </div>
-    </div>
-    <h1>Welcome to AskMate!</h1>
     {% if sorted_questions %}
         <h3>Help out your fellow AskMates:</h3>
         {% include 'home/sort.html' %}
