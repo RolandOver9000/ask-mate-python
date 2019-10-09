@@ -14,14 +14,14 @@
         </form>
     {% endif %}
 </div>
-{% if user_id %}
-    <a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment this answer!</a>
-{% endif %}
+<div id="answer-actions">
+<a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment on this answer!</a>
 {% if user_id == answer.user_id %}
-    <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
-        id="delete-answer">Delete answer</a>
-    <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" id="edit-answer">Edit answer</a>
+<a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
+    class="delete" id="delete-answer"></a>
+<a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" class="edit" id="edit-answer"></a>
 {% endif %}
+</div>
 {% if user_id == question.user_id and user_id != answer.user_id %}
     <div class="answer-operations">
             <a class="accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"
