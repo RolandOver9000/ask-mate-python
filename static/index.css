@@ -27,3 +27,7 @@ h3 {
 #index-page {
     visibility: hidden;
 }
+
+#content {
+    margin-top: 3%;
+}

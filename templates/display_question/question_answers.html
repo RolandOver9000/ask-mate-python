@@ -9,7 +9,8 @@
         {% endfor %}
     </div>
 {% endfor %}
-{% else %}
+{% endif %}
+{% if not answers and user_id %}
     <a href="/question/{{ question.id }}/new-answer"
        id="answer-question-first">Be the first to answer this question!</a>
     <a href="/question/{{ question.id }}/new-comment"

@@ -1,0 +1,34 @@
+<table>
+    <thead>
+    <tr>
+        <th>Posted to</th>
+        <th>Message</th>
+        <th>Submission time</th>
+        <th>Question title</th>
+        <th>Question<br>submission time</th>
+        <th>Answer message</th>
+        <th>Answer<br>submission time</th>
+    </tr>
+    </thead>
+    {% for comment in user_data.comments %}
+        <tr>
+            {% if comment.answer_id %}
+                <td>Answer</td>
+            {% else %}
+                <td>Question</td>
+            {% endif %}
+            <td>{{ comment.message }}</td>
+            <td>{{ comment.submission_time }}</td>
+            <td><a href="{{ url_for('display_question_and_answers', question_id=comment.question_id) }}">
+                {{ comment.q_title }}</a></td>
+            <td>{{ comment.q_submission_time }}</td>
+            {% if comment.answer_id %}
+                <td>{{ comment.a_message }}</td>
+                <td>{{ comment.a_submission_time }}</td>
+            {% else %}
+                <td>-</td>
+                <td>-</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>

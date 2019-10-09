@@ -13,6 +13,14 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
+def get_session_data(data_type):
+    if 'username' in session:
+        if data_type == 'username':
+            return session['username']
+        elif data_type == 'user_id':
+            return session['user_id']
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def route_login():
     if request.method == 'POST':
@@ -38,12 +46,9 @@ def route_logout():
 @app.route("/")
 def route_index():
     sorted_questions = data_manager.get_most_recent_questions()
+    username = get_session_data('username')
 
-    if 'username' in session:
-        username = session['username']
-        return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
-
-    return render_template('home/index.html', sorted_questions=sorted_questions)
+    return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
 
 
 @app.route("/list")
@@ -92,18 +97,31 @@ def display_question_and_answers(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     tags = data_manager.get_tags_for_question(question_id)
     comments = data_manager.get_all_comments(question_id)
+    user_id = session['user_id'] if 'user_id' in session else False
+
     return render_template('display_question/question_display.html', question=question, tags=tags,
-                           answers=answers, question_ids=question_ids, comments=comments)
+                           answers=answers, question_ids=question_ids, comments=comments, user_id=user_id)
 
 
 @app.route('/question/<question_id>/vote', methods=['POST'])
 def route_vote(question_id):
     vote_option, message_id, message_type = request.form['vote'].split(',')
     data_manager.handle_votes(vote_option, message_id, message_type)
+    data_manager.handle_user_reputation(vote_option, message_id, message_type)
 
     # the code=307 argument ensures that the request type (POST) is preserved after redirection
     # so that the view number of the question doesn't increase after voting
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
+
+
+@app.route('/question/<question_id>/<answer_id>/accepted_answer', methods=['GET'])
+def route_accepted_answer(question_id, answer_id):
+    data_manager.handle_accepted_answer(question_id, answer_id)
+    data_manager.handle_user_reputation('accepted_answer', answer_id)
+
+    # the code=307 argument ensures that the request type (POST) is preserved after redirection
+    # so that the view number of the question doesn't increase after voting
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
@@ -210,7 +228,8 @@ def route_add_comment_to_answer(question_id, answer_id):
     # After this process it redirects you to the specific page of the question.
 
     comment_message = request.form['message']
-    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id)
+    user_id = session['user_id']
+    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id, user_id=user_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -220,8 +239,10 @@ def route_add_comment_to_question(question_id):
         question = data_manager.get_single_entry('question', question_id)
         return render_template('database_ops/new_comment.html', answer_by_id=question)
 
+    user_id = session['user_id']
     comment_message = request.form['message']
-    data_manager.insert_comment(comment_message, question_id)
+    data_manager.insert_comment(comment_message, question_id, user_id)
+
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
@@ -289,6 +310,16 @@ def route_register():
         return redirect('/')
 
     return render_template('home/register.html')
+
+
+@app.route('/user/<user_id>')
+def route_user_page(user_id):
+    user_id = int(user_id)
+    if not ('user_id' in session and session['user_id'] == user_id):
+        return redirect('/')
+
+    user_data = data_manager.get_user_data_for_user_page(session['user_id'], session['username'])
+    return render_template('user_page/main.html', user_data=user_data)
 
 
 if __name__ == '__main__':

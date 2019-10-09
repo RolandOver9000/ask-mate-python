@@ -73,7 +73,7 @@ def all_comments(cursor, comment_id):
     cursor.execute(
         sql.SQL("""
                     SELECT id, question_id, answer_id, message, submission_time,
-                           COALESCE(edited_count, 0) AS edited_count 
+                           COALESCE(edited_count, 0) AS edited_count, user_id
                     FROM comment
                     WHERE question_id = {comment_id}
                     ORDER BY submission_time DESC
@@ -212,7 +212,8 @@ def hashed_password_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['password']
+    if user_data:
+        return user_data['password']
 
 
 @connection.connection_handler
@@ -262,3 +263,56 @@ def user_id_for_comment(cursor, comment_id):
                     """, {'comment_id': comment_id})
     comment_data = cursor.fetchone()
     return comment_data['user_id']
+
+
+@connection.connection_handler
+def questions_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT id, title, submission_time
+        FROM question
+        WHERE user_id = %(user_id)s
+        ORDER BY submission_time DESC
+        """,
+        {'user_id': user_id}
+    )
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def answers_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT
+            a.id, a.message, a.submission_time, a.question_id,
+            q.title AS q_title, q.submission_time AS q_submission_time
+        FROM answer a
+        JOIN question q on a.question_id = q.id
+        WHERE a.user_id = %(user_id)s
+        ORDER BY a.submission_time DESC
+        """,
+        {'user_id': user_id}
+    )
+    answers = cursor.fetchall()
+    return answers
+
+
+@connection.connection_handler
+def comments_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT
+            c.message, c.submission_time, c.question_id, c.answer_id,
+            q.title AS q_title, q.submission_time AS q_submission_time,
+            a.message AS a_message, a.submission_time AS a_submission_time
+        FROM comment c
+        JOIN question q on c.question_id = q.id
+        LEFT JOIN answer a on c.answer_id = a.id
+        WHERE c.user_id = %(user_id)s
+        ORDER BY c.submission_time DESC
+        """,
+        {'user_id': user_id}
+    )
+    comments = cursor.fetchall()
+    return comments

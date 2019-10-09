@@ -2,28 +2,10 @@ html {
     background: #d5ecff;
 }
 
-h1 {
-    margin-top: 2%;
-    margin-left: 2%;
-    margin-bottom: 2%;
+body {
+    margin: 0;
 }
 
 .page-header {
     display: block;
-}
-
-.register {
-    display: inline-block;
-    float: right;
-    margin-top: 1em;
-    padding: 5px 0;
-    margin-right: 10%;
-}
-
-.back-to-main {
-    display: inline-block;
-    margin-top: 1em;
-    border: 1px solid darkkhaki;
-    background-color: whitesmoke;
-    padding: 5px;
 }

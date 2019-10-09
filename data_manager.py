@@ -102,6 +102,17 @@ def comment_belongs_to_user(username, comment_id):
         return False
 
 
+
+def get_user_data_for_user_page(user_id, username):
+    user_data = {
+        'user_id': user_id,
+        'username': username,
+        'questions': select.questions_by_user_id(user_id),
+        'answers': select.answers_by_user_id(user_id),
+        'comments': select.comments_by_user_id(user_id)
+    }
+    return user_data
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
@@ -118,11 +129,12 @@ def insert_answer(user_inputs, question_id, user_id):
     insert.answer(new_answer_data)
 
 
-def insert_comment(message, question_id, answer_id=None):
+def insert_comment(message, question_id, user_id, answer_id=None):
     new_comment_data = {
         'message': message,
         'answer_id': answer_id,
-        'question_id': question_id
+        'question_id': question_id,
+        'user_id': user_id
     }
     new_comment_data = util.amend_user_inputs_for_comment(new_comment_data)
     insert.comment(new_comment_data)
@@ -169,6 +181,24 @@ def handle_votes(vote_option, message_id, message_type):
     vote_calculation = 'vote_number + 1' if vote_option == 'Upvote' else 'vote_number - 1'
     table = 'answer' if message_type == 'answer' else 'question'
     update.votes(vote_calculation, message_id, table)
+
+
+def handle_accepted_answer(question_id, answer_id):
+    update.accepted_answer(question_id, answer_id)
+
+
+def handle_user_reputation(vote_option, message_id, *message_type):
+    if 'question' in message_type:
+        reputation_calculation = 'reputation + 5' if vote_option == 'Upvote' else 'reputation - 2'
+        user_id = str(select.user_id_for_question(message_id))
+    elif 'answer' in message_type:
+        reputation_calculation = 'reputation + 10' if vote_option == 'Upvote' else 'reputation -2'
+        user_id = str(select.user_id_for_answer(message_id))
+    else:
+        reputation_calculation = 'reputation + 15'
+        user_id = str(select.user_id_for_answer(message_id))
+
+    update.reputation(reputation_calculation, user_id)
 
 # ------------------------------------------------------------------
 # ------------------------------DELETE------------------------------

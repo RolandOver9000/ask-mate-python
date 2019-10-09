@@ -10,13 +10,6 @@
     background: whitesmoke;
 }
 
-#back-to-main {
-    display: inline-block;
-    margin-top: 2%;
-    border: 1px solid darkkhaki;
-    background-color: whitesmoke;
-    padding: 5px;
-}
 #next-previous-question {
     display: block;
     margin-bottom: 4em;
@@ -39,26 +32,17 @@
 #question-title {
     display: inline;
     font-size: 1.5em;
-    /*margin: inherit inherit inherit 0;*/
-    /*padding: inherit inherit inherit 0;*/
     margin-left: 0;
     padding-left: 0;
     line-height: 2em;
 }
 
-/*#edit-question {*/
-/*    display: inline-block;*/
-/*    margin-left: 0.5em;*/
-/*    border: 1px solid grey;*/
-/*    border-radius: 4px;*/
-/*    line-height: 1.5em;*/
-/*    padding: 0.2em;*/
-/*    float: right;*/
-/*}*/
-
 #edit-question {
     display: inline-block;
     float: right;
+}
+
+.edit {
     background-image: url('pen.png');
     background-size: contain;
     background-repeat: no-repeat;
@@ -68,7 +52,7 @@
     transition: transform 0.3s ease;
 }
 
-#edit-question:hover {
+.edit:hover {
     background-image: url("pen_editing.png");
     transition: transform 0.3s ease;
     transform: scale(1.3);
@@ -164,12 +148,11 @@
 
 #comment-operations {
     display: block;
-    margin-top: 2em;
-    width: inherit;
+    height: 40px;
 }
 
-#delete-button-link {
-    display: flow-root;
+#delete-comment, #edit-comment {
+    display: inline-block;
     float: right;
 }
 
@@ -187,12 +170,6 @@
     background-image: url("trashcan_opened.png");
     transition: transform 0.3s ease;
     transform: scale(1.3);
-}
-
-#edit-comment {
-    display: inline;
-    line-height: 2.5em;
-    padding-top: 0.3em;
 }
 
 #answers {
@@ -219,6 +196,23 @@
     font-size: small;
 }
 
+#answer-actions{
+    display: block;
+    height: 40px;
+}
+
+#new_comment, #edit-answer, #delete-answer {
+    display: inline-block;
+}
+
+#edit-answer, #delete-answer {
+    float: right;
+}
+
+#new_comment {
+    padding-top: 12px;
+}
+
 #answer-id, #answers-user {
     display: inline;
 }
@@ -231,4 +225,26 @@ em {
     color: deeppink;
     font-style: normal;
     font-size: medium;
+}
+
+#accepted-answer-button-link {
+    display: flow-root;
+    float: right;
+}
+
+.accepted_answer {
+    background-image: url('accepted_answer.png');
+    filter: grayscale(100);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 40px;
+    width: 40px;
+    transition: transform 0.3s ease;
+}
+
+.accepted_answer:hover {
+    transition: transform 0.3s ease;
+    filter:grayscale(0);
+    transform: scale(1.3);
 }

@@ -38,10 +38,36 @@ def votes(cursor, vote_calculation, message_id, table):
     cursor.execute(
         sql.SQL("""
                     UPDATE {table}
-                    SET vote_number={vote_calculation}
+                    SET vote_number = {vote_calculation}
                     WHERE id={message_id}
                     """)
         .format(table=sql.Identifier(table),
                 vote_calculation=sql.SQL(vote_calculation),
                 message_id=sql.SQL(message_id))
                 )
+
+
+@connection.connection_handler
+def accepted_answer(cursor, question_id, answer_id):
+    cursor.execute(
+        sql.SQL("""
+                    UPDATE question
+                    SET accepted_answer_id={answer_id}
+                    WHERE id={question_id}
+                    """)
+        .format(answer_id=sql.SQL(answer_id),
+                question_id=sql.SQL(question_id))
+                )
+
+
+@connection.connection_handler
+def reputation(cursor, reputation_calculation, user_id):
+    cursor.execute(
+        sql.SQL("""
+                 UPDATE user_data
+                 SET reputation = {reputation_calculation}
+                 WHERE id={user_id}
+                """)
+        .format(reputation_calculation=sql.SQL(reputation_calculation),
+                user_id=sql.SQL(user_id))
+                  )
