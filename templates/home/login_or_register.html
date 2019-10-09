@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Please log in or register</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login_register.css') }}">
-</head>
-<body>
-<div class="back-to-main">
-            <a href="{{ url_for('route_index') }}">&#x2B05; Return to main page</a>
-        </div>
+{% extends 'layout.html' %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="login_register.css") }}">
+{% endblock %}
+{% block content %}
 <div id="login-register">
     <div id="register">
         <h3>Register</h3>
@@ -19,5 +13,4 @@
         {% include 'home/login_form.html' %}
     </div>
 </div>
-</body>
-</html>
+{% endblock %}
