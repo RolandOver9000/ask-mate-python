@@ -20,7 +20,7 @@ def route_login():
         user_credentials = request.form.to_dict()
         if log_in_user(user_credentials):
             flash("Login successful")
-            return redirect(url_for('route_index'))
+            return redirect(session['url'])
 
         error = 'Invalid password and/or username!'
     return render_template('home/login.html', error=error)
@@ -42,7 +42,7 @@ def route_logout():
     session.pop('username', None)
     session.pop('user_id', None)
     flash("You've logged out successfully")
-    return redirect(url_for('route_index'))
+    return redirect(session['url'])
 
 
 @app.route('/login_or_register', methods=["GET", "POST"])
