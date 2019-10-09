@@ -73,7 +73,7 @@ def all_comments(cursor, comment_id):
     cursor.execute(
         sql.SQL("""
                     SELECT id, question_id, answer_id, message, submission_time,
-                           COALESCE(edited_count, 0) AS edited_count 
+                           COALESCE(edited_count, 0) AS edited_count, user_id
                     FROM comment
                     WHERE question_id = {comment_id}
                     ORDER BY submission_time DESC
@@ -212,7 +212,8 @@ def hashed_password_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['password']
+    if user_data:
+        return user_data['password']
 
 
 @connection.connection_handler
@@ -224,4 +225,33 @@ def user_id_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['id']
+    if user_data:
+        return user_data['id']
+
+
+@connection.connection_handler
+def user_id_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT user_id
+        FROM question
+        WHERE id = %(question_id)s
+        """,
+        {'question_id': question_id}
+    )
+    question_data = cursor.fetchone()
+    return question_data['user_id']
+
+
+@connection.connection_handler
+def user_id_for_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT user_id
+        FROM answer
+        WHERE id = %(answer_id)s
+        """,
+        {'answer_id': answer_id}
+    )
+    answer_data = cursor.fetchone()
+    return answer_data['user_id']

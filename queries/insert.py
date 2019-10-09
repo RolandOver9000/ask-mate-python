@@ -24,8 +24,9 @@ def answer(cursor, new_answer_data):
 @connection.connection_handler
 def comment(cursor, new_comment_data):
     cursor.execute("""
-                    INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count)
-                    VALUES (%(answer_id)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                    INSERT INTO comment (answer_id, question_id, message, submission_time, edited_count, user_id)
+                    VALUES (%(answer_id)s, %(question_id)s, %(message)s,
+                    %(submission_time)s, %(edited_count)s, %(user_id)s)
                     """,
                    new_comment_data
                    )
