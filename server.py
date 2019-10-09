@@ -27,7 +27,6 @@ def route_login():
 def log_in_user(user_credentials):
     user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
                                                                     user_credentials['password'])
-    print(user_credentials_valid)
     if user_credentials_valid:
         session['username'] = user_credentials['username']
         session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
@@ -56,11 +55,12 @@ def login_or_register():
 
 @app.route("/")
 def route_index():
+    session['url'] = url_for('route_index')
     sorted_questions = data_manager.get_most_recent_questions()
-
-    if 'username' in session:
-        username = session['username']
-        return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
+    #
+    # if 'username' in session:
+    #     username = session['username']
+    #     return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
 
     return render_template('home/index.html', sorted_questions=sorted_questions)
 
@@ -102,6 +102,8 @@ def route_add_question():
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
+    session['url'] = url_for('display_question_and_answers', question_id=question_id)
+
     if request.method == 'GET':
         # update view number for question
         data_manager.increment_view_number(question_id)
@@ -151,10 +153,6 @@ def route_new_answer(question_id):
     :param question_id: id integer of the specific question
     :return:
     """
-    if 'username' not in session:
-        session['url'] = url_for('display_question_and_answers', question_id=question_id)
-        return redirect(url_for('login_or_register'))
-
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
         data_manager.insert_answer(user_inputs_for_answer, question_id, session['user_id'])
