@@ -287,3 +287,22 @@ def answers_by_user_id(cursor, user_id):
     )
     answers = cursor.fetchall()
     return answers
+
+
+@connection.connection_handler
+def comments_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT
+            c.message, c.submission_time, c.question_id, c.answer_id,
+            q.title AS q_title, q.submission_time AS q_submission_time,
+            a.message AS a_message, a.submission_time AS a_submission_time
+        FROM comment c
+        JOIN question q on c.question_id = q.id
+        JOIN answer a on c.answer_id = a.id
+        WHERE c.user_id = %(user_id)s
+        """,
+        {'user_id': user_id}
+    )
+    comments = cursor.fetchall()
+    return comments

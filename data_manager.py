@@ -78,13 +78,12 @@ def get_user_id_for_question(question_id):
 
 
 def get_user_data_for_user_page(user_id, username):
-    questions = select.questions_by_user_id(user_id)
-    answers = select.answers_by_user_id(user_id)
     user_data = {
         'user_id': user_id,
         'username': username,
-        'questions': questions,
-        'answers': answers
+        'questions': select.questions_by_user_id(user_id),
+        'answers': select.answers_by_user_id(user_id),
+        'comments': select.comments_by_user_id(user_id)
     }
     return user_data
 
