@@ -11,6 +11,11 @@
         <th class="submission_time">Answer<br>submission time</th>
     </tr>
     </thead>
+    {% if not user_data.comments %}
+        <tr>
+            <td colspan="8">You haven't posted any comments yet.</td>
+        </tr>
+    {% endif %}
     {% for comment in user_data.comments %}
         <tr>
             <td>{{ comment.id }}</td>

@@ -322,7 +322,9 @@ def route_edit_comment(comment_id):
 def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        record_user(user_data)
+        if record_user(user_data):
+            log_in_user(user_data)
+            flash("Login successful")
         return redirect('/')
 
     return render_template('home/register.html')
@@ -332,6 +334,7 @@ def record_user(user_data):
     username_is_unique = data_manager.is_username_unique(user_data['username'])
     if username_is_unique:
         data_manager.insert_user(user_data)
+        return True
 
 
 @app.route('/user/<user_id>')
