@@ -255,3 +255,20 @@ def questions_by_user_id(cursor, user_id):
     )
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def answers_by_user_id(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT
+            a.id, a.message, a.submission_time, a.question_id,
+            q.title AS q_title, q.submission_time AS q_submission_time
+        FROM answer a
+        JOIN question q on a.question_id = q.id
+        WHERE a.user_id = %(user_id)s
+        """,
+        {'user_id': user_id}
+    )
+    answers = cursor.fetchall()
+    return answers
