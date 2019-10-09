@@ -68,13 +68,39 @@ def get_hashed_password_for(username):
 
 
 def get_user_id_for(username):
-    user_id = select.user_id_for(username)
+    user_id = select.get_user_id_by_username(username)
     return user_id
 
 
-def get_user_id_for_question(question_id):
-    user_id = select.user_id_for_question(question_id)
-    return user_id
+def question_belongs_to_user(username, question_id):
+    if username:
+        user_id = select.get_user_id_by_username(username)
+        question_owner = select.user_id_for_question(question_id)
+        if user_id == question_owner:
+            return True
+    else:
+        return False
+
+
+def answer_belongs_to_user(username, answer_id):
+    if username:
+        user_id = select.get_user_id_by_username(username)
+        answer_owner = select.user_id_for_answer(answer_id)
+        if user_id == answer_owner:
+            return True
+    else:
+        return False
+
+
+def comment_belongs_to_user(username, comment_id):
+    if username:
+        user_id = select.get_user_id_by_username(username)
+        comment_owner = select.user_id_for_comment(comment_id)
+        if user_id == comment_owner:
+            return True
+    else:
+        return False
+
 
 
 def get_user_data_for_user_page(user_id, username):
@@ -227,6 +253,6 @@ def validate_user_credentials(username, password):
 
 
 def is_username_unique(username):
-    user_id = select.user_id_for(username)
+    user_id = select.get_user_id_by_username(username)
     if not user_id:
         return True
