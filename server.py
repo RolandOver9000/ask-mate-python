@@ -5,8 +5,7 @@ from flask import \
     redirect, \
     url_for, \
     session, \
-    flash, \
-    escape
+    flash
 import data_manager
 import util
 
