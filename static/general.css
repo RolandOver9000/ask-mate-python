@@ -9,3 +9,7 @@ body {
 .page-header {
     display: block;
 }
+
+#content {
+    margin-top: 3%;
+}
