@@ -97,8 +97,10 @@ def display_question_and_answers(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     tags = data_manager.get_tags_for_question(question_id)
     comments = data_manager.get_all_comments(question_id)
+    user_id = session['user_id'] if 'user_id' in session else False
+
     return render_template('display_question/question_display.html', question=question, tags=tags,
-                           answers=answers, question_ids=question_ids, comments=comments)
+                           answers=answers, question_ids=question_ids, comments=comments, user_id=user_id)
 
 
 @app.route('/question/<question_id>/vote', methods=['POST'])
@@ -110,6 +112,16 @@ def route_vote(question_id):
     # the code=307 argument ensures that the request type (POST) is preserved after redirection
     # so that the view number of the question doesn't increase after voting
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
+
+
+@app.route('/question/<question_id>/<answer_id>/accepted_answer', methods=['GET'])
+def route_accepted_answer(question_id, answer_id):
+    data_manager.handle_accepted_answer(question_id, answer_id)
+    data_manager.handle_user_reputation('accepted_answer', answer_id)
+
+    # the code=307 argument ensures that the request type (POST) is preserved after redirection
+    # so that the view number of the question doesn't increase after voting
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
@@ -225,7 +237,8 @@ def route_add_comment_to_answer(question_id, answer_id):
     # After this process it redirects you to the specific page of the question.
 
     comment_message = request.form['message']
-    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id)
+    user_id = session['user_id']
+    data_manager.insert_comment(comment_message, question_id, answer_id=answer_id, user_id=user_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 

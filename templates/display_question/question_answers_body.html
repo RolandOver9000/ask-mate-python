@@ -7,12 +7,24 @@
 {% endif %}
 <div class="like-and-counter">
     <span id="answers-like-counter">Likes: {{ answer.vote_number }}</span>
-    <form class="like-and-dislike" action="{{ url_for('route_vote', question_id=question.id) }}" method="post">
-        <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>
-        <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">&#x1F44E;</button>
-    </form>
+    {% if user_id and user_id != answer.user_id %}
+        <form class="like-and-dislike" action="{{ url_for('route_vote', question_id=question.id) }}" method="post">
+            <button type="submit" name="vote" value="Upvote,{{ answer.id }},answer" id="upvote-answer">&#x1F44D;</button>
+            <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">&#x1F44E;</button>
+        </form>
+    {% endif %}
 </div>
-<a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment this answer!</a>
-<a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
-    id="delete-answer">Delete answer</a>
-<a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" id="edit-answer">Edit answer</a>
+{% if user_id %}
+    <a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment this answer!</a>
+{% endif %}
+{% if user_id == answer.user_id %}
+    <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
+        id="delete-answer">Delete answer</a>
+    <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" id="edit-answer">Edit answer</a>
+{% endif %}
+{% if user_id == question.user_id and user_id != answer.user_id %}
+    <div class="answer-operations">
+            <a class="accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"
+               href="{{ url_for('route_accepted_answer', question_id=question.id, answer_id=answer.id) }}"></a>
+    </div>
+{% endif %}

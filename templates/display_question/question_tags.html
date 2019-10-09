@@ -2,14 +2,18 @@
     {% for tag in tags %}
     <div id="tags">
         <span id="tag-text">{{ tag.name }}</span>
-        <span>
-            <a href="{{ url_for('route_delete_tag', question_id=question.id, tag_id=tag.id) }}">
-                <strong>x</strong>
-            </a>
-        </span>
+        {% if user_id == question.user_id %}
+            <span>
+                <a href="{{ url_for('route_delete_tag', question_id=question.id, tag_id=tag.id) }}">
+                    <strong>x</strong>
+                </a>
+            </span>
+        {% endif %}
     </div>
     {% endfor %}
-    <div id="add-new-tag">
-        <a href="{{ url_for('route_new_tag', question_id=question.id) }}">Add new tag</a>
-    </div>
+    {% if user_id == question.user_id %}
+        <div id="add-new-tag">
+            <a href="{{ url_for('route_new_tag', question_id=question.id) }}">Add new tag</a>
+        </div>
+    {% endif %}
 </div>

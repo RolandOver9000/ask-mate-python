@@ -48,6 +48,19 @@ def votes(cursor, vote_calculation, message_id, table):
 
 
 @connection.connection_handler
+def accepted_answer(cursor, question_id, answer_id):
+    cursor.execute(
+        sql.SQL("""
+                    UPDATE question
+                    SET accepted_answer_id={answer_id}
+                    WHERE id={question_id}
+                    """)
+        .format(answer_id=sql.SQL(answer_id),
+                question_id=sql.SQL(question_id))
+                )
+
+
+@connection.connection_handler
 def reputation(cursor, reputation_calculation, user_id):
     cursor.execute(
         sql.SQL("""

@@ -73,7 +73,7 @@ def all_comments(cursor, comment_id):
     cursor.execute(
         sql.SQL("""
                     SELECT id, question_id, answer_id, message, submission_time,
-                           COALESCE(edited_count, 0) AS edited_count 
+                           COALESCE(edited_count, 0) AS edited_count, user_id
                     FROM comment
                     WHERE question_id = {comment_id}
                     ORDER BY submission_time DESC
