@@ -2,12 +2,12 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Posted to</th>
-        <th>Message</th>
+        <th class="posted-to">Posted to</th>
+        <th class="c-message">Message</th>
         <th class="submission_time">Submission time</th>
         <th class="q-title">Question title</th>
         <th class="submission_time">Question<br>submission time</th>
-        <th>Answer message</th>
+        <th class="a-message">Answer message</th>
         <th class="submission_time">Answer<br>submission time</th>
     </tr>
     </thead>
@@ -19,13 +19,13 @@
             {% else %}
                 <td>Question</td>
             {% endif %}
-            <td>{{ comment.message }}</td>
+            <td class="c-message">{{ comment.message }}</td>
             <td>{{ comment.submission_time }}</td>
-            <td><a href="{{ url_for('display_question_and_answers', question_id=comment.question_id) }}">
+            <td class="q-title"><a href="{{ url_for('display_question_and_answers', question_id=comment.question_id) }}">
                 {{ comment.q_title }}</a></td>
             <td>{{ comment.q_submission_time }}</td>
             {% if comment.answer_id %}
-                <td>{{ comment.a_message }}</td>
+                <td class="a-message">{{ comment.a_message }}</td>
                 <td>{{ comment.a_submission_time }}</td>
             {% else %}
                 <td>-</td>

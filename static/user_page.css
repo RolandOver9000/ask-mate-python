@@ -31,10 +31,14 @@ table thead th:nth-child(1) {
     width: 50px;
 }
 
-th.q-title {
-    width: 400px;
-}
-
 th.submission_time {
     width: 200px;
+}
+
+.q-title, .a-message, .c-message {
+    width: 300px;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

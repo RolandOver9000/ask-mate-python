@@ -78,13 +78,21 @@ def get_user_id_for_question(question_id):
 
 
 def get_user_data_for_user_page(user_id, username):
+    questions = select.questions_by_user_id(user_id)
+    answers = select.answers_by_user_id(user_id)
+    comments = select.comments_by_user_id(user_id)
+
+    for query_results in (questions, answers, comments):
+        query_results = util.format_datetime_in_query_results(query_results)
+
     user_data = {
         'user_id': user_id,
         'username': username,
-        'questions': select.questions_by_user_id(user_id),
-        'answers': select.answers_by_user_id(user_id),
-        'comments': select.comments_by_user_id(user_id)
+        'questions': questions,
+        'answers': answers,
+        'comments': comments
     }
+
     return user_data
 
 # ------------------------------------------------------------------

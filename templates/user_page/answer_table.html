@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Message</th>
+        <th class="a-message">Message</th>
         <th class="submission_time">Submission time</th>
         <th class="q-title">Question title</th>
         <th class="submission_time">Question<br>submission time</th>
@@ -11,9 +11,9 @@
     {% for answer in user_data.answers %}
         <tr>
             <td>{{ answer.id }}</td>
-            <td>{{ answer.message }}</td>
+            <td class="a-message">{{ answer.message }}</td>
             <td>{{ answer.submission_time }}</td>
-            <td><a href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">
+            <td class="q-title"><a href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">
                 {{ answer.q_title }}</a></td>
             <td>{{ answer.q_submission_time }}</td>
         </tr>

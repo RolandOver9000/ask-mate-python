@@ -112,5 +112,17 @@ def get_datetime():
     return datetime.now().replace(microsecond=0)
 
 
+def format_datetime(datetime_):
+    return datetime_.strftime("%b %d %Y %H:%M:%S")
+
+
 def is_password_valid(plain_text_password, hashed_password):
     return verify_password(plain_text_password, hashed_password)
+
+
+def format_datetime_in_query_results(query_results):
+    for record in query_results:
+        for key, value in record.items():
+            if isinstance(value, datetime):
+                record[key] = format_datetime(value)
+    return query_results
