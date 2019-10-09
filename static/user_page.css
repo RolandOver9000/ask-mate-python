@@ -19,7 +19,13 @@ table {
     table-layout: fixed;
     border-collapse: collapse;
     border: black solid 2px;
-    margin: 0 100px;
+    background: whitesmoke;
+    margin-left:  100px;
+    margin-right: 100px;
+}
+
+table.comment {
+    margin-bottom: 100px;
 }
 
 th, td {
