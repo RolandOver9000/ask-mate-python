@@ -108,17 +108,13 @@ def route_vote(question_id):
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        if request.method == 'GET':
+            question_data = data_manager.get_single_question(question_id)
+            return render_template('database_ops/add-question.html', question_data=question_data)
 
-    if request.method == 'GET':
-        if 'user_id' in session:
-            user_id_for_question = data_manager.get_user_id_for_question(question_id)
-            if session['user_id'] == user_id_for_question:
-                question_data = data_manager.get_single_question(question_id)
-                return render_template('database_ops/add-question.html', question_data=question_data)
-        return redirect(url_for('display_question_and_answers', question_id=question_id))
-
-    user_inputs_for_question = request.form.to_dict()
-    data_manager.update_entry('question', question_id, user_inputs_for_question)
+        user_inputs_for_question = request.form.to_dict()
+        data_manager.update_entry('question', question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -143,17 +139,15 @@ def route_new_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
-    if 'user_id' in session:
-        user_id_for_question = data_manager.get_user_id_for_question(question_id)
-        if session['user_id'] == user_id_for_question:
-            data_manager.delete_question(question_id)
-            return redirect(url_for('route_index'))
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_index'))
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/<answer_id>/delete')
 def route_delete_answer(question_id, answer_id):
-    if data_manager.answer_belongs_to_user(session['username'], answer_id):
+    if data_manager.answer_belongs_to_user(session.get('username'), answer_id):
         data_manager.delete_answer(answer_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
@@ -164,7 +158,7 @@ def route_edit_answer(answer_id):
     question_id = answer_data.get('question_id')
     question_data = data_manager.get_single_entry('question', question_id)
 
-    if data_manager.answer_belongs_to_user(session['username'], answer_id):
+    if data_manager.answer_belongs_to_user(session.get('username'), answer_id):
 
         if request.method == 'GET':
             return render_template('database_ops/new_answer.html', answer=answer_data, question=question_data)
@@ -253,7 +247,7 @@ def route_tags():
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
 def route_delete_comment(comment_id):
     comment = data_manager.get_single_entry('comment', comment_id)
-    if data_manager.comment_belongs_to_user(session['username'], comment_id):
+    if data_manager.comment_belongs_to_user(session.get('username'), comment_id):
         answer_id_of_comment = comment['answer_id']
         question_id_of_comment = comment['question_id']
 
@@ -275,7 +269,7 @@ def route_edit_comment(comment_id):
     comment_data = data_manager.get_single_entry('comment', comment_id)
     question_id = comment_data.get('question_id')
 
-    if data_manager.comment_belongs_to_user(session['username'], comment_id):
+    if data_manager.comment_belongs_to_user(session.get('username'), comment_id):
         question_data = data_manager.get_single_entry('question', question_id)
         answer_data = None
         if comment_data['answer_id']:
