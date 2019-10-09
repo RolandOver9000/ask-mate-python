@@ -18,7 +18,7 @@
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
         {% endif %}
         {% for comment in comments %}
-        {% if comment.answer_id == False %}
+        {% if not comment.answer_id %}
             {% include 'display_question/comments.html' %}
         {% endif %}
         {% endfor %}
