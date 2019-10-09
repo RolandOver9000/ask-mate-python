@@ -212,7 +212,8 @@ def hashed_password_for(cursor, username):
                    """,
                    {'username': username})
     user_data = cursor.fetchone()
-    return user_data['password']
+    if user_data:
+        return user_data['password']
 
 
 @connection.connection_handler
@@ -240,6 +241,20 @@ def user_id_for_question(cursor, question_id):
     )
     question_data = cursor.fetchone()
     return question_data['user_id']
+
+
+@connection.connection_handler
+def user_id_for_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT user_id
+        FROM answer
+        WHERE id = %(answer_id)s
+        """,
+        {'answer_id': answer_id}
+    )
+    answer_data = cursor.fetchone()
+    return answer_data['user_id']
 
 
 @connection.connection_handler

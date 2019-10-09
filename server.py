@@ -13,6 +13,14 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
+def get_session_data(data_type):
+    if 'username' in session:
+        if data_type == 'username':
+            return session['username']
+        elif data_type == 'user_id':
+            return session['user_id']
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def route_login():
     if request.method == 'POST':
@@ -38,12 +46,9 @@ def route_logout():
 @app.route("/")
 def route_index():
     sorted_questions = data_manager.get_most_recent_questions()
+    username = get_session_data('user_id')
 
-    if 'username' in session:
-        username = session['username']
-        return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
-
-    return render_template('home/index.html', sorted_questions=sorted_questions)
+    return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
 
 
 @app.route("/list")
@@ -100,6 +105,7 @@ def display_question_and_answers(question_id):
 def route_vote(question_id):
     vote_option, message_id, message_type = request.form['vote'].split(',')
     data_manager.handle_votes(vote_option, message_id, message_type)
+    data_manager.handle_user_reputation(vote_option, message_id, message_type)
 
     # the code=307 argument ensures that the request type (POST) is preserved after redirection
     # so that the view number of the question doesn't increase after voting
