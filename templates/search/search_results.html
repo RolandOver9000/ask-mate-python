@@ -5,9 +5,8 @@
 {% endblock %}
 {% block title %}Search results{% endblock %}
 {% block content %}
-    <a href="{{ url_for('route_index') }}" class="back-to-main">&#x2B05; Return to main page</a>
-    <h1>Search results</h1>
-    <h3>Questions containing search phrase '{{ search_phrase }}':</h3>
+    <h1 class="page-title">Search results</h1>
+    <h3>Questions and answers containing search phrase '{{ search_phrase }}':</h3>
     {% if questions %}
         {% include 'search/all_results.html' %}
     {% endif %}

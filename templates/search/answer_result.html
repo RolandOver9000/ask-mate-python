@@ -5,8 +5,6 @@
     </div>
     <div class="a-message">
         <span class="label">Message: </span>
-        <span class="text-value">
-            {% for substring in answer.message %}{% if search_phrase|lower == substring|lower %}<em>{{ substring }}</em>{% else %}<span>{{ substring }}</span>{% endif %}{% endfor %}
-        </span>
+        <span class="text-value">{% for substring in answer.message %}{% if search_phrase|lower == substring|lower %}<em>{{ substring }}</em>{% else %}<span>{{ substring }}</span>{% endif %}{% endfor %}</span>
     </div>
 </div>

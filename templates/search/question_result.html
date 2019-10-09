@@ -11,8 +11,6 @@
 <div class="q-message">
     <span class="label">Message: </span>
     {% if question.message %}
-        <span class="text-value">
-            {% for substring in question.message %}{% if search_phrase|lower == substring|lower %}<em>{{ substring }}</em>{% else %}<span>{{ substring }}</span>{% endif %}{% endfor %}
-        </span>
+        <span class="text-value">{% for substring in question.message %}{% if search_phrase|lower == substring|lower %}<em>{{ substring }}</em>{% else %}<span>{{ substring }}</span>{% endif %}{% endfor %}</span>
     {% endif %}
 </div>

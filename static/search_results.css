@@ -1,13 +1,18 @@
 @import 'general.css';
 @import 'anchor.css';
 
+h1.page-title {
+    color: black;
+    margin-left: 100px;
+}
+
 h3 {
     display: inline;
     margin: 0 0 0 10%;
 }
 
 #questions-container {
-    margin: 2% 10% 0 15%;
+    margin: 2% 10% 10% 15%;
     border: black solid thick;
     padding: 2% 4%;
 }
@@ -59,4 +64,5 @@ em {
 
 .text-value {
     word-break: break-word;
+    white-space: pre-line;
 }
