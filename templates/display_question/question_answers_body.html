@@ -12,7 +12,9 @@
         <button type="submit" name="vote" value="Downvote,{{ answer.id }},answer">&#x1F44E;</button>
     </form>
 </div>
-<a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment this answer!</a>
+<div id="answer-actions">
+<a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment on this answer!</a>
 <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
-    id="delete-answer">Delete answer</a>
-<a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" id="edit-answer">Edit answer</a>
+    class="delete" id="delete-answer"></a>
+<a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" class="edit" id="edit-answer"></a>
+</div>
