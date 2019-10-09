@@ -71,6 +71,11 @@ def get_user_id_for(username):
     user_id = select.user_id_for(username)
     return user_id
 
+
+def get_user_id_for_question(question_id):
+    user_id = select.user_id_for_question(question_id)
+    return user_id
+
 # ------------------------------------------------------------------
 # ------------------------------INSERT------------------------------
 # ------------------------------------------------------------------
@@ -143,6 +148,21 @@ def handle_votes(vote_option, message_id, message_type):
 
 def handle_accepted_answer(question_id, answer_id):
     update.accepted_answer(question_id, answer_id)
+
+
+def handle_user_reputation(vote_option, message_id, *message_type):
+    if 'question' in message_type:
+        reputation_calculation = 'reputation + 5' if vote_option == 'Upvote' else 'reputation - 2'
+        user_id = str(select.user_id_for_question(message_id))
+    elif 'answer' in message_type:
+        reputation_calculation = 'reputation + 10' if vote_option == 'Upvote' else 'reputation -2'
+        user_id = str(select.user_id_for_answer(message_id))
+    else:
+        reputation_calculation = 'reputation + 15'
+        user_id = str(select.user_id_for_answer(message_id))
+
+    update.reputation(reputation_calculation, user_id)
+
 # ------------------------------------------------------------------
 # ------------------------------DELETE------------------------------
 # ------------------------------------------------------------------
@@ -193,3 +213,9 @@ def validate_user_credentials(username, password):
         if password_valid:
             return True
     return False
+
+
+def is_username_unique(username):
+    user_id = select.user_id_for(username)
+    if not user_id:
+        return True

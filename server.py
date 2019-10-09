@@ -7,9 +7,18 @@ from flask import \
     session, \
     escape
 import data_manager
+import util
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
+def get_session_data(data_type):
+    if 'username' in session:
+        if data_type == 'username':
+            return session['username']
+        elif data_type == 'user_id':
+            return session['user_id']
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -37,12 +46,9 @@ def route_logout():
 @app.route("/")
 def route_index():
     sorted_questions = data_manager.get_most_recent_questions()
+    username = get_session_data('user_id')
 
-    if 'username' in session:
-        username = session['username']
-        return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
-
-    return render_template('home/index.html', sorted_questions=sorted_questions)
+    return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
 
 
 @app.route("/list")
@@ -101,6 +107,7 @@ def display_question_and_answers(question_id):
 def route_vote(question_id):
     vote_option, message_id, message_type = request.form['vote'].split(',')
     data_manager.handle_votes(vote_option, message_id, message_type)
+    data_manager.handle_user_reputation(vote_option, message_id, message_type)
 
     # the code=307 argument ensures that the request type (POST) is preserved after redirection
     # so that the view number of the question doesn't increase after voting
@@ -121,8 +128,12 @@ def route_accepted_answer(question_id, answer_id):
 def route_edit_question(question_id):
 
     if request.method == 'GET':
-        question_data = data_manager.get_single_question(question_id)
-        return render_template('database_ops/add-question.html', question_data=question_data)
+        if 'user_id' in session:
+            user_id_for_question = data_manager.get_user_id_for_question(question_id)
+            if session['user_id'] == user_id_for_question:
+                question_data = data_manager.get_single_question(question_id)
+                return render_template('database_ops/add-question.html', question_data=question_data)
+        return redirect(url_for('display_question_and_answers', question_id=question_id))
 
     user_inputs_for_question = request.form.to_dict()
     data_manager.update_entry('question', question_id, user_inputs_for_question)
@@ -150,9 +161,12 @@ def route_new_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
-    data_manager.delete_question(question_id)
-
-    return redirect(url_for('route_list'))
+    if 'user_id' in session:
+        user_id_for_question = data_manager.get_user_id_for_question(question_id)
+        if session['user_id'] == user_id_for_question:
+            data_manager.delete_question(question_id)
+            return redirect(url_for('route_index'))
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/<answer_id>/delete')
@@ -186,12 +200,21 @@ def route_new_tag(question_id):
         data_manager.handle_tag(question_id, new_tag, existing_tag_id)
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
-    return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
+    if 'user_id' in session:
+        user_id_for_question = data_manager.get_user_id_for_question(question_id)
+        if session['user_id'] == user_id_for_question:
+            return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
+
+    return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
 def route_delete_tag(question_id, tag_id):
-    data_manager.delete_tag(question_id, tag_id)
+    if 'user_id' in session:
+        user_id_for_question = data_manager.get_user_id_for_question(question_id)
+        if session['user_id'] == user_id_for_question:
+            data_manager.delete_tag(question_id, tag_id)
+
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
@@ -285,7 +308,9 @@ def route_edit_comment(comment_id):
 def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        data_manager.insert_user(user_data)
+        username_is_unique = data_manager.is_username_unique(user_data['username'])
+        if username_is_unique:
+            data_manager.insert_user(user_data)
         return redirect('/')
 
     return render_template('home/register.html')
