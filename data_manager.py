@@ -152,6 +152,9 @@ def handle_user_reputation(vote_option, message_id, *message_type):
     elif 'answer' in message_type:
         reputation_calculation = 'reputation + 10' if vote_option == 'Upvote' else 'reputation -2'
         user_id = str(select.user_id_for_answer(message_id))
+    else:
+        reputation_calculation = 'reputation + 15'
+        user_id = str(select.user_id_for_answer(message_id))
 
     update.reputation(reputation_calculation, user_id)
 
