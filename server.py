@@ -5,6 +5,7 @@ from flask import \
     redirect, \
     url_for, \
     session, \
+    flash, \
     escape
 import data_manager
 import util
@@ -13,42 +14,58 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
-def get_session_data(data_type):
-    if 'username' in session:
-        if data_type == 'username':
-            return session['username']
-        elif data_type == 'user_id':
-            return session['user_id']
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def route_login():
+    error = None
     if request.method == 'POST':
         user_credentials = request.form.to_dict()
-        user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
-                                                                        user_credentials['password'])
-        if user_credentials_valid:
-            session['username'] = user_credentials['username']
-            session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
+        if log_in_user(user_credentials):
+            flash("Login successful")
+            return redirect(url_for('route_index'))
 
-        return redirect(url_for('route_index'))
+    error = 'Invalid password and/or username!'
+    return render_template('home/login.html', error=error)
 
-    return render_template('login.html')
+
+def log_in_user(user_credentials):
+    user_credentials_valid = data_manager.validate_user_credentials(user_credentials['username'],
+                                                                    user_credentials['password'])
+    if user_credentials_valid:
+        session['username'] = user_credentials['username']
+        session['user_id'] = data_manager.get_user_id_for(user_credentials['username'])
+        return True
+    else:
+        return False
 
 
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
     session.pop('user_id', None)
+    flash("You've logged out successfully")
     return redirect(url_for('route_index'))
+
+
+@app.route('/login_or_register', methods=["GET", "POST"])
+def login_or_register():
+    if request.method == "POST":
+        user_credentials = request.form.to_dict()
+        if request.form.get('login'):
+            log_in_user(user_credentials)
+        elif request.form.get('register'):
+            record_user(user_credentials)
+            log_in_user(user_credentials)
+        return redirect(session['url'])
+
+    return render_template('home/login_or_register.html')
 
 
 @app.route("/")
 def route_index():
+    session['url'] = url_for('route_index')
     sorted_questions = data_manager.get_most_recent_questions()
-    username = get_session_data('username')
 
-    return render_template('home/index.html', sorted_questions=sorted_questions, user=username)
+    return render_template('home/index.html', sorted_questions=sorted_questions)
 
 
 @app.route("/list")
@@ -88,6 +105,8 @@ def route_add_question():
 
 @app.route('/question/<question_id>', methods=["GET", "POST"])
 def display_question_and_answers(question_id):
+    session['url'] = url_for('display_question_and_answers', question_id=question_id)
+
     if request.method == 'GET':
         # update view number for question
         data_manager.increment_view_number(question_id)
@@ -97,7 +116,7 @@ def display_question_and_answers(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     tags = data_manager.get_tags_for_question(question_id)
     comments = data_manager.get_all_comments(question_id)
-    user_id = session['user_id'] if 'user_id' in session else False
+    user_id = session.get('user_id', False)
 
     return render_template('display_question/question_display.html', question=question, tags=tags,
                            answers=answers, question_ids=question_ids, comments=comments, user_id=user_id)
@@ -126,17 +145,13 @@ def route_accepted_answer(question_id, answer_id):
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        if request.method == 'GET':
+            question_data = data_manager.get_single_question(question_id)
+            return render_template('database_ops/add-question.html', question_data=question_data)
 
-    if request.method == 'GET':
-        if 'user_id' in session:
-            user_id_for_question = data_manager.get_user_id_for_question(question_id)
-            if session['user_id'] == user_id_for_question:
-                question_data = data_manager.get_single_question(question_id)
-                return render_template('database_ops/add-question.html', question_data=question_data)
-        return redirect(url_for('display_question_and_answers', question_id=question_id))
-
-    user_inputs_for_question = request.form.to_dict()
-    data_manager.update_entry('question', question_id, user_inputs_for_question)
+        user_inputs_for_question = request.form.to_dict()
+        data_manager.update_entry('question', question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -161,17 +176,16 @@ def route_new_answer(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
-    if 'user_id' in session:
-        user_id_for_question = data_manager.get_user_id_for_question(question_id)
-        if session['user_id'] == user_id_for_question:
-            data_manager.delete_question(question_id)
-            return redirect(url_for('route_index'))
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        data_manager.delete_question(question_id)
+        return redirect(url_for('route_index'))
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
 @app.route('/question/<question_id>/<answer_id>/delete')
 def route_delete_answer(question_id, answer_id):
-    data_manager.delete_answer(answer_id)
+    if data_manager.answer_belongs_to_user(session.get('username'), answer_id):
+        data_manager.delete_answer(answer_id)
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
 
@@ -181,11 +195,13 @@ def route_edit_answer(answer_id):
     question_id = answer_data.get('question_id')
     question_data = data_manager.get_single_entry('question', question_id)
 
-    if request.method == 'GET':
-        return render_template('database_ops/new_answer.html', answer=answer_data, question=question_data)
+    if data_manager.answer_belongs_to_user(session.get('username'), answer_id):
 
-    user_inputs_for_answer = request.form.to_dict()
-    data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
+        if request.method == 'GET':
+            return render_template('database_ops/new_answer.html', answer=answer_data, question=question_data)
+
+        user_inputs_for_answer = request.form.to_dict()
+        data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -193,27 +209,21 @@ def route_edit_answer(answer_id):
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
     existing_tags = data_manager.get_existing_tags_for_question(question_id, )
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
 
     if request.method == "POST":
         new_tag = request.form.get('new_tag')
         existing_tag_id = request.form.get('existing_tag')
         data_manager.handle_tag(question_id, new_tag, existing_tag_id)
-        return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
-    if 'user_id' in session:
-        user_id_for_question = data_manager.get_user_id_for_question(question_id)
-        if session['user_id'] == user_id_for_question:
-            return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
-
-    return redirect(url_for('display_question_and_answers', question_id=question_id))
+    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
 def route_delete_tag(question_id, tag_id):
-    if 'user_id' in session:
-        user_id_for_question = data_manager.get_user_id_for_question(question_id)
-        if session['user_id'] == user_id_for_question:
-            data_manager.delete_tag(question_id, tag_id)
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        data_manager.delete_tag(question_id, tag_id)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id))
 
@@ -271,18 +281,19 @@ def route_tags():
 @app.route('/comment/<comment_id>/delete', methods=["GET", "POST"])
 def route_delete_comment(comment_id):
     comment = data_manager.get_single_entry('comment', comment_id)
-    answer_id_of_comment = comment['answer_id']
-    question_id_of_comment = comment['question_id']
+    if data_manager.comment_belongs_to_user(session.get('username'), comment_id):
+        answer_id_of_comment = comment['answer_id']
+        question_id_of_comment = comment['question_id']
 
-    if request.method == "GET":
-        if answer_id_of_comment:
-            answer_data = data_manager.get_single_entry('answer', answer_id_of_comment)
-            return render_template('database_ops/delete_comment.html', answer=answer_data['message'], comment=comment)
-        question_data = data_manager.get_single_entry('question', question_id_of_comment)
-        return render_template('database_ops/delete_comment.html', question=question_data, comment=comment)
+        if request.method == "GET":
+            if answer_id_of_comment:
+                answer_data = data_manager.get_single_entry('answer', answer_id_of_comment)
+                return render_template('database_ops/delete_comment.html', answer=answer_data['message'], comment=comment)
+            question_data = data_manager.get_single_entry('question', question_id_of_comment)
+            return render_template('database_ops/delete_comment.html', question=question_data, comment=comment)
 
-    if request.form['delete-button'] == 'Yes':
-        data_manager.delete_comment(comment_id)
+        if request.form['delete-button'] == 'Yes':
+            data_manager.delete_comment(comment_id)
 
     return redirect(url_for('display_question_and_answers', question_id=comment['question_id']), code=307)
 
@@ -291,17 +302,19 @@ def route_delete_comment(comment_id):
 def route_edit_comment(comment_id):
     comment_data = data_manager.get_single_entry('comment', comment_id)
     question_id = comment_data.get('question_id')
-    question_data = data_manager.get_single_entry('question', question_id)
-    answer_data = None
-    if comment_data['answer_id']:
-        answer_id = comment_data['answer_id']
-        answer_data = data_manager.get_single_entry('answer', answer_id)
 
-    if request.method == 'GET':
-        return render_template('database_ops/new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
+    if data_manager.comment_belongs_to_user(session.get('username'), comment_id):
+        question_data = data_manager.get_single_entry('question', question_id)
+        answer_data = None
+        if comment_data['answer_id']:
+            answer_id = comment_data['answer_id']
+            answer_data = data_manager.get_single_entry('answer', answer_id)
 
-    new_comment_message = request.form['message']
-    data_manager.update_comment_message(comment_data, new_comment_message)
+        if request.method == 'GET':
+            return render_template('database_ops/new_comment.html', comment=comment_data, answer=answer_data, question=question_data)
+
+        new_comment_message = request.form['message']
+        data_manager.update_comment_message(comment_data, new_comment_message)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -310,12 +323,16 @@ def route_edit_comment(comment_id):
 def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        username_is_unique = data_manager.is_username_unique(user_data['username'])
-        if username_is_unique:
-            data_manager.insert_user(user_data)
+        record_user(user_data)
         return redirect('/')
 
     return render_template('home/register.html')
+
+
+def record_user(user_data):
+    username_is_unique = data_manager.is_username_unique(user_data['username'])
+    if username_is_unique:
+        data_manager.insert_user(user_data)
 
 
 @app.route('/user/<user_id>')

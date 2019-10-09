@@ -8,8 +8,10 @@
     {% if sorted_questions %}
         <h3 id="help-out">Help out your fellow AskMates:</h3>
         {% include 'home/table.html' %}
-        {% if user %}
+        {% if session.username %}
             <a href="{{ url_for('route_add_question') }}" id="ask-question">Ask a question</a>
+        {% else %}
+            <a href="{{ url_for('login_or_register') }}" id="ask-question">Log in or register to ask a question</a>
         {% endif %}
         <a href="{{ url_for('route_list') }}" id="list-questions">List all questions</a>
         <a href="{{ url_for('route_tags') }}" id="list-tags">List tags</a>

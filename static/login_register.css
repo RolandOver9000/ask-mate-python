@@ -1,0 +1,23 @@
+@import "general.css";
+
+#login-register {
+    display: block;
+    width: max-content;
+    margin: auto;
+}
+
+#login, #register {
+    display: inline-block;
+    border: 1px darkkhaki solid;
+    padding: 20px;
+    margin-inline: 30px;
+}
+
+.user-data-input {
+    margin-bottom: 10px;
+}
+
+
+h3  {
+    text-align: center;
+}
