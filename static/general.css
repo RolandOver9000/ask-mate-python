@@ -9,11 +9,3 @@ body {
 .page-header {
     display: block;
 }
-
-.register {
-    display: inline-block;
-    float: right;
-    margin-top: 1em;
-    padding: 5px 0;
-    margin-right: 10%;
-}
