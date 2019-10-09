@@ -324,6 +324,8 @@ def route_register():
     if request.method == 'POST':
         user_data = request.form.to_dict()
         record_user(user_data)
+        log_in_user(user_data)
+        flash("Login successful")
         return redirect('/')
 
     return render_template('home/register.html')
