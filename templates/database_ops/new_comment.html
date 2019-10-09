@@ -13,7 +13,7 @@
         <p>{{ question.message }}</p>
     {% endif %}
     <form action="" method="POST">
-        <textarea name="message" cols="40" rows="10" required>{{ comment.message if comment }}</textarea>
+        <textarea name="message" cols="40" rows="10" required>{{ comment.message if comment }}</textarea><br>
         <button type="submit">
             {{"Post comment" if answer_by_id else "Save changes"}}
         </button>
