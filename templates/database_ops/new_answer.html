@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
-        <meta charset="UTF-8">
-        {% block title %}<title>Post an answer</title>{% endblock %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+    {{ super() }}
 {% endblock %}
+{% block title %}{{ 'Post an answer' if not answer else 'Edit answer' }}{% endblock %}
 {% block content %}
         <div class="form-header">
             {% if question %}
