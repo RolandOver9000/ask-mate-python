@@ -332,16 +332,19 @@ def user_stats(cursor):
                 COUNT (DISTINCT answer.id) AS answer_count,
                 COUNT (DISTINCT question.id) AS question_count,
                 COUNT (DISTINCT comment.id) AS comment_count,
-                COUNT (DISTINCT question.accepted_answer_id) AS accepted_answer_count,
+                COALESCE(accepted.count, 0) AS accepted_answer_count,
                 reg_date
-         FROM user_data
-         LEFT JOIN question
-            ON user_data.id = question.user_id
-         LEFT JOIN answer
-            ON answer.user_id = question.user_id
-         LEFT JOIN comment
-            ON user_data.id = comment.user_id
-         GROUP BY username, reputation, reg_date
+        FROM user_data
+        LEFT JOIN question
+         ON user_data.id = question.user_id
+        LEFT JOIN answer
+         ON answer.user_id = question.user_id
+        LEFT JOIN comment
+         ON user_data.id = comment.user_id
+        LEFT JOIN
+            (SELECT answer.user_id AS id, COUNT(question.accepted_answer_id) FROM answer INNER JOIN  question ON question.accepted_answer_id = answer.id GROUP BY answer.user_id) accepted
+         ON question.user_id = accepted.id
+        GROUP BY username, reputation, reg_date, accepted.count
         """)
     stats = cursor.fetchall()
 
