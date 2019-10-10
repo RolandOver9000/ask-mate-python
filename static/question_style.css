@@ -5,7 +5,7 @@
 #main {
     width: 80%;
     margin: 0 auto 0 auto;
-    border: 3px solid darkkhaki;
+    border: 3px solid var(--main-color2);
     padding: 2%;
     background: whitesmoke;
 }
@@ -66,7 +66,7 @@
 }
 
 #question-message-and-image {
-    border-left: 5px solid darkkhaki;
+    border-left: 5px solid var(--main-color2);
     padding-left: 2em;
     display: block;
     margin-bottom: 1em;
@@ -96,7 +96,7 @@
 }
 
 #add-new-tag {
-    background-color: #a2cfc7;
+    background-color: var(--main-color4);
     border: 1px solid grey;
     border-radius: 4px;
     padding: 0 10px;
@@ -126,7 +126,7 @@
 
 #comment {
     display: block;
-    border: 2px solid black;
+    border: 2px solid var(--main-color3);
     border-radius: 20px;
     padding: 10px;
     margin-top: 1em;
@@ -178,7 +178,7 @@
 #answers {
     margin-left: 4%;
     margin-top: 4%;
-    border: 2px solid darkkhaki;
+    border: 2px solid var( --main-color3);
     padding: 2%;
 }
 
@@ -220,11 +220,11 @@
 }
 
 .display-username a {
-    color: black;
+    color: var(--main-color1);
 }
 
 .display-username a:hover {
-    color: orange;
+    color: var(--main-color2);
 }
 
 

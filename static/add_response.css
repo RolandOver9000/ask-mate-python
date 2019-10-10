@@ -38,7 +38,7 @@ h2 {
 
 #back-to-question {
     background: whitesmoke;
-    border: 1px darkkhaki solid;
+    border: 1px var(--main-color1) solid;
     padding: 5px;
     float: right;
 }

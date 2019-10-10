@@ -19,7 +19,7 @@ table {
     table-layout: fixed;
     border-collapse: collapse;
     border: black solid 2px;
-    background: whitesmoke;
+    background: #e2f3f5;
     margin-left:  50px;
     margin-right: 100px;
 }

@@ -1,8 +1,10 @@
+@import "general.css";
+
 .header {
     margin: 0;
     display: block;
-    border-bottom: 2px solid blue;
-    background-color: grey;
+    border-bottom: 2px solid var(--main-color2);
+    background-color: var(--main-color1);
     width: auto;
     height: 85px;
     text-align: center;
@@ -13,7 +15,7 @@
 }
 
 h1 {
-    color: white;
+    color: var(--main-color3);
 }
 
 #back-to-main {
@@ -22,19 +24,16 @@ h1 {
 }
 
 #user-area {
+    color: var(--main-color3);
     float: right;
     margin: 33px;
-}
-
-a {
-    text-decoration: none;
 }
 
 .flashes {
     display: inline-block;
     padding: 5px;
     border-radius: 10px;
-    background-color: whitesmoke;
+    background-color: var(--main-color3);
     margin-top: 17px;
     line-height: 9px;
 }

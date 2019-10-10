@@ -1,5 +1,5 @@
 html {
-    background: #d5ecff;
+    background: var(--main-color4);
 }
 
 body {
@@ -12,4 +12,22 @@ body {
 
 #content {
     margin: 3%;
+}
+
+a:hover {
+    color: var(--main-color3);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a {
+    color: var(--main-color2);
+    text-decoration: none;
+}
+
+:root {
+    --main-color1: #0e153a;
+    --main-color2: #3d5af1;
+    --main-color3: #22d1ee;
+    --main-color4: #e2f3f5;
 }

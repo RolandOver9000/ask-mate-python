@@ -13,19 +13,19 @@ h3 {
 
 #questions-container {
     margin: 2% 10% 10% 15%;
-    border: black solid thick;
+    border: var(--main-color1) solid thick;
     padding: 2% 4%;
 }
 
 .q-container {
     margin-top: 12pt;
-    border: darkblue solid thick;
+    border: var(--main-color1) solid thick;
     padding: 12pt 6pt;
 }
 
 .answers-container {
     margin-top: 6pt;
-    border: black solid thin;
+    border: var(--main-color2) solid thin;
     padding: 2pt 4pt;
 }
 

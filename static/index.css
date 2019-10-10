@@ -1,4 +1,4 @@
-@import 'anchor.css';
+/*@import 'anchor.css';*/
 @import 'table.css';
 @import 'general.css';
 @import 'search_box.css';
@@ -27,7 +27,3 @@ h3 {
 #index-page {
     visibility: hidden;
 }
-
-/*#content {*/
-/*    margin-top: 3%;*/
-/*}*/

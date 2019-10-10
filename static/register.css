@@ -9,7 +9,7 @@ h2 {
     display: block;
     width: max-content;
     margin:  auto;
-    border: 1px darkkhaki solid;
+    border: 2px var(--main-color1) solid;
     padding: 20px;
 }
 

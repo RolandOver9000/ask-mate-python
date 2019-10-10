@@ -8,7 +8,7 @@
 
 #login, #register {
     display: inline-block;
-    border: 1px darkkhaki solid;
+    border: 2px solid var(--main-color1);
     padding: 20px;
     margin-inline: 30px;
 }
