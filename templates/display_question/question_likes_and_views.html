@@ -1,4 +1,4 @@
-<div id="question-like-and-counter" class="like-and-counter">
+<div id="question-like-and-countergi" class="like-and-counter">
     <span id="view-counter">views: {{ question.view_number }} | likes: {{ question.vote_number }}</span>
     {% if user_id and user_id != question.user_id %}
         <form class="like-and-dislike" action="{{ url_for('route_vote', question_id=question.id) }}" method="post">
