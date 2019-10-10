@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <meta charset="UTF-8">
-    {% block title %}<title>New question | AskMate</title>{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+    {{ super() }}
 {% endblock %}
+{% block title %}{{ 'New question' if not question_data else 'Edit question'}}{% endblock %}
 {% block content %}
     <div id="body-of-inputs">
         <div class="form-header">
