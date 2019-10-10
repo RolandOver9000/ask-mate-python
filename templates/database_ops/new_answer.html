@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <meta charset="UTF-8" xmlns="http://www.w3.org/1999/html">
+        <meta charset="UTF-8">
         {% block title %}<title>Post an answer</title>{% endblock %}
         <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
 {% endblock %}
@@ -18,14 +18,14 @@
             <strong><p>{{ question.title }}</p></strong><br>
             <p class="text" id="question-message">{{ question.message}}</p>
             </div>
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <p>
                     <label for="message-textarea">Write your answer here:</label><br>
                     <textarea id="message-textarea" name="message" minlength="10" rows="6" cols="40" required>{{ answer.message if answer }}</textarea>
                 </p>
                 <p>
                     <label for="image">Image URL:</label><br>
-                    <input id="image" name="image" size="30" value="{{ answer.image if answer and answer.image != None }}">
+                    <input type="file" id="image" name="image" size="30" value="{{ answer.image if answer and answer.image != None }}">
                 </p>
                 <p>
                     <button type="submit">{{ "Submit changes" if answer else "Send answer!" }}</button>

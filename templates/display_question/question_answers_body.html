@@ -3,7 +3,7 @@
 <p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
 <p id="answer-message">{{ answer.message }}</p>
 {% if answer.image %}
-    <br><img src="{{ answer.image }}" width="500" alt="answer_image">
+    <img class="answer-image" src="/static/{{ answer.image }}" width="500" alt="answer_image">
 {% endif %}
 <div class="like-and-counter">
     <span id="answers-like-counter">Likes: {{ answer.vote_number }}</span>

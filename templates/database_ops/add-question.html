@@ -21,7 +21,7 @@
             </div>
             {% endif %}
         </div>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <p id="add-question-title">
                 <label for="title">Question title:</label><br>
                 <input id="title" name="title" minlength="5" maxlength="100" size="50" required
@@ -33,8 +33,8 @@
                 >{{ question_data.message if question_data else '' }}</textarea>
             </p>
             <p id="add-image-url">
-                <label for="image">Image URL:</label><br>
-                <input id="image" name="image" size="30"
+                <label for="image">Upload image:</label><br>
+                <input type="file" id="image" name="image" size="30"
                        value="{{ question_data.image if question_data else '' }}">
             </p>
             <p id="question-submit-button">
