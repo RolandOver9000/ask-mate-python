@@ -4,8 +4,21 @@
 @import 'general.css';
 
 h3 {
-    display: inline;
-    margin: 0 0 0 10%;
+    display: inline-block;
+    float: left;
+    margin: 6px 0 6px 0;
+}
+
+#sort {
+    display: inline-block;
+    float: right;
+}
+
+#list-header {
+    display: block;
+    width: 1100px;
+    height: 35px;
+    margin: auto;
 }
 
 #ask-question, #list-questions, #first-question {
