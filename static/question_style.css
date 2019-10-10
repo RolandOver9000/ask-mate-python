@@ -223,6 +223,10 @@
     color: black;
 }
 
+.display-username a:hover {
+    color: orange;
+}
+
 
 em {
     color: deeppink;
