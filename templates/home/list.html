@@ -6,8 +6,9 @@
 {% block title %}All questions{% endblock %}
 {% block content %}
     {% if sorted_questions %}
+        <div id="list-header">
         <h3>Help out your fellow AskMates:</h3>
-        {% include 'home/sort.html' %}
+            {% include 'home/sort.html' %}</div>
         {% include 'home/table.html' %}
         <a href="{{ url_for('route_add_question') }}" id="ask-question">Ask a question</a>
     {% else %}
