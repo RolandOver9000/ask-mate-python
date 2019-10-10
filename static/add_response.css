@@ -8,9 +8,6 @@
     margin-bottom: 15px;
 }
 
-#body-of-inputs {
-}
-
 h2 {
     color: black;
     flex: 0 0 200px;
@@ -40,8 +37,9 @@ form {
     display: block;
 }
 
-#add-question-message {
+#message-textarea {
     width: 650px;
+    padding: 0;
 }
 
 textarea {

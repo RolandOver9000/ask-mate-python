@@ -28,8 +28,8 @@
                        value="{{ question_data.title if question_data else '' }}">
             </p>
             <p id="add-question-message">
-                <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="15" required
+                <label for="message-textarea">Message:</label><br>
+                <textarea id="message-textarea" name="message" rows="15" required
                 >{{ question_data.message if question_data else '' }}</textarea>
             </p>
             <p id="add-image-url">
