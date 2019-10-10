@@ -14,14 +14,12 @@
                     <h2>Ask a question</h2>
                 {% endif %}
             </div>
+            {% if question_data %}
             <div id="back-to-question">
-                {% if question_data %}
                     <a href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">
                         &#x2B05; Return to question</a>
-                {% else %}
-                    <div>Hidden</div>
-                {% endif %}
             </div>
+            {% endif %}
         </div>
         <form action="" method="post">
             <p id="add-question-title">

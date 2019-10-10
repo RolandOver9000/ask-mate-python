@@ -2,32 +2,31 @@
 @import "anchor.css";
 
 .form-header {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    display: block;
     width: 650px;
-    margin-left: 66px;
+    height: 60px;
+    margin-bottom: 15px;
 }
 
-#heading {
-    color: black;
-    margin: 20px 0;
-    flex: 0 0 200px;
+#body-of-inputs {
+    margin-left: 3%;
 }
 
 h2 {
+    color: black;
+    flex: 0 0 200px;
     margin: 0;
 }
 
-#back-to-question {
-    margin: 20px 0;
+#back-to-question, #heading {
+    display: inline-block;
 }
 
-#back-to-question a {
-    display: block;
+#back-to-question {
     background: whitesmoke;
     border: 1px darkkhaki solid;
     padding: 5px;
+    float: right;
 }
 
 #back-to-question div {
@@ -38,20 +37,14 @@ h2 {
     visibility: hidden;
 }
 
-#body-of-inputs {
-    margin-left: 33px;
-    color: black;
-}
-
 form {
     display: block;
-    margin-left: 33px;
 }
 
-p {
-    margin-left: 33px;
+#add-question-message {
+    width: 650px;
 }
 
 textarea {
-    width: 650px;
+    width: inherit;
 }
