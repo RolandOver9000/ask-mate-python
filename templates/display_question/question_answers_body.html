@@ -15,11 +15,14 @@
     {% endif %}
 </div>
 <div class="answer-comment-operations" id="answer-operations">
-    {% if user_id == answer.user_id %}
+    {% if user_id %}
     <a href="/answer/{{ question.id }}/{{ answer.id }}/new_comment" id="new_comment">Comment on this answer!</a>
+    {% elif user_id == answer.user_id %}
         <a href="{{ url_for('route_delete_answer', question_id=question.id, answer_id=answer.id) }}"
         class="delete" id="delete-answer"></a>
         <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" class="edit" id="edit-answer"></a>
+    {% else %}
+        <a id="new_comment" href="{{ url_for('login_or_register') }}">Log in or register</a><span> to leave a comment</span>
     {% endif %}
     {% if answer.id == question.accepted_answer_id %}
         <a class="accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"></a>
