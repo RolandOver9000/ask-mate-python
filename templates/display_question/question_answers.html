@@ -16,6 +16,6 @@
     <a href="/question/{{ question.id }}/new-comment"
        id="add-comment">Comment this question</a>
     {% else %}
-        <a href="{{ url_for('login_or_register') }}">Log in or register in order to answer or comment this question</a>
+        <a href="{{ url_for('login_or_register') }}">Log in or register</a><span> in order to answer or comment this question</span>
     {% endif %}
 {% endif %}

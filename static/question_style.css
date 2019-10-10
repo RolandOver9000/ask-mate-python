@@ -111,6 +111,9 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
+#question-like-and-counter {
+    margin-bottom: 30px;
+}
 
 #view-counter, #answers-like-counter{
     display: inline;
