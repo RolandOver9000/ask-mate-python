@@ -1,6 +1,6 @@
 <div id="question-title-plus-editing">
     <h3 id="question-title">{{ question.title }}</h3>
-    <span class="username">by <strong>{{ question.username }}</strong>(<em>{{ question.reputation }}</em>)</span>
+    <span class="display-username">by <a href="{{ url_for('route_user_page', user_id=question.user_id) }}"><strong>{{ question.username }}</strong></a>(<em>{{ question.reputation }}</em>)</span>
     {% if user_id == question.user_id %}
     <a  href="{{ url_for('route_delete_question', question_id=question.id) }}"
        class="delete" id="delete-question"></a>

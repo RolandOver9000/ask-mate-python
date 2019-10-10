@@ -14,8 +14,12 @@
         {% include 'display_question/question_tags.html' %}
         {% include 'display_question/question_likes_and_views.html' %}
         {% if answers and user_id %}
+            <div>
             <a href="/question/{{ question.id }}/new-answer" id="answer-question">Answer this question!</a>
             <a href="/question/{{ question.id }}/new-comment" id="add-comment">Comment this question</a>
+            </div>
+        {% elif not user_id %}
+            <a href="{{ url_for('login_or_register') }}">Log in or register</a><span> in order to answer or comment this question</span>
         {% endif %}
         {% for comment in comments %}
         {% if not comment.answer_id %}

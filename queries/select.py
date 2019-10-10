@@ -347,3 +347,13 @@ def user_stats(cursor):
 
     return stats
 
+
+@connection.connection_handler
+def get_username_by_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT username
+                    FROM user_data
+                    WHERE id = %(user_id)s
+                    """, {'user_id': user_id})
+    name = cursor.fetchone()
+    return name['username']

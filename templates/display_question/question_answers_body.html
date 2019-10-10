@@ -1,5 +1,5 @@
 <strong id="answer-id">Answer id_{{ answer.id }}</strong>
-<p class="display-username">by <strong>{{ answer.username }}</strong>(<em>{{ answer.reputation }}</em>)</p>
+<p class="display-username">by <a href="{{ url_for('route_user_page', user_id=answer.user_id) }}"><strong>{{ answer.username }}</strong></a>(<em>{{ answer.reputation }}</em>)</p>
 <p id="answer-submission-time">posted on {{ answer.submission_time }}</p>
 <p id="answer-message">{{ answer.message }}</p>
 {% if answer.image %}
