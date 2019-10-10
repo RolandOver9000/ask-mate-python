@@ -9,8 +9,8 @@
         {% endfor %}
     </div>
 {% endfor %}
-{% else %}
-    {% if session.username %}
+    {% else %}
+      {% if session.username %}
     <a href="/question/{{ question.id }}/new-answer"
        id="answer-question-first">Be the first to answer this question!</a>
     <a href="/question/{{ question.id }}/new-comment"
