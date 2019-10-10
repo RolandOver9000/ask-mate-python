@@ -153,15 +153,20 @@ def insert_comment(message, question_id, user_id, answer_id=None):
     insert.comment(new_comment_data)
 
 
-def handle_tag(question_id, new_tag, existing_tag_id):
-    if new_tag == '':
-        insert.tag_into_question_table(question_id, existing_tag_id)
-        return
-
-    if util.not_duplicate_tag(new_tag):
+def handle_new_tag(question_id, new_tag):
+    if util.is_duplicate_tag(new_tag):
+        if not util.tag_belongs_to_question(question_id, new_tag):
+            tag_id = select.tag_id(new_tag)
+            insert_existing_tag(question_id, tag_id)
+        else:
+            return
+    else:
         insert.tag_into_tag_table(new_tag)
+        tag_id = select.tag_id(new_tag)
+        insert_existing_tag(question_id, tag_id)
 
-    tag_id = select.tag_id(new_tag)
+
+def insert_existing_tag(question_id, tag_id):
     insert.tag_into_question_table(question_id, tag_id)
 
 

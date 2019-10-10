@@ -161,6 +161,18 @@ def tag_id(cursor, tag_text):
 
 
 @connection.connection_handler
+def tags_counted(cursor):
+    cursor.execute("""
+                    SELECT tag.name, COUNT(question_id) as count
+                    FROM tag
+                    RIGHT JOIN question_tag qt on tag.id = qt.tag_id
+                    GROUP BY tag.name
+                    """)
+    tags_counted = cursor.fetchall()
+    return tags_counted
+
+
+@connection.connection_handler
 def questions_by_search_phrase(cursor, search_phrase):
     search_phrase = '%' + search_phrase.lower() + '%'
     cursor.execute(
@@ -194,18 +206,6 @@ def answers_by_search_phrase(cursor, search_phrase):
     )
     answers = cursor.fetchall()
     return answers
-
-
-@connection.connection_handler
-def tags_counted(cursor):
-    cursor.execute("""
-                    SELECT tag.name, COUNT(question_id) as count
-                    FROM tag
-                    RIGHT JOIN question_tag qt on tag.id = qt.tag_id
-                    GROUP BY tag.name
-                    """)
-    tags_counted_ = cursor.fetchall()
-    return tags_counted_
 
 
 @connection.connection_handler

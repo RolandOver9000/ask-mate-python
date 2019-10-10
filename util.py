@@ -11,12 +11,20 @@ def handle_updated_comment(comment_data, updated_comment_message):
     return comment_data
 
 
-def not_duplicate_tag(tag_text):
-    existing_tags = select.existing_tags_for_question(-1)
+def is_duplicate_tag(tag_text):
+    existing_tags = select.tags_counted()
     for tag in existing_tags:
         if tag_text == tag['name']:
-            return False
-    return True
+            return True
+    return False
+
+
+def tag_belongs_to_question(question_id, tag_text):
+    existing_tags = select.tags_for_question(question_id)
+    for tag in existing_tags:
+        if tag_text == tag['name']:
+            return True
+    return False
 
 
 def amend_user_inputs_for_question(question_data):

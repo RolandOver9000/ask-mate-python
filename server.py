@@ -233,9 +233,13 @@ def route_new_tag(question_id):
     existing_tags = data_manager.get_existing_tags_for_question(question_id)
 
     if request.method == "POST":
-        new_tag = request.form.get('new_tag')
-        existing_tag_id = request.form.get('existing_tag')
-        data_manager.handle_tag(question_id, new_tag, existing_tag_id)
+        if request.form.get('tag') == "new_tag":
+            new_tag = request.form.get('new_tag')
+            data_manager.handle_new_tag(question_id, new_tag)
+        else:
+            existing_tag_id = request.form.get('tag')
+            data_manager.insert_existing_tag(question_id, existing_tag_id)
+
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
     if data_manager.question_belongs_to_user(session.get('username'), question_id):
