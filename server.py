@@ -116,8 +116,7 @@ def route_add_question():
             return redirect('/')
 
     user_inputs_for_question = request.form.to_dict()
-    image = request.files['image']
-    user_inputs_for_question['image'] = handle_image(image)
+    user_inputs_for_question['image'] = handle_image(request.files['image'])
     data_manager.insert_question(user_inputs_for_question, session['user_id'])
     new_id = data_manager.get_latest_id('question')
     return redirect(url_for('display_question_and_answers', question_id=new_id), code=307)
@@ -171,6 +170,7 @@ def route_edit_question(question_id):
             return render_template('database_ops/add-question.html', question_data=question_data)
 
         user_inputs_for_question = request.form.to_dict()
+        user_inputs_for_question['image'] = handle_image(request.files['image'])
         data_manager.update_entry('question', question_id, user_inputs_for_question)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
@@ -187,6 +187,7 @@ def route_new_answer(question_id):
     """
     if request.method == "POST":
         user_inputs_for_answer = request.form.to_dict()
+        user_inputs_for_answer['image'] = handle_image(request.files['image'])
         data_manager.insert_answer(user_inputs_for_answer, question_id, session['user_id'])
         return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
@@ -221,6 +222,7 @@ def route_edit_answer(answer_id):
             return render_template('database_ops/new_answer.html', answer=answer_data, question=question_data)
 
         user_inputs_for_answer = request.form.to_dict()
+        user_inputs_for_answer['image'] = handle_image(request.files['image'])
         data_manager.update_entry('answer', answer_id, user_inputs_for_answer)
 
     return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)

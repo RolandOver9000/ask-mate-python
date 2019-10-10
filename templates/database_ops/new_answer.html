@@ -15,14 +15,14 @@
         <div id="body-of-inputs">
             <h2>{{ question.title}}</h2>
             <span id="question-message">{{ question.message}}</span>
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <p>
                     <label for="message">Write your answer here:</label><br>
                     <textarea id="message" name="message" minlength="10" rows="6" cols="40" required>{{ answer.message if answer }}</textarea>
                 </p>
                 <p>
                     <label for="image">Image URL:</label><br>
-                    <input id="image" name="image" size="30" value="{{ answer.image if answer and answer.image != None }}">
+                    <input type="file" id="image" name="image" size="30" value="{{ answer.image if answer and answer.image != None }}">
                 </p>
                 <p>
                     <button type="submit">{{ "Submit changes" if answer else "Send answer!" }}</button>
