@@ -1,0 +1,32 @@
+@import 'anchor.css';
+@import 'sort.css';
+@import 'general.css';
+
+h3 {
+    display: inline;
+    margin: 0 0 0 10%;
+}
+
+.user_stats {
+    border: 1px solid black;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    background: whitesmoke;
+}
+
+.user_stats .user_attributes {
+    border: 1px solid black;
+    border-collapse: separate;
+    border-spacing: 0;
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.user_stats th {
+    padding-right: 15px;
+    padding-left: 15px;
+    border: 1px solid black;
+}

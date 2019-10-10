@@ -21,14 +21,12 @@
         class="delete" id="delete-answer"></a>
         <a href="{{ url_for('route_edit_answer', answer_id=answer.id) }}" class="edit" id="edit-answer"></a>
     {% endif %}
-    {% if user_id == question.user_id and user_id != answer.user_id %}
-        {% if answer.id == question.accepted_answer_id %}
-            <a class="accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"></a>
-        {% elif not question.accepted_answer_id %}
-            <a class="not_accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"
-               href="{{ url_for('route_accepted_answer', question_id=question.id, answer_id=answer.id) }}"></a>
-        {% else %}
-            <a class="never_will_be_accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"></a>
-        {% endif %}
+    {% if answer.id == question.accepted_answer_id %}
+        <a class="accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"></a>
+    {% elif not question.accepted_answer_id and user_id != answer.user_id and user_id == question.user_id %}
+        <a class="not_accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"
+           href="{{ url_for('route_accepted_answer', question_id=question.id, answer_id=answer.id) }}"></a>
+    {% elif user_id != answer.user_id or user_id != question.user_id %}
+        <a class="never_will_be_accepted_answer" id='accepted-answer-button-link' value="{{ answer.id }}"></a>
     {% endif %}
 </div>

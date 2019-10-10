@@ -1,0 +1,22 @@
+<table class="user_stats">
+    <tr>
+        <th>username</th>
+        <th>reputation</th>
+        <th>questions asked</th>
+        <th>answers given</th>
+        <th>comments made</th>
+        <th>accepted answers</th>
+        <th>registration date</th>
+    </tr>
+    {% for user in user_stats %}
+        <tr>
+            <td class="user_attributes">{{ user.username }}</td>
+            <td class="user_attributes">{{ user.reputation }}</td>
+            <td class="user_attributes">{{ user.question_count }}</td>
+            <td class="user_attributes">{{ user.answer_count }}</td>
+            <td class="user_attributes">{{ user.comment_count }}</td>
+            <td class="user_attributes">{{ user.accepted_answer_count }}</td>
+            <td class="user_attributes">{{ user.reg_date }}</td>
+        </tr>
+    {% endfor %}
+</table>

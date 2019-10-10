@@ -60,9 +60,10 @@ def answers_for_question(cursor, question_id):
         """
         SELECT answer.*, user_data.username as username, user_data.reputation as reputation
         FROM answer
+        LEFT JOIN question ON answer.id = question.accepted_answer_id
         LEFT JOIN user_data ON answer.user_id = user_data.id
         WHERE question_id = %(question_id)s
-        ORDER BY submission_time desc;
+        ORDER BY question.accepted_answer_id, submission_time desc;
         """,
         {'question_id': question_id}
     )
