@@ -1,6 +1,6 @@
 <div id="question-message-and-image">
         <p id="question-message">{{ question.message }}</p>
         {% if question.image %}
-            <img id="question-image" src="{{ question.image }}" width="500" alt="missing_image">
+            <img id="question-image" src="/static/{{ question.image }}" width="500" alt="missing_image">
         {% endif %}
     </div>
