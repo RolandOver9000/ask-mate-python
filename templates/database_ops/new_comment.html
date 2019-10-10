@@ -1,19 +1,26 @@
 {% extends 'layout.html' %}
 {% block head %}
     <meta charset="UTF-8">
-    {% block title %}<title>New comment for answer</title>{% endblock %}
+    {% block title %}<title>New comment</title>{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
 {% endblock %}
 {% block content %}
+    <div class="form-header">
+            <a id="back-to-question" href="{{ session.url }}">Return to question</a>
+        <h2>{{ "Edit" if comment else "Leave a" }} comment</h2>
+    </div>
+    <div class="text-container">
     {% if answer_by_id %}
-        <p>{{ answer_by_id.message }}</p>
+        <p class="text">{{ answer_by_id.message }}</p>
     {% elif comment.answer_id %}
-        <p>{{ answer.message }}</p>
+        <p class="text">{{ answer.message }}</p>
     {% else %}
-        <p>{{ question.message }}</p>
+        <p  class="text">{{ question.message }}</p>
     {% endif %}
+    </div>
     <form action="" method="POST">
-        <textarea name="message" cols="40" rows="10" required>{{ comment.message if comment }}</textarea><br>
+        <label for="message-textarea">Your comment:</label><br>
+        <textarea id="message-textarea" name="message" cols="40" rows="10" required>{{ comment.message if comment }}</textarea><br>
         <button type="submit">
             {{"Post comment" if answer_by_id else "Save changes"}}
         </button>

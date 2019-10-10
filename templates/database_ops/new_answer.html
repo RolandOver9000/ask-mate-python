@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
-        <meta charset="UTF-8">
+    <meta charset="UTF-8" xmlns="http://www.w3.org/1999/html">
         {% block title %}<title>Post an answer</title>{% endblock %}
         <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
 {% endblock %}
@@ -11,10 +11,13 @@
             {%  elif answer %}
             <a id="back-to-question" href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">Return to question</a>
             {% endif %}
-        <h2>{{ question.title}}</h2>
+        <h2>Answer question</h2>
         </div>
         <div id="body-of-inputs">
-            <span id="question-message">{{ question.message}}</span>
+            <div class="text-container">
+            <strong><p>{{ question.title }}</p></strong><br>
+            <p class="text" id="question-message">{{ question.message}}</p>
+            </div>
             <form action="" method="post">
                 <p>
                     <label for="message-textarea">Write your answer here:</label><br>
