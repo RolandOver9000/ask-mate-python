@@ -1,18 +1,18 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='general.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tags.css') }}">
     {{ super() }}
 {% endblock %}
 {% block title %}Add tag{% endblock %}
 {% block content %}
 <form action="" method="post" id="tag-select">
-    <select name="existing_tag" id="tag-list">
-        <option SELECTED hidden value="not_present">Select a tag</option>
+    <div id="tag-bubble">
     {% for tag in existing_tags %}
-        <option value="{{ tag.id }}" >{{ tag.name }}</option>
-    {% endfor %}
-    </select>
-    <input name="new_tag" id="new-tag" placeholder="Or enter a new tag" type="text">
-    <button type="submit">Add tag</button>
+    <button id="tag-button" type="submit" name="existing_tag" value="{{ tag.id }}">{{ tag.name }}</button>
+    {% endfor %}</div>
+    <div id="custom-tag">
+    <label for="">Or enter a new tag</label><br>
+    <input name="new_tag" id="new-tag" placeholder="New tag" type="text">
+    <button type="submit">Add tag</button></div>
 </form>
 {% endblock %}

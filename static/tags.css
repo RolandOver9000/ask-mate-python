@@ -5,3 +5,36 @@ table {
     border-radius: 5px;
     margin-bottom: 7px;
 }
+
+#tag-select {
+    display: block;
+    width: 1100px;
+    margin: auto;
+}
+
+#tag-bubble {
+    display: inline-block;
+    width: 650px;
+    float: left;
+}
+
+#custom-tag {
+    display: inline-block;
+    width: 400px;
+    float: right;
+}
+
+#tag-button {
+    margin-bottom: 5px;
+    background-color: whitesmoke;
+    border: 1px grey solid;
+    padding: 0 10px;
+    line-height: 1.5;
+    border-radius: 4px;
+}
+
+#tag-button:hover {
+    background-color: var(--main-color3);
+    color: var(--main-color4);
+    cursor: pointer;
+}
