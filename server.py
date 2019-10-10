@@ -208,15 +208,15 @@ def route_edit_answer(answer_id):
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
     existing_tags = data_manager.get_existing_tags_for_question(question_id, )
-    if data_manager.question_belongs_to_user(session.get('username'), question_id):
-        return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
 
     if request.method == "POST":
         new_tag = request.form.get('new_tag')
         existing_tag_id = request.form.get('existing_tag')
         data_manager.handle_tag(question_id, new_tag, existing_tag_id)
+        return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
 
-    return redirect(url_for('display_question_and_answers', question_id=question_id), code=307)
+    if data_manager.question_belongs_to_user(session.get('username'), question_id):
+        return render_template('database_ops/new_tag.html', existing_tags=existing_tags)
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
