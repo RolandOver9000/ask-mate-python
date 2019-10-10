@@ -38,3 +38,18 @@ table {
     color: var(--main-color4);
     cursor: pointer;
 }
+
+#back-to-question-holder {
+    display: block;
+    height: 31px;
+    margin: 35px;
+}
+
+#back-to-question {
+    display: block;
+    background: whitesmoke;
+    border: 1px var(--main-color1) solid;
+    padding: 5px;
+    float: left;
+    margin-bottom: 30px;
+}

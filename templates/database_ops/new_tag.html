@@ -5,6 +5,7 @@
 {% endblock %}
 {% block title %}Add tag{% endblock %}
 {% block content %}
+<div id="back-to-question-holder"><a id="back-to-question" href="{{ session.url }}">Return to question</a></div>
 <form action="" method="post" id="tag-select">
     <div id="tag-bubble">
     {% for tag in existing_tags %}
