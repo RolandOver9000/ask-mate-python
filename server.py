@@ -207,7 +207,7 @@ def route_edit_answer(answer_id):
 
 @app.route('/question/<question_id>/new-tag', methods=["GET", "POST"])
 def route_new_tag(question_id):
-    existing_tags = data_manager.get_existing_tags_for_question(question_id, )
+    existing_tags = data_manager.get_existing_tags_for_question(question_id)
 
     if request.method == "POST":
         new_tag = request.form.get('new_tag')
@@ -339,11 +339,7 @@ def record_user(user_data):
 
 @app.route('/user/<user_id>')
 def route_user_page(user_id):
-    user_id = int(user_id)
-    if not ('user_id' in session and session['user_id'] == user_id):
-        return redirect('/')
-
-    user_data = data_manager.get_user_data_for_user_page(session['user_id'], session['username'])
+    user_data = data_manager.get_user_data_for_user_page(user_id)
     return render_template('user_page/main.html', user_data=user_data)
 
 

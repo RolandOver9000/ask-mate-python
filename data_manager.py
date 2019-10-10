@@ -102,10 +102,11 @@ def comment_belongs_to_user(username, comment_id):
         return False
 
 
-def get_user_data_for_user_page(user_id, username):
+def get_user_data_for_user_page(user_id):
     questions = select.questions_by_user_id(user_id)
     answers = select.answers_by_user_id(user_id)
     comments = select.comments_by_user_id(user_id)
+    username = select.get_username_by_id(user_id)
 
     for query_results in (questions, answers, comments):
         query_results = util.format_datetime_in_query_results(query_results)
