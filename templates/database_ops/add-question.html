@@ -17,7 +17,7 @@
             {% if question_data %}
             <div id="back-to-question">
                     <a href="{{ url_for('display_question_and_answers', question_id=question_data.id) }}">
-                        &#x2B05; Return to question</a>
+                        Return to question</a>
             </div>
             {% endif %}
         </div>
@@ -28,8 +28,8 @@
                        value="{{ question_data.title if question_data else '' }}">
             </p>
             <p id="add-question-message">
-                <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="15" required
+                <label for="message-textarea">Message:</label><br>
+                <textarea id="message-textarea" name="message" rows="15" required
                 >{{ question_data.message if question_data else '' }}</textarea>
             </p>
             <p id="add-image-url">

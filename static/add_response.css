@@ -4,12 +4,14 @@
 .form-header {
     display: block;
     width: 650px;
-    height: 60px;
-    margin-bottom: 15px;
+    height: 30px;
+    margin-bottom: 35px;
 }
 
-#body-of-inputs {
-    margin-left: 3%;
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
 }
 
 h2 {
@@ -20,6 +22,18 @@ h2 {
 
 #back-to-question, #heading {
     display: inline-block;
+}
+
+.text-container {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.text {
+    margin-left: 30px;
+    white-space: pre-line;
+    text-align: justify;
+    word-break: break-word;
 }
 
 #back-to-question {
@@ -41,10 +55,15 @@ form {
     display: block;
 }
 
-#add-question-message {
+#message-textarea {
     width: 650px;
+    padding: 0;
 }
 
 textarea {
     width: inherit;
+}
+
+p {
+    margin: 0;
 }

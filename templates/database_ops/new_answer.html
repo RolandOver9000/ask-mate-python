@@ -5,20 +5,23 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
 {% endblock %}
 {% block content %}
-        <div>
+        <div class="form-header">
             {% if question %}
-            <a id="link-back-to-question" href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to question</a>
+            <a id="back-to-question" href="{{ url_for('display_question_and_answers', question_id=question.id) }}">Return to question</a>
             {%  elif answer %}
-            <a id="link-back-to-question" href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">Return to question</a>
+            <a id="back-to-question" href="{{ url_for('display_question_and_answers', question_id=answer.question_id) }}">Return to question</a>
             {% endif %}
+        <h2>Answer question</h2>
         </div>
         <div id="body-of-inputs">
-            <h2>{{ question.title}}</h2>
-            <span id="question-message">{{ question.message}}</span>
+            <div class="text-container">
+            <strong><p>{{ question.title }}</p></strong><br>
+            <p class="text" id="question-message">{{ question.message}}</p>
+            </div>
             <form action="" method="post" enctype="multipart/form-data">
                 <p>
-                    <label for="message">Write your answer here:</label><br>
-                    <textarea id="message" name="message" minlength="10" rows="6" cols="40" required>{{ answer.message if answer }}</textarea>
+                    <label for="message-textarea">Write your answer here:</label><br>
+                    <textarea id="message-textarea" name="message" minlength="10" rows="6" cols="40" required>{{ answer.message if answer }}</textarea>
                 </p>
                 <p>
                     <label for="image">Image URL:</label><br>
