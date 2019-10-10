@@ -11,11 +11,14 @@
     </div>
     <div class="text-container">
     {% if answer_by_id %}
+        {% if answer_by_id.title %}
+            <strong><p>{{ answer_by_id.title }}</p></strong><br>
+        {% endif %}
         <p class="text">{{ answer_by_id.message }}</p>
     {% elif comment.answer_id %}
         <p class="text">{{ answer.message }}</p>
     {% else %}
-        <p  class="text">{{ question.message }}</p>
+        <p class="text">{{ question.message }}</p>
     {% endif %}
     </div>
     <form action="" method="POST">
