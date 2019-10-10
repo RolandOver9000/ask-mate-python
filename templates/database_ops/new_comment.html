@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <meta charset="UTF-8">
-    {% block title %}<title>New comment</title>{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='add_response.css') }}">
+    {{ super() }}
 {% endblock %}
+{% block title %}{{"Edit" if comment else "New"}} comment{% endblock %}
 {% block content %}
     <div class="form-header">
             <a id="back-to-question" href="{{ session.url }}">Return to question</a>
