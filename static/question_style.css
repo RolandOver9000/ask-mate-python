@@ -219,9 +219,10 @@
     display: inline;
 }
 
-.display-username em{
-    font-style: oblique;
+.display-username a {
+    color: black;
 }
+
 
 em {
     color: deeppink;
