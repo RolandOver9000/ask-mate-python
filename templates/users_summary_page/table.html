@@ -10,7 +10,7 @@
     </tr>
     {% for user in user_stats %}
         <tr>
-            <td class="user_attributes">{{ user.username }}</td>
+            <td class="user_attributes"><a href="{{ url_for('route_user_page', user_id=user.id) }}">{{ user.username }}</a></td>
             <td class="user_attributes">{{ user.reputation }}</td>
             <td class="user_attributes">{{ user.question_count }}</td>
             <td class="user_attributes">{{ user.answer_count }}</td>

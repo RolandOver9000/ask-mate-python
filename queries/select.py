@@ -327,7 +327,8 @@ def comments_by_user_id(cursor, user_id):
 def user_stats(cursor):
     cursor.execute(
         """
-         SELECT username,
+         SELECT user_data.id as id,
+                username,
                 reputation,
                 COUNT (DISTINCT answer.id) AS answer_count,
                 COUNT (DISTINCT question.id) AS question_count,
@@ -344,7 +345,7 @@ def user_stats(cursor):
         LEFT JOIN
             (SELECT answer.user_id AS id, COUNT(question.accepted_answer_id) FROM answer INNER JOIN  question ON question.accepted_answer_id = answer.id GROUP BY answer.user_id) accepted
          ON question.user_id = accepted.id
-        GROUP BY username, reputation, reg_date, accepted.count
+        GROUP BY username, reputation, reg_date, accepted.count, user_data.id
         """)
     stats = cursor.fetchall()
 
