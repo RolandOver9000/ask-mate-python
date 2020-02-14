@@ -9,7 +9,6 @@ from flask import \
 import data_manager
 import os
 from werkzeug.utils import secure_filename
-import util
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/images')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
